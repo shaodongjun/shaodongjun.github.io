@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>ShaoDJ's blog</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Fri, 31 Jan 2025 18:00:00 +0800</lastBuildDate><item><title>使用 openpyxl 创建 Excel 文件</title><link>https://shaodongjun.github.io/mypython-openpyxl.html</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
+<rss version="2.0"><channel><title>ShaoDJ's blog - ShaoDJ</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Fri, 31 Jan 2025 18:00:00 +0800</lastBuildDate><item><title>使用 openpyxl 创建 Excel 文件</title><link>https://shaodongjun.github.io/mypython-openpyxl.html</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;openpyxl&lt;/span&gt;
 
