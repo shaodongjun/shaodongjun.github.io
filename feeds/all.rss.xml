@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>ShaoDJ's blog</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Fri, 31 Jan 2025 18:00:00 +0800</lastBuildDate><item><title>使用 openpyxl 创建 Excel 文件</title><link>https://shaodongjun.github.io/mypython-openpyxl.html</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
+<rss version="2.0"><channel><title>ShaoDJ's blog</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Fri, 31 Jan 2025 18:00:00 +0800</lastBuildDate><item><title>使用 openpyxl 创建 Excel 文件</title><link>https://shaodongjun.github.io/python-openpyxl.html</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;openpyxl&lt;/span&gt;
 
@@ -46,5 +46,5 @@
 &lt;ul&gt;
 &lt;li&gt;使用 wb.save("测试名单.xlsx") 保存工作簿。&lt;/li&gt;
 &lt;li&gt;注意，openpyxl 支持 .xlsx 格式，而不是 .xls。&lt;/li&gt;
-&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">ShaoDJ</dc:creator><pubDate>Fri, 31 Jan 2025 18:00:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-01-31:/mypython-openpyxl.html</guid><category>编程</category><category>blog</category><category>python</category></item><item><title>My first post</title><link>https://shaodongjun.github.io/My-first-post.html</link><description>&lt;h5&gt;开篇小记&lt;/h5&gt;
+&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">ShaoDJ</dc:creator><pubDate>Fri, 31 Jan 2025 18:00:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-01-31:/python-openpyxl.html</guid><category>编程</category><category>blog</category><category>python</category></item><item><title>My first post</title><link>https://shaodongjun.github.io/My-first-post.html</link><description>&lt;h5&gt;开篇小记&lt;/h5&gt;
 &lt;p&gt;This is the &lt;em&gt;first post&lt;/em&gt; by Pelican Blog. &lt;strong&gt;YAY!&lt;/strong&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">ShaoDJ</dc:creator><pubDate>Fri, 31 Jan 2025 12:00:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-01-31:/My-first-post.html</guid><category>杂记</category><category>blog</category><category>随笔</category></item></channel></rss>
