@@ -4,24 +4,30 @@
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                         <meta name="generator" content="Pelican" />
-                        <title>ShaoDJ's World - blog</title>
+                        <title>使用 python-docx 创建 word 文件</title>
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
+    <meta name="description" content="代码示例展示了如何使用 python-docx 库创建和修改 Word 文件。 可运行代码 from docx import Document from docx.oxml.ns import qn from docx.shared import Inches, Pt, RGBColor..." />
         </head>
 
         <body id="index" class="home">
                 <header id="banner" class="body">
                         <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
                         <nav><ul>
-                                                <li><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li class="active"><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
                                                 <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/" rel="bookmark"
+             title="Permalink to 使用 python-docx 创建 word 文件">使用 python-docx 创建 word 文件</a></h1>
+      </header>
 
-                <aside id="featured" class="body">
-                    <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/">使用 python-docx 创建 word 文件</a></h1>
+      <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-01T10:52:00+08:00">
                 Published: 六 01 二月 2025
@@ -32,7 +38,7 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info --><p>代码示例展示了如何使用 <code>python-docx</code> 库创建和修改 Word 文件。</p>
+</footer><!-- /.post-info -->        <p>代码示例展示了如何使用 <code>python-docx</code> 库创建和修改 Word 文件。</p>
 <h2>可运行代码</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">docx</span> <span class="kn">import</span> <span class="n">Document</span>
 <span class="kn">from</span> <span class="nn">docx.oxml.ns</span> <span class="kn">import</span> <span class="n">qn</span>
@@ -83,66 +89,11 @@
 <span class="n">doc</span><span class="o">.</span><span class="n">add_page_break</span><span class="p">()</span>
 
 <span class="n">doc</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;demo.docx&#39;</span><span class="p">)</span>
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+</code></pre></div>
+      </div><!-- /.entry-content -->
 
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="bookmark"
-                               title="Permalink to 使用 openpyxl 创建 Excel 文件">使用 openpyxl 创建 Excel 文件</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-31T18:00:00+08:00">
-                Published: 五 31 一月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
-<h2>可运行代码</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openpyxl</span>
-
-<span class="c1"># 创建一个新的工作簿</span>
-<span class="n">wb</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">()</span>
-
-<span class="c1"># 创建 …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/" rel="bookmark"
-                               title="Permalink to My first post">My first post</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-31T12:00:00+08:00">
-                Published: 五 31 一月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/sui-bi.html">随笔</a> </p>        
-</footer><!-- /.post-info -->                        <h5>开篇小记</h5>
-<p>This is the <em>first post</em> by Pelican Blog. <strong>YAY!</strong></p>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-                    </ol><!-- /#posts-list -->
-                    </section><!-- /#content -->
+    </article>
+  </section>
                 <section id="extras" class="body">
                                 <div class="blogroll">
                                         <h2>links</h2>
