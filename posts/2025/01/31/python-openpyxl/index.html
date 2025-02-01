@@ -4,7 +4,7 @@
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                         <meta name="generator" content="Pelican" />
-                        <title>使用 openpyxl 创建 Excel 文件</title>
+                        <title>使用 openpyxl 创建 Excel 文件</title>
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
@@ -24,7 +24,7 @@
       <header>
         <h1 class="entry-title">
           <a href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="bookmark"
-             title="Permalink to 使用 openpyxl 创建 Excel 文件">使用 openpyxl 创建 Excel 文件</a></h1>
+             title="Permalink to 使用 openpyxl 创建 Excel 文件">使用 openpyxl 创建 Excel&nbsp;文件</a></h1>
       </header>
 
       <div class="entry-content">
@@ -64,27 +64,27 @@
 <h2>代码解释</h2>
 <h3>创建工作簿和工作表：</h3>
 <ul>
-<li>使用 openpyxl.Workbook() 创建一个新的工作簿。</li>
-<li>create_sheet("人员名单", 0) 创建一个新的工作表并将其命名为 "人员名单"。</li>
+<li>使用 openpyxl.Workbook()&nbsp;创建一个新的工作簿。</li>
+<li>create_sheet(&#8220;人员名单&#8221;, 0) 创建一个新的工作表并将其命名为&nbsp;&#8220;人员名单&#8221;。</li>
 </ul>
 <h3>读取文件：</h3>
 <ul>
-<li>打开文本文件，确保使用正确的编码（如 UTF-8）。</li>
-<li>enumerate(f.readlines()) 用于逐行读取文件内容，并在循环中获得行索引。</li>
+<li>打开文本文件，确保使用正确的编码（如 <span class="caps">UTF</span>-8）。</li>
+<li>enumerate(f.readlines())&nbsp;用于逐行读取文件内容，并在循环中获得行索引。</li>
 </ul>
 <h3>处理数据：</h3>
 <ul>
-<li>使用 strip().split(",") 去除行首尾空白并根据逗号分隔字符串。</li>
-<li>检查 people 列表的长度，确保至少有两个元素（姓名和性别）。</li>
+<li>使用 strip().split(&#8220;,&#8221;)&nbsp;去除行首尾空白并根据逗号分隔字符串。</li>
+<li>检查 people&nbsp;列表的长度，确保至少有两个元素（姓名和性别）。</li>
 </ul>
 <h3>写入工作表：</h3>
 <ul>
-<li>使用 wt.cell(row=row, column=1, value=name) 将姓名写入第一列，性别写入第二列。</li>
+<li>使用 wt.cell(row=row, column=1, value=name)&nbsp;将姓名写入第一列，性别写入第二列。</li>
 </ul>
 <h3>保存文件：</h3>
 <ul>
-<li>使用 wb.save("测试名单.xlsx") 保存工作簿。</li>
-<li>注意，openpyxl 支持 .xlsx 格式，而不是 .xls。</li>
+<li>使用 wb.save(&#8220;测试名单.xlsx&#8221;)&nbsp;保存工作簿。</li>
+<li>注意，openpyxl 支持 .xlsx 格式，而不是&nbsp;.xls。</li>
 </ul>
       </div><!-- /.entry-content -->
 
@@ -94,7 +94,7 @@
                                 <div class="blogroll">
                                         <h2>links</h2>
                                         <ul>
-                                                        <li><a href="http://shaohy.upyun.com/doku.php">Shaohy's Blog</a></li>
+                                                        <li><a href="https://www.upyun.com">UP#AI</a></li>
                                         </ul>
                                 </div><!-- /.blogroll -->
                                 <div class="social">
@@ -103,7 +103,6 @@
                                                         <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
                                                         <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
 
-                                                        <li><a href="#">Another social link</a></li>
                                         </ul>
                                 </div><!-- /.social -->
                 </section><!-- /#extras -->
