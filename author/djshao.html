@@ -21,7 +21,117 @@
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">使用 PyPDF 和 Pandoc&nbsp;实现word/pdf转换</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/">使用 <span class="caps">PIL</span>(pillow) 实现图片绘制 <span class="amp">&amp;</span> 裁剪 <span class="amp">&amp;</span>&nbsp;水印</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-01T20:32:00+08:00">
+                Published: 六 01 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+</footer><!-- /.post-info --><p>使用<code>PIL</code>代码实现了从图像中裁剪出一个<code>logo</code>，并将其作为水印添加到其他图像上。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageDraw</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/apple/myDemo/Python39_Demos/image&quot;</span>
+
+<span class="n">infile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;test0.png&quot;</span><span class="p">)</span>
+<span class="n">watermark</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;../logo.png&quot;</span><span class="p">)</span>  <span class="c1"># 这里修复了路径</span>
+<span class="n">margin</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">crop_logo</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pyimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">pyimg</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">pyimg</span><span class="o">.</span><span class="n">height</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;图像的高和宽: </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logo</span> <span class="o">=</span> <span class="n">pyimg</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="n">logo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;裁剪 Logo 时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">img_watermark</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">waterfile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">logo</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">waterfile</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">logo</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">margin</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">logo</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">margin</span>
+
+        <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">logo</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">logo</span><span class="p">)</span>  <span class="c1"># 使用 logo 作为掩码</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;添加水印时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">draw_logo</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGBA&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
+    <span class="n">pen</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">pen</span><span class="o">.</span><span class="n">point</span><span class="p">([(</span><span class="mi">190</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">210</span><span class="p">,</span> <span class="mi">200</span><span class="p">)],</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">pen</span><span class="o">.</span><span class="n">line</span><span class="p">([(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span> <span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span> <span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">220</span><span class="p">),</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">220</span><span class="p">),</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">)],</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="n">pen</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="mi">250</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">pen</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+
+<span class="c1"># 裁剪 Logo</span>
+<span class="n">crop_logo</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">watermark</span><span class="p">)</span>
+
+<span class="c1"># 绘制 Logo</span>
+<span class="n">draw_logo</span><span class="p">(</span><span class="n">watermark</span><span class="p">)</span>
+
+<span class="c1"># 遍历 PNG 文件并添加水印</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s1">&#39;*.png&#39;</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">stem</span>
+    <span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mark.png&quot;</span><span class="p">)</span>
+    <span class="n">img_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">watermark</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>代码分析</h2>
+<h3>裁剪&nbsp;Logo：</h3>
+<ul>
+<li>crop_logo 函数从输入图像中裁剪出一个 100x100&nbsp;像素的区域，并将其保存为水印。</li>
+</ul>
+<h3>添加水印：</h3>
+<ul>
+<li>img_watermark 函数将裁剪出的 logo&nbsp;作为水印添加到指定的图像上，放置在右下角。</li>
+</ul>
+<h3>绘制&nbsp;Logo：</h3>
+<ul>
+<li>draw_logo 函数创建一个新的 400x400 像素的图像，在其中绘制了一些图形和文本，并保存为 logo&nbsp;图像。</li>
+</ul>
+<h3>遍历 <span class="caps">PNG</span>&nbsp;文件：</h3>
+<ul>
+<li>使用 Path.rglob() 方法查找指定目录下的所有 <span class="caps">PNG</span>&nbsp;文件，并对每个文件应用水印。</li>
+</ul>
+<h2>改进建议</h2>
+<h3>路径处理：</h3>
+<ul>
+<li>使用 os.path.join()&nbsp;以确保路径在不同操作系统上兼容。</li>
+</ul>
+<h3>异常处理：</h3>
+<ul>
+<li>可以在打开和保存图像时添加异常处理，以避免在文件不存在或无法写入时崩溃。</li>
+</ul>
+<h3>参数化：</h3>
+<ul>
+<li>考虑将某些参数（如裁剪区域、图像大小等）作为函数参数，以提高灵活性。</li>
+</ul>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/" rel="bookmark"
+                               title="Permalink to 使用 PyPDF 和 Pandoc 实现word/pdf转换">使用 PyPDF 和 Pandoc&nbsp;实现word/pdf转换</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-01T15:04:00+08:00">
                 Published: 六 01 二月 2025
@@ -32,7 +142,7 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info --><p>代码示例展示了如何使用 <code>PyPDF</code> 和 <code>Pandoc</code> 实现word/pdf转换</p>
+</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>PyPDF</code> 和 <code>Pandoc</code> 实现word/pdf转换</p>
 <p>关于<a href="https://medium.com/@daneallist/3-simple-ways-to-merge-word-documents-using-python-862112ff4152">Pandoc的具体用法</a></p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pypandoc</span> <span class="kn">import</span> <span class="n">convert_file</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -40,61 +150,10 @@
 <span class="n">unused</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;demo&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">find_doc_files</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;docx&quot;</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;*.</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-             <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unused</span><span class="p">)</span>
-    <span class="p">]</span>
-
-<span class="k">def</span> <span class="nf">convert_pdf</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
-    <span class="n">convert_file</span><span class="p">(</span>
-        <span class="n">infile</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> 
-        <span class="n">extra_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--pdf-engine=weasyprint&#39;</span><span class="p">])</span>
-
-<span class="k">def</span> <span class="nf">add_watermark</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">watermark</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
-    <span class="n">old_file</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
-    <span class="n">new_file</span> <span class="o">=</span> <span class="n">PdfWriter</span><span class="p">()</span>
-
-    <span class="k">for</span> <span class="n">pageNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">old_file</span><span class="o">.</span><span class="n">pages</span><span class="p">)):</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="n">old_file</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">pageNum</span><span class="p">]</span>
-        <span class="n">page</span><span class="o">.</span><span class="n">merge_page</span><span class="p">(</span><span class="n">watermark</span><span class="p">)</span>
-        <span class="n">new_file</span><span class="o">.</span><span class="n">add_page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">watermark_file</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="s2">&quot;watermark.pdf&quot;</span><span class="p">)</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="n">watermark_file</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">file_list</span> <span class="o">=</span> <span class="n">find_doc_files</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;docx&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_list</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
-        <span class="n">convert_pdf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
-        <span class="n">add_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">watermark</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mark.pdf&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>代码分析</h2>
-<h3>查找 docx&nbsp;文件：</h3>
-<ul>
-<li>find_doc_files 函数使用 Path.rglob 方法递归查找指定目录中的 <span class="caps">DOCX</span> 文件，排除以 unused&nbsp;元组中指定的前缀开头的文件。</li>
-</ul>
-<h3><span class="caps">PDF</span>&nbsp;转换：</h3>
-<ul>
-<li>convert_pdf 函数使用 pypandoc 的 convert_file 方法将 docx 文件转换为 <span class="caps">PDF</span>，使用 WeasyPrint 作为 <span class="caps">PDF</span>&nbsp;引擎。</li>
-</ul>
-<h3>添加水印：</h3>
-<ul>
-<li>add_watermark 函数读取输入 <span class="caps">PDF</span>，使用 PyPDF2&nbsp;将水印添加到每一页，并保存为新文件。</li>
-</ul>
-<h2>注意事项</h2>
-<h3>依赖库安装：</h3>
-<p>确保已安装 pypandoc、PyPDF2 和&nbsp;WeasyPrint。可以通过以下命令安装：</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pypandoc<span class="w"> </span>PyPDF2<span class="w"> </span>WeasyPrint
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+    <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f …</span></code></pre></div>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
