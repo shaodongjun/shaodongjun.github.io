@@ -30,10 +30,18 @@
 &lt;h2&gt;Pandas&amp;nbsp;功能&lt;/h2&gt;
 &lt;p&gt;Pandas&amp;nbsp;是数据分析的利器，它不仅提供了高效、灵活的数据结构，还能帮助你以极低的成本完成复杂的数据操作和分析任务。&lt;/p&gt;
 &lt;p&gt;Pandas 提供了丰富的功能，包括：
-- 数据清洗：处理缺失数据、重复数据等。
-- 数据转换：改变数据的形状、结构或格式。
-- 数据分析：进行统计分析、聚合、分组等。
-- 数据可视化：通过整合 Matplotlib 和 Seaborn&amp;nbsp;等库，可以进行数据可视化。&lt;/p&gt;
+-&amp;nbsp;数据清洗：处理缺失数据、重复数据等。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据转换：改变数据的形状、结构或格式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据分析：进行统计分析、聚合、分组等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据可视化：通过整合 Matplotlib 和 Seaborn&amp;nbsp;等库，可以进行数据可视化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Pandas 是 Python&lt;/strong&gt;&amp;nbsp;数据科学领域中不可或缺的工具之一，它的灵活性和强大的功能使得数据处理和分析变得更加简单和高效。&lt;/p&gt;
 &lt;p&gt;可运行的代码实例&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
