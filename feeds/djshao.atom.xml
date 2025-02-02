@@ -29,9 +29,11 @@
 &lt;/ul&gt;
 &lt;h2&gt;Pandas&amp;nbsp;功能&lt;/h2&gt;
 &lt;p&gt;Pandas&amp;nbsp;是数据分析的利器，它不仅提供了高效、灵活的数据结构，还能帮助你以极低的成本完成复杂的数据操作和分析任务。&lt;/p&gt;
-&lt;p&gt;Pandas 提供了丰富的功能，包括：
--&amp;nbsp;数据清洗：处理缺失数据、重复数据等。&lt;/p&gt;
+&lt;p&gt;Pandas&amp;nbsp;提供了丰富的功能，包括：&lt;/p&gt;
 &lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据清洗：处理缺失数据、重复数据等。&lt;/p&gt;
+&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;数据转换：改变数据的形状、结构或格式。&lt;/p&gt;
 &lt;/li&gt;
