@@ -21,7 +21,121 @@
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/">使用 <span class="caps">PIL</span>(pillow) 实现图片绘制 <span class="amp">&amp;</span> 裁剪 <span class="amp">&amp;</span>&nbsp;水印</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/">使用 Pandas&nbsp;实现基本的数据分析</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-02T10:16:00+08:00">
+                Published: 日 02 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+</footer><!-- /.post-info --><p><strong>Pandas</strong> 一个强大的分析结构化数据的工具集，基础是 <a href="https://www.runoob.com/numpy/numpy-tutorial.html">Numpy</a>（提供高性能的矩阵运算）。</p>
+<h2>数据结构</h2>
+<p>Pandas 的主要数据结构是 Series （一维数据）与&nbsp;DataFrame（二维数据）。</p>
+<ul>
+<li>
+<p>Series 是一种类似于一维数组的对象，它由一组数据（各种 Numpy&nbsp;数据类型）以及一组与之相关的数据标签（即索引）组成。</p>
+</li>
+<li>
+<p>DataFrame 是一个表格型的数据结构，它含有一组有序的列，每列可以是不同的值类型（数值、字符串、布尔型值）。DataFrame 既有行索引也有列索引，它可以被看做由 Series&nbsp;组成的字典（共同用一个索引）。</p>
+</li>
+</ul>
+<h2>Pandas&nbsp;应用</h2>
+<ul>
+<li>
+<p>Pandas 可以从各种文件格式比如 <span class="caps">CSV</span>、<span class="caps">JSON</span>、<span class="caps">SQL</span>、Microsoft Excel&nbsp;导入数据。</p>
+</li>
+<li>
+<p>Pandas&nbsp;可以对各种数据进行运算操作，比如归并、再成形、选择，还有数据清洗和数据加工特征。</p>
+</li>
+<li>
+<p>Pandas&nbsp;广泛应用在学术、金融、统计学等各个数据分析领域。</p>
+</li>
+</ul>
+<h2>Pandas&nbsp;功能</h2>
+<p>Pandas&nbsp;是数据分析的利器，它不仅提供了高效、灵活的数据结构，还能帮助你以极低的成本完成复杂的数据操作和分析任务。</p>
+<p>Pandas 提供了丰富的功能，包括：
+- 数据清洗：处理缺失数据、重复数据等。
+- 数据转换：改变数据的形状、结构或格式。
+- 数据分析：进行统计分析、聚合、分组等。
+- 数据可视化：通过整合 Matplotlib 和 Seaborn&nbsp;等库，可以进行数据可视化。</p>
+<p><strong>Pandas 是 Python</strong>&nbsp;数据科学领域中不可或缺的工具之一，它的灵活性和强大的功能使得数据处理和分析变得更加简单和高效。</p>
+<p>可运行的代码实例</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># 中文支持，不会显示小方框</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SimHei&#39;</span><span class="p">,</span> <span class="s1">&#39;Songti SC&#39;</span><span class="p">,</span> <span class="s1">&#39;STFangsong&#39;</span><span class="p">]</span>
+<span class="c1"># 正常显示负号</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c1"># 设置线条宽度</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="c1"># 设置线条颜色</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+<span class="c1"># 设置线条样式，样式的各类还有 `--`为虚线，`-.`为点虚线</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span> <span class="c1"># 直线</span>
+
+<span class="c1"># 1. 创建一个示例 DataFrame</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;张三&#39;</span><span class="p">,</span> <span class="s1">&#39;李四&#39;</span><span class="p">,</span> <span class="s1">&#39;王五&#39;</span><span class="p">,</span> <span class="s1">&#39;赵六&#39;</span><span class="p">,</span> <span class="s1">&#39;田七&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">24</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">29</span><span class="p">],</span>
+    <span class="s1">&#39;Salary&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">8500</span><span class="p">,</span> <span class="mi">6800</span><span class="p">,</span> <span class="mi">7200</span><span class="p">,</span> <span class="mi">6500</span><span class="p">],</span>
+    <span class="s1">&#39;Department&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span> <span class="s1">&#39;IT&#39;</span><span class="p">,</span> <span class="s1">&#39;Finance&#39;</span><span class="p">,</span> <span class="s1">&#39;IT&#39;</span><span class="p">,</span> <span class="s1">&#39;HR&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># 2. 数据查看</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DataFrame: </span><span class="se">\n</span><span class="si">{</span><span class="n">df</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. 基本统计</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;基本统计: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 4. 数据选择</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;选择 &#39;Name&#39; 和 &#39;Salary&#39; 列: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Salary&#39;</span><span class="p">]]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5. 添加新列</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Bonus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Salary&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;添加 &#39;Bonus&#39; 列: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 6. 条件筛选</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;筛选出薪水大于 6000 的员工: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Salary&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">6000</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 7. 分组统计</span>
+<span class="n">grouped</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Department&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 只计算数值列</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;按部门分组的平均值: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">grouped</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 8. 处理缺失值</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Salary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 人为制造缺失值</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;处理缺失值: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="w"> </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Salary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 9. 数据排序</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;按年龄排序: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 10. 数据可视化</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;姓名&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;薪资&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;员工薪水&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Salary&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/" rel="bookmark"
+                               title="Permalink to 使用 PIL(pillow) 实现图片绘制 & 裁剪 & 水印">使用 <span class="caps">PIL</span>(pillow) 实现图片绘制 <span class="amp">&amp;</span> 裁剪 <span class="amp">&amp;</span>&nbsp;水印</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-01T20:32:00+08:00">
                 Published: 六 01 二月 2025
@@ -32,98 +146,16 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info --><p>使用<code>PIL</code>代码实现了从图像中裁剪出一个<code>logo</code>，并将其作为水印添加到其他图像上。</p>
+</footer><!-- /.post-info -->                        <p>使用<code>PIL</code>代码实现了从图像中裁剪出一个<code>logo</code>，并将其作为水印添加到其他图像上。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageDraw</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/apple/myDemo/Python39_Demos/image&quot;</span>
-
-<span class="n">infile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;test0.png&quot;</span><span class="p">)</span>
-<span class="n">watermark</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;../logo.png&quot;</span><span class="p">)</span>  <span class="c1"># 这里修复了路径</span>
-<span class="n">margin</span> <span class="o">=</span> <span class="mi">5</span>
-
-<span class="k">def</span> <span class="nf">crop_logo</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">pyimg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">pyimg</span><span class="o">.</span><span class="n">width</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">pyimg</span><span class="o">.</span><span class="n">height</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;图像的高和宽: </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logo</span> <span class="o">=</span> <span class="n">pyimg</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
-        <span class="n">logo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;裁剪 Logo 时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">img_watermark</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">waterfile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">logo</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">waterfile</span><span class="p">)</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">logo</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">margin</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">logo</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">margin</span>
-
-        <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">logo</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">logo</span><span class="p">)</span>  <span class="c1"># 使用 logo 作为掩码</span>
-        <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;添加水印时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">draw_logo</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
-    <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGBA&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
-    <span class="n">pen</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-    <span class="n">pen</span><span class="o">.</span><span class="n">point</span><span class="p">([(</span><span class="mi">190</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">210</span><span class="p">,</span> <span class="mi">200</span><span class="p">)],</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-    <span class="n">pen</span><span class="o">.</span><span class="n">line</span><span class="p">([(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span> <span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span> <span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">220</span><span class="p">),</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">220</span><span class="p">),</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">)],</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
-    <span class="n">pen</span><span class="o">.</span><span class="n">rectangle</span><span class="p">((</span><span class="mi">250</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-    <span class="n">pen</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-    <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-
-<span class="c1"># 裁剪 Logo</span>
-<span class="n">crop_logo</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">watermark</span><span class="p">)</span>
-
-<span class="c1"># 绘制 Logo</span>
-<span class="n">draw_logo</span><span class="p">(</span><span class="n">watermark</span><span class="p">)</span>
-
-<span class="c1"># 遍历 PNG 文件并添加水印</span>
-<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s1">&#39;*.png&#39;</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">stem</span>
-    <span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mark.png&quot;</span><span class="p">)</span>
-    <span class="n">img_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">watermark</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>代码分析</h2>
-<h3>裁剪&nbsp;Logo：</h3>
-<ul>
-<li>crop_logo 函数从输入图像中裁剪出一个 100x100&nbsp;像素的区域，并将其保存为水印。</li>
-</ul>
-<h3>添加水印：</h3>
-<ul>
-<li>img_watermark 函数将裁剪出的 logo&nbsp;作为水印添加到指定的图像上，放置在右下角。</li>
-</ul>
-<h3>绘制&nbsp;Logo：</h3>
-<ul>
-<li>draw_logo 函数创建一个新的 400x400 像素的图像，在其中绘制了一些图形和文本，并保存为 logo&nbsp;图像。</li>
-</ul>
-<h3>遍历 <span class="caps">PNG</span>&nbsp;文件：</h3>
-<ul>
-<li>使用 Path.rglob() 方法查找指定目录下的所有 <span class="caps">PNG</span>&nbsp;文件，并对每个文件应用水印。</li>
-</ul>
-<h2>改进建议</h2>
-<h3>路径处理：</h3>
-<ul>
-<li>使用 os.path.join()&nbsp;以确保路径在不同操作系统上兼容。</li>
-</ul>
-<h3>异常处理：</h3>
-<ul>
-<li>可以在打开和保存图像时添加异常处理，以避免在文件不存在或无法写入时崩溃。</li>
-</ul>
-<h3>参数化：</h3>
-<ul>
-<li>考虑将某些参数（如裁剪区域、图像大小等）作为函数参数，以提高灵活性。</li>
-</ul>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/apple …</span></code></pre></div>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
