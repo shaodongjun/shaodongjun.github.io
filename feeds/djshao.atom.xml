@@ -6,10 +6,13 @@
 &lt;p&gt;Pandas 的主要数据结构是 Series （一维数据）与&amp;nbsp;DataFrame（二维数据）。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Series 是一种类似于一维数组的对象，它由一组数据（各种 Numpy&amp;nbsp;数据类型）以及一组与之相关的数据标签（即索引）组成。&lt;/p&gt;
+&lt;p&gt;Series 是一种类似于一维数组的对象，它由一组数据（各种 Numpy 数据类型）以及一组与之相关的数据标签（即索引）组成。
+&lt;img alt="serier" src="images/pandas-series.png"&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;DataFrame 是一个表格型的数据结构，它含有一组有序的列，每列可以是不同的值类型（数值、字符串、布尔型值）。DataFrame 既有行索引也有列索引，它可以被看做由 Series&amp;nbsp;组成的字典（共同用一个索引）。&lt;/p&gt;
+&lt;p&gt;DataFrame 是一个表格型的数据结构，它含有一组有序的列，每列可以是不同的值类型（数值、字符串、布尔型值）。DataFrame 既有行索引也有列索引，它可以被看做由 Series 组成的字典（共同用一个索引）。
+&lt;img alt="dataframe" src="images/pandas-dataframe.png"&gt;
+&lt;img alt="dataframe" src="images/pandas-df2.png"&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Pandas&amp;nbsp;应用&lt;/h2&gt;
