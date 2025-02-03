@@ -4,24 +4,30 @@
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                         <meta name="generator" content="Pelican" />
-                        <title>ShaoDJ's World - python</title>
+                        <title>使用 BeautifulSoup & Requests 解析网页</title>
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
+    <meta name="description" content="Python有两个很好用第三方模块requests库和beautifulsoup库，简单学习下模块用法： requests模块 标准库中提供了：urllib、urllib2、httplib 等模块以供Http请求，使用起来较为麻烦。..." />
         </head>
 
         <body id="index" class="home">
                 <header id="banner" class="body">
                         <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
                         <nav><ul>
-                                                <li><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li class="active"><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
                                                 <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/" rel="bookmark"
+             title="Permalink to 使用 BeautifulSoup & Requests 解析网页">使用 BeautifulSoup <span class="amp">&amp;</span> Requests&nbsp;解析网页</a></h1>
+      </header>
 
-                <aside id="featured" class="body">
-                    <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/">使用 BeautifulSoup <span class="amp">&amp;</span> Requests&nbsp;解析网页</a></h1>
+      <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-03T15:53:00+08:00">
                 Published: 一 03 二月 2025
@@ -32,7 +38,7 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info --><p>Python有两个很好用第三方模块<code>requests</code>库和<code>beautifulsoup</code>库，简单学习下模块用法：</p>
+</footer><!-- /.post-info -->        <p>Python有两个很好用第三方模块<code>requests</code>库和<code>beautifulsoup</code>库，简单学习下模块用法：</p>
 <h2>requests模块</h2>
 <p>标准库中提供了：<strong>urllib、urllib2、httplib</strong> 等模块以供Http请求，使用起来较为麻烦。
 <a href="https://requests.readthedocs.io">requests</a>是基于Python开发的HTTP第三方库，在Python内置模块的基础上进行了高度的封装，使用了更简单，代码量更少。</p>
@@ -107,155 +113,11 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;time=1738771200
 6号场, 12:00,13:00
 1号场, 18:00,20:00
 2号场, 18:00,20:00
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+</code></pre></div>
+      </div><!-- /.entry-content -->
 
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/" rel="bookmark"
-                               title="Permalink to 使用 Pandas 实现基本的数据分析">使用 Pandas&nbsp;实现基本的数据分析</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-02T10:16:00+08:00">
-                Published: 日 02 二月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info -->                        <p><strong>Pandas</strong> 一个强大的分析结构化数据的工具集，基础是 <a href="https://www.runoob.com/numpy/numpy-tutorial.html">Numpy</a>（提供高性能的矩阵运算）。</p>
-<h2>数据结构</h2>
-<p>Pandas 的主要数据结构是 Series （一维数据）与 …</p>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/" rel="bookmark"
-                               title="Permalink to 使用 PIL(pillow) 实现图片绘制 & 裁剪 & 水印">使用 <span class="caps">PIL</span>(pillow) 实现图片绘制 <span class="amp">&amp;</span> 裁剪 <span class="amp">&amp;</span>&nbsp;水印</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-01T20:32:00+08:00">
-                Published: 六 01 二月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info -->                        <p>使用<code>PIL</code>代码实现了从图像中裁剪出一个<code>logo</code>，并将其作为水印添加到其他图像上。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageDraw</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/apple …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/" rel="bookmark"
-                               title="Permalink to 使用 PyPDF 和 Pandoc 实现word/pdf转换">使用 PyPDF 和 Pandoc&nbsp;实现word/pdf转换</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-01T15:04:00+08:00">
-                Published: 六 01 二月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>PyPDF</code> 和 <code>Pandoc</code> 实现word/pdf转换</p>
-<p>关于<a href="https://medium.com/@daneallist/3-simple-ways-to-merge-word-documents-using-python-862112ff4152">Pandoc的具体用法</a></p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pypandoc</span> <span class="kn">import</span> <span class="n">convert_file</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfReader</span><span class="p">,</span><span class="n">PdfWriter</span> 
-<span class="n">unused</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;demo&#39;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">find_doc_files</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;docx&quot;</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/" rel="bookmark"
-                               title="Permalink to 使用 python-docx 创建 word 文件">使用 python-docx 创建 word&nbsp;文件</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-01T10:52:00+08:00">
-                Published: 六 01 二月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>python-docx</code> 库创建和修改 Word&nbsp;文件。</p>
-<h2>可运行代码</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">docx</span> <span class="kn">import</span> <span class="n">Document</span>
-<span class="kn">from</span> <span class="nn">docx.oxml.ns</span> <span class="kn">import</span> <span class="n">qn</span>
-<span class="kn">from</span> <span class="nn">docx.shared</span> <span class="kn">import</span> <span class="n">Inches</span><span class="p">,</span> <span class="n">Pt</span><span class="p">,</span> <span class="n">RGBColor</span> 
-
-<span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;demo.docx&quot;</span>
-<span class="n">name_placeholder</span> <span class="o">=</span> <span class="s2">&quot;&lt;name&gt;&quot;</span>
-<span class="n">sex_placeholder</span> <span class="o">=</span> <span class="s2">&quot;&lt;sex …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="bookmark"
-                               title="Permalink to 使用 openpyxl 创建 Excel 文件">使用 openpyxl 创建 Excel&nbsp;文件</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-31T18:00:00+08:00">
-                Published: 五 31 一月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
-<h2>可运行代码</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openpyxl</span>
-
-<span class="c1"># 创建一个新的工作簿</span>
-<span class="n">wb</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">()</span>
-
-<span class="c1"># 创建 …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-                    </ol><!-- /#posts-list -->
-                    </section><!-- /#content -->
+    </article>
+  </section>
                 <section id="extras" class="body">
                                 <div class="blogroll">
                                         <h2>links</h2>
