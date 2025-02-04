@@ -21,7 +21,219 @@
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/">使用 BeautifulSoup <span class="amp">&amp;</span> Requests&nbsp;解析网页</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/">使用 Selenium <span class="amp">&amp;</span> webdriver&nbsp;自动化测试</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-04T14:08:00+08:00">
+                Published: 二 04 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+</footer><!-- /.post-info --><p><strong>Selenium</strong> 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是 Web&nbsp;爬虫、任务自动化（如表单提交、网页截图、数据抓取等），<code>Selenium</code> 都是一个优秀的选择。</p>
+<h2>Selenium&nbsp;的一些优秀特性和用途：</h2>
+<hr>
+<h2>1.&nbsp;跨浏览器支持</h2>
+<p>Selenium&nbsp;支持多种浏览器，包括：</p>
+<ul>
+<li>
+<p><strong>Chrome</strong>（通过&nbsp;ChromeDriver）</p>
+</li>
+<li>
+<p><strong>Edge</strong>（通过&nbsp;EdgeDriver）</p>
+</li>
+<li>
+<p><strong>Firefox</strong>（通过&nbsp;GeckoDriver）</p>
+</li>
+<li>
+<p><strong>Safari</strong>（通过&nbsp;SafariDriver）</p>
+</li>
+<li>
+<p><strong>Opera</strong>&nbsp;等。</p>
+</li>
+</ul>
+<p>这使得 Selenium&nbsp;可以在不同的浏览器环境中运行相同的脚本，确保兼容性。</p>
+<h2>2.&nbsp;支持多种编程语言</h2>
+<p>Selenium 不仅支持&nbsp;Python，还支持：</p>
+<ul>
+<li>
+<p>Java</p>
+</li>
+<li>
+<p>JavaScript&nbsp;(Node.js)</p>
+</li>
+<li>
+<p>C#</p>
+</li>
+<li>
+<p>Ruby</p>
+</li>
+<li>
+<p><span class="caps">PHP</span>&nbsp;等。</p>
+</li>
+</ul>
+<p>这使得开发者可以使用自己熟悉的语言来编写自动化脚本。</p>
+<h2>3.&nbsp;强大的元素定位功能</h2>
+<p>Selenium&nbsp;提供了多种定位网页元素的方式，例如：</p>
+<ul>
+<li>
+<p><strong>By <span class="caps">ID</span></strong>: <code>find_element(By.ID, "element_id")</code></p>
+</li>
+<li>
+<p><strong>By Class Name</strong>: <code>find_element(By.CLASS_NAME, "class_name")</code></p>
+</li>
+<li>
+<p><strong>By Name</strong>: <code>find_element(By.NAME, "name")</code></p>
+</li>
+<li>
+<p><strong>By Tag Name</strong>: <code>find_element(By.TAG_NAME, "tag_name")</code></p>
+</li>
+<li>
+<p><strong>By <span class="caps">CSS</span> Selector</strong>: <code>find_element(By.CSS_SELECTOR, "css_selector")</code></p>
+</li>
+<li>
+<p><strong>By XPath</strong>: <code>find_element(By.XPATH, "xpath_expression")</code></p>
+</li>
+</ul>
+<p>这些定位方式使得 Selenium&nbsp;可以灵活地与网页中的任何元素交互。</p>
+<h2>4.&nbsp;丰富的操作功能</h2>
+<p>Selenium&nbsp;不仅可以点击按钮、输入文本，还可以：</p>
+<ul>
+<li>提交表单</li>
+<li>处理下拉菜单</li>
+<li>上传文件</li>
+<li>执行 JavaScript&nbsp;代码</li>
+<li>截图</li>
+<li>处理弹窗（如警告框、确认框）</li>
+<li>切换窗口或&nbsp;iframe</li>
+</ul>
+<p>这些功能使得 Selenium&nbsp;可以模拟几乎所有的用户操作。</p>
+<h2>5.&nbsp;支持动态网页</h2>
+<p>Selenium 可以处理 JavaScript&nbsp;动态加载的内容，这是它与传统爬虫工具（如 <code>requests</code> 库）相比的最大优势。它能够等待页面完全加载后再进行操作，甚至可以与动态生成的元素交互。</p>
+<h2>6. 支持无头模式（Headless&nbsp;Mode）</h2>
+<p>通过启用无头模式（如 <code>options.add_argument('headless')</code>），Selenium 可以在后台运行浏览器，无需打开 <span class="caps">GUI</span>&nbsp;界面。这对于服务器环境或自动化任务非常有用，可以节省资源并提高效率。</p>
+<h2>7.&nbsp;强大的等待机制</h2>
+<p>Selenium&nbsp;提供了两种等待机制来处理异步加载的内容：</p>
+<ul>
+<li><strong>隐式等待（Implicit Wait）</strong>：全局等待时间，适用于所有元素。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># 等待最多 10 秒</span>
+</code></pre></div>
+
+<ul>
+<li><strong>显式等待（Explicit Wait）</strong>：针对特定条件等待，直到条件满足或超时。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
+
+<span class="n">element</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+    <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s2">&quot;element_id&quot;</span><span class="p">))</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h2>8.&nbsp;支持分布式测试</h2>
+<p>通过 Selenium&nbsp;Grid，可以在多台机器上并行运行测试脚本，显著提高测试效率。</p>
+<h2>9.&nbsp;社区支持和文档丰富</h2>
+<p>Selenium&nbsp;拥有庞大的用户社区和丰富的文档资源，遇到问题时可以轻松找到解决方案。</p>
+<h2>10.&nbsp;应用场景广泛</h2>
+<p>Selenium&nbsp;不仅用于测试，还可以用于：</p>
+<ul>
+<li>
+<p>Web&nbsp;爬虫：抓取动态加载的数据。</p>
+</li>
+<li>
+<p>自动化任务：如自动填写表单、自动登录、自动下载文件等。</p>
+</li>
+<li>
+<p>网页监控：定期检查网页内容变化。</p>
+</li>
+<li>
+<p>性能测试：模拟用户操作，测试网页性能。</p>
+</li>
+</ul>
+<h2>11.&nbsp;与其他工具集成</h2>
+<p>Selenium&nbsp;可以与其他工具和框架集成，例如：</p>
+<ul>
+<li>
+<p>Pytest：用于编写更结构化的测试脚本。</p>
+</li>
+<li>
+<p>BeautifulSoup：用于解析抓取的网页内容。</p>
+</li>
+<li>
+<p>Pandas：用于处理和分析抓取的数据。</p>
+</li>
+<li>
+<p>Docker：用于在容器化环境中运行&nbsp;Selenium。</p>
+</li>
+</ul>
+<h2>12.&nbsp;开源和免费</h2>
+<p>Selenium&nbsp;是一个开源项目，完全免费使用，适合个人和企业。</p>
+<hr>
+<h1>使用Selenium v4&nbsp;编写脚本</h1>
+<h2>预约球场</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">datetime</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.edge.service</span> <span class="kn">import</span> <span class="n">Service</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.edge.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
+
+<span class="c1"># 设置 Edge 选项</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="n">options</span><span class="o">.</span><span class="n">use_chromium</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># This is required for Selenium 4</span>
+<span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;headless&#39;</span><span class="p">)</span>  <span class="c1"># 运行无界面模式</span>
+<span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--disable-gpu&#39;</span><span class="p">)</span>  <span class="c1"># 可选：禁用 GPU 硬件加速</span>
+<span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--window-size=1920,1080&#39;</span><span class="p">)</span>  <span class="c1"># 可选：设置窗口大小</span>
+
+<span class="c1"># 初始化 WebDriver 服务</span>
+<span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;C:\chromedriver.exe&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">days</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">daytime</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">day</span><span class="p">))</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()</span>
+        <span class="n">daytime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">daytime</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;time=</span><span class="si">{</span><span class="n">daytime</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="c1"># 等待元素加载</span>
+        <span class="n">elems</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+            <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_all_elements_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">CLASS_NAME</span><span class="p">,</span> <span class="s1">&#39;can-select&#39;</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s1">&#39;data-start&#39;</span><span class="p">)</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s1">&#39;data-end&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">start_time</span> <span class="o">==</span> <span class="s2">&quot;12:00&quot;</span> <span class="ow">or</span> <span class="n">end_time</span> <span class="o">==</span> <span class="s2">&quot;18:00&quot;</span><span class="p">:</span>
+                <span class="n">hall_name</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s1">&#39;data-hall_name&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">hall_name</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">raise</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="k">finally</span><span class="p">:</span>
+  <span class="n">driver</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/" rel="bookmark"
+                               title="Permalink to 使用 BeautifulSoup & Requests 解析网页">使用 BeautifulSoup <span class="amp">&amp;</span> Requests&nbsp;解析网页</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-03T15:53:00+08:00">
                 Published: 一 03 二月 2025
@@ -32,87 +244,13 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info --><p>Python有两个很好用第三方模块<code>requests</code>库和<code>beautifulsoup</code>库，简单学习下模块用法：</p>
+</footer><!-- /.post-info -->                        <p>Python有两个很好用第三方模块<code>requests</code>库和<code>beautifulsoup</code>库，简单学习下模块用法：</p>
 <h2>requests模块</h2>
 <p>标准库中提供了：<strong>urllib、urllib2、httplib</strong> 等模块以供Http请求，使用起来较为麻烦。
-<a href="https://requests.readthedocs.io">requests</a>是基于Python开发的HTTP第三方库，在Python内置模块的基础上进行了高度的封装，使用了更简单，代码量更少。</p>
-<h3>requests&nbsp;的api主要包括了八个方法：</h3>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="k">def</span> <span class="nf">patch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-<span class="c1">#上面方法都是基于request方法实现的（method参数）</span>
-<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</code></pre></div>
-
-<h2>BeautifulSoup模块</h2>
-<p><code>BeautifulSoup</code>模块是一个可以从 <strong>HTML或XML</strong> 文件中提取数据的Python第三方库。&nbsp;它将一个html或xml字符串（或文档句柄）文档被转换成Unicode，利用解析器来解析这段文档。</p>
-<h3>BeautifulSoup&nbsp;支持几种不同的解析器：</h3>
-<ul>
-<li>
-<p>python标准库中的html.parser</p>
-</li>
-<li>
-<p>第三方库lxml-html</p>
-</li>
-<li>
-<p>lxml-xml</p>
-</li>
-<li>
-<p>html5lib</p>
-</li>
-</ul>
-<p><img alt="beautifulsoup" src="/images/beautifulsoup-parser.png"></p>
-<h2>爬虫应用:&nbsp;预约空闲的羽毛球馆时间</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span> <span class="k">as</span> <span class="nn">rq</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span> <span class="k">as</span> <span class="n">bs</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">place</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;753&quot;</span><span class="p">]</span>   <span class="c1"># 羽毛球场地编号</span>
-<span class="n">days</span><span class="o">=</span><span class="mi">3</span>          <span class="c1"># 检查近3天的空闲时间</span>
-
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">place</span><span class="p">:</span>
-  <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">days</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">daytime</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">day</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://xihuwenti.juyancn.cn/wechat/product/details?id=</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&amp;time=</span><span class="si">{</span><span class="n">daytime</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">headers</span><span class="p">)</span>
-    <span class="n">soup</span> <span class="o">=</span> <span class="n">bs</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span> <span class="s2">&quot;lxml&quot;</span><span class="p">)</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;can-select&quot;</span><span class="p">})</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-      <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;data-start&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;12:00&quot;</span> <span class="ow">or</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;data-start&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;18:00&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;data-hall_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;data-start&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;data-end&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<h3>返回查询结果</h3>
-<div class="highlight"><pre><span></span><code>https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;time=1738598400
-1号场, 12:00,13:00
-2号场, 12:00,13:00
-https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;time=1738684800
-1号场, 12:00,13:00
-3号场, 12:00,13:00
-5号场, 18:00,20:00
-6号场, 18:00,20:00
-https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;time=1738771200
-2号场, 12:00,13:00
-5号场, 12:00,13:00
-6号场, 12:00,13:00
-1号场, 18:00,20:00
-2号场, 18:00,20:00
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+<a href="https://requests.readthedocs.io">requests</a>是基于Python开发的HTTP第三方库，在Python内置模块的基础上进行了高度的封装，使用了 …</p>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
