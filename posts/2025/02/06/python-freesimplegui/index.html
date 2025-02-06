@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>使用 FreeSimpleGUI 定制图形界面</title>
+                        <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
+                                <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
+                                <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
+    <meta name="description" content="什么是FreeSimpleGUI？ FreeSimpleGUI是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁 …" />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
+                        <nav><ul>
+                                                <li class="active"><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/" rel="bookmark"
+             title="Permalink to 使用 FreeSimpleGUI 定制图形界面">使用 FreeSimpleGUI&nbsp;定制图形界面</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2025-02-06T17:18:00+08:00">
+                Published: 四 06 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+</footer><!-- /.post-info -->        <h2>什么是FreeSimpleGUI？</h2>
+<p><strong>FreeSimpleGUI</strong>是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁的布局定义系统，支持多种流行的 <span class="caps">GUI</span> 框架，包括 tkinter、Qt、WxPython 和 Remi。它通过封装这些框架的常用功能，提供了更简洁的 <span class="caps">API</span>，让你专注于应用逻辑而非繁杂的UI细节。</p>
+<h2>FreeSimpleGUI的特点</h2>
+<ul>
+<li>
+<p>简单易用：FreeSimpleGUI的API设计非常简单易用，任何人都可以轻松地使用它来创建GUI应用程序。</p>
+</li>
+<li>
+<p>免费：FreeSimpleGUI是完全免费的，不需要任何付费许可证，可以自由地使用和分发。</p>
+</li>
+<li>
+<p>跨平台：FreeSimpleGUI支持多种平台，包括Windows、MacOS和Linux等。</p>
+</li>
+<li>
+<p>高性能：FreeSimpleGUI具有高性能，能够快速地渲染和响应用户交互。</p>
+</li>
+<li>
+<p>灵活：FreeSimpleGUI提供了多种自定义选项，允许开发者根据需要进行自定义和调整。</p>
+</li>
+</ul>
+<h2>技术应用示例</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">FreeSimpleGUI</span> <span class="k">as</span> <span class="nn">sg</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="n">version</span> <span class="o">=</span> <span class="mf">0.8</span>
+
+<span class="c1"># 界面布局</span>
+<span class="n">sg</span><span class="o">.</span><span class="n">theme</span><span class="p">(</span><span class="s1">&#39;TanBlue&#39;</span><span class="p">)</span>  <span class="c1"># 图形界面布局</span>
+
+<span class="n">layout</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;重要资料目录夹: &quot;</span><span class="p">),</span> 
+     <span class="n">sg</span><span class="o">.</span><span class="n">In</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">enable_events</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;_FOLDER_&quot;</span><span class="p">),</span>
+     <span class="n">sg</span><span class="o">.</span><span class="n">FolderBrowse</span><span class="p">()],</span>
+    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;水印大小: &quot;</span><span class="p">),</span>
+     <span class="n">sg</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">border_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span>
+        <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_SCALE_&#39;</span><span class="p">)],</span>
+    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s1">&#39;水印文字:&#39;</span><span class="p">),</span> <span class="n">sg</span><span class="o">.</span><span class="n">InputText</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_WORDS_&#39;</span><span class="p">)],</span>
+    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s1">&#39;OK&#39;</span><span class="p">),</span> <span class="n">sg</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s1">&#39;Exit&#39;</span><span class="p">)],</span>
+<span class="p">]</span>
+
+<span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;jpeg&quot;</span><span class="p">]</span>
+
+<span class="n">window</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;又拍云水印系统 v</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s1"> -悟空&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span><span class="o">.</span><span class="n">Finalize</span><span class="p">()</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">jpg_and_pngs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">event</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Exit&#39;</span><span class="p">):</span>
+        <span class="k">break</span>
+    <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;OK&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_FOLDER_&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_WORDS_&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;水印文字不能为空!&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;_FOLDER_&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/*.</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">this_type_files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+                <span class="n">jpg_and_pngs</span> <span class="o">+=</span> <span class="n">this_type_files</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">jpg_and_pngs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;没有发现图片!&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">jpg_and_pngs</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">IsValidImage</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                        <span class="n">add_mark_png</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_WORDS_&#39;</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_SCALE_&#39;</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;图片格式与后缀名不符!&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+            <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;处理完毕!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;目录不能为空!&quot;</span><span class="p">)</span>
+<span class="n">window</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://www.upyun.com">UP#AI</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
+
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+                <footer id="contentinfo" class="body">
+                        <address id="about" class="vcard body">
+                                Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+                        </address><!-- /#about -->
+
+                        <p>The theme is by <a rel="nofollow" href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+                </footer><!-- /#contentinfo -->
+
+        </body>
+</html>
