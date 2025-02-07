@@ -21,7 +21,163 @@
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/">使用 FreeSimpleGUI&nbsp;定制图形界面</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/">使用 <span class="caps">PIL</span>(pillow)&nbsp;实现图片水印*优化版</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-07T15:55:00+08:00">
+                Published: 五 07 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/pillow.html">pillow</a> <a href="https://shaodongjun.github.io/tag/pil.html">pil</a> </p>        
+</footer><!-- /.post-info --><p><strong>Pillow</strong> 是一个用于图像处理的 Python 库，是 Python Imaging Library (<span class="caps">PIL</span>)&nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。</p>
+<h2>优点</h2>
+<ul>
+<li>
+<p>易于使用：Pillow 提供了简单易懂的 <span class="caps">API</span>，适合初学者和专业开发者使用。</p>
+</li>
+<li>
+<p>支持多种格式：可以处理多种图像格式，如 <span class="caps">JPEG</span>、<span class="caps">PNG</span>、<span class="caps">GIF</span>、<span class="caps">BMP</span>&nbsp;等。</p>
+</li>
+<li>
+<p>图像处理功能强大：提供了多种图像处理功能，包括图像增强、过滤、变换、裁剪、旋转等。</p>
+</li>
+<li>
+<p>图像创建：可以方便地创建新图像，绘制文本和图形。</p>
+</li>
+<li>
+<p>快速高效：经过优化，能够处理较大的图像文件而不会显著影响性能。</p>
+</li>
+<li>
+<p>文档完善：Pillow&nbsp;的文档详细，提供了丰富的示例，便于学习和使用。</p>
+</li>
+<li>
+<p>社区支持：作为一个广泛使用的库，Pillow&nbsp;拥有活跃的社区，可以获得各种资源和支持。</p>
+</li>
+</ul>
+<h2>增加文字水印的代码</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">system</span>
+
+<span class="n">version</span> <span class="o">=</span> <span class="mf">0.8</span>
+
+<span class="k">def</span> <span class="nf">IsValidImage</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    判断文件是否为有效（完整）的图片</span>
+<span class="sd">    :param img_path:图片路径</span>
+<span class="sd">    :return:True：有效 False：无效</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Valid</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">Valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">Valid</span>
+
+
+<span class="k">def</span> <span class="nf">add_mark_png</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)):</span>
+    <span class="c1"># 设置所使用的字体</span>
+    <span class="k">if</span> <span class="s2">&quot;Darwin&quot;</span> <span class="ow">in</span> <span class="n">system</span><span class="p">():</span>
+        <span class="n">font_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;/System/Library/Fonts/PingFang.ttc&quot;</span>
+    <span class="k">elif</span> <span class="s2">&quot;Windows&quot;</span> <span class="ow">in</span> <span class="n">system</span><span class="p">():</span>
+        <span class="n">font_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\windows\Fonts\msyh.ttc&quot;</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">font_file</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+
+    <span class="c1"># Opening Image &amp; Creating New Text Layer</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.png&quot;</span><span class="p">:</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="c1"># 针对jpeg无透明通道,先创建水印图片的模式</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="c1"># Creating Draw Object</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+
+    <span class="c1"># Positioning Text</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># textwidth, textheight = d.textsize(words, font)</span>
+    <span class="c1"># x=width/2-textwidth/2</span>
+    <span class="c1"># y=height-textheight-300</span>
+
+    <span class="k">while</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">:</span>
+        <span class="n">mark</span> <span class="o">=</span> <span class="n">txt</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mf">16.8</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.png&quot;</span><span class="p">:</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">words</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">155</span><span class="p">),</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">words</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="mi">50</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="mi">120</span>
+
+    <span class="c1"># 另存图片</span>
+    <span class="n">dir_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;水印图&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dir_name</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">Path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;_new&quot;</span> <span class="o">+</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">dir_name</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.png&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">watermarked</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">alpha_composite</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">mark</span><span class="p">)</span>
+            <span class="n">watermarked</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">rgb_im</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+            <span class="n">rgb_im</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mark</span><span class="p">)</span>
+            <span class="n">rgb_im</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># 针对jpeg格式的图片,用paste方法</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mark</span><span class="p">)</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>图片转pdf的代码</h2>
+<ul>
+<li>
+<p>打开图像：使用 Image.open()&nbsp;打开指定路径的图像文件。</p>
+</li>
+<li>
+<p>模式检查与转换：如果图像不是 <span class="caps">RGB</span> 模式，则将其转换为 <span class="caps">RGB</span> 模式。<span class="caps">PDF</span> 格式通常要求图像为 <span class="caps">RGB</span>。</p>
+</li>
+<li>
+<p>保存为 <span class="caps">PDF</span>：使用 image.save() 方法将图像保存为 <span class="caps">PDF</span>&nbsp;文件，同时可以指定分辨率。</p>
+</li>
+<li>
+<p>支持多图像：如果需要支持将多个图像合并为一个 <span class="caps">PDF</span>，可以使用 save() 方法的 append_images&nbsp;参数。</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="k">def</span> <span class="nf">image_to_pdf</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">pdf_path</span><span class="p">):</span>
+    <span class="c1"># 打开图像文件</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error opening image: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># 检查图像模式，如果不是 RGB，则转换为 RGB</span>
+    <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;RGB&quot;</span><span class="p">:</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 保存图像为 PDF 文件</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="s2">&quot;PDF&quot;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
+</code></pre></div>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/" rel="bookmark"
+                               title="Permalink to 使用 FreeSimpleGUI 定制图形界面">使用 FreeSimpleGUI&nbsp;定制图形界面</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-06T17:18:00+08:00">
                 Published: 四 06 二月 2025
@@ -31,85 +187,12 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
-</footer><!-- /.post-info --><h2>什么是FreeSimpleGUI？</h2>
-<p><strong>FreeSimpleGUI</strong>是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁的布局定义系统，支持多种流行的 <span class="caps">GUI</span> 框架，包括 tkinter、Qt、WxPython 和 Remi。它通过封装这些框架的常用功能，提供了更简洁的 <span class="caps">API</span>，让你专注于应用逻辑而非繁杂的UI细节。</p>
-<h2>FreeSimpleGUI的特点</h2>
-<ul>
-<li>
-<p>简单易用：FreeSimpleGUI的API设计非常简单易用，任何人都可以轻松地使用它来创建GUI应用程序。</p>
-</li>
-<li>
-<p>免费：FreeSimpleGUI是完全免费的，不需要任何付费许可证，可以自由地使用和分发。</p>
-</li>
-<li>
-<p>跨平台：FreeSimpleGUI支持多种平台，包括Windows、MacOS和Linux等。</p>
-</li>
-<li>
-<p>高性能：FreeSimpleGUI具有高性能，能够快速地渲染和响应用户交互。</p>
-</li>
-<li>
-<p>灵活：FreeSimpleGUI提供了多种自定义选项，允许开发者根据需要进行自定义和调整。</p>
-</li>
-</ul>
-<h2>技术应用示例</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">FreeSimpleGUI</span> <span class="k">as</span> <span class="nn">sg</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
-
-<span class="n">version</span> <span class="o">=</span> <span class="mf">0.8</span>
-
-<span class="c1"># 界面布局</span>
-<span class="n">sg</span><span class="o">.</span><span class="n">theme</span><span class="p">(</span><span class="s1">&#39;TanBlue&#39;</span><span class="p">)</span>  <span class="c1"># 图形界面布局</span>
-
-<span class="n">layout</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;重要资料目录夹: &quot;</span><span class="p">),</span> 
-     <span class="n">sg</span><span class="o">.</span><span class="n">In</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">enable_events</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;_FOLDER_&quot;</span><span class="p">),</span>
-     <span class="n">sg</span><span class="o">.</span><span class="n">FolderBrowse</span><span class="p">()],</span>
-    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;水印大小: &quot;</span><span class="p">),</span>
-     <span class="n">sg</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">border_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span>
-        <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_SCALE_&#39;</span><span class="p">)],</span>
-    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s1">&#39;水印文字:&#39;</span><span class="p">),</span> <span class="n">sg</span><span class="o">.</span><span class="n">InputText</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_WORDS_&#39;</span><span class="p">)],</span>
-    <span class="p">[</span><span class="n">sg</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s1">&#39;OK&#39;</span><span class="p">),</span> <span class="n">sg</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s1">&#39;Exit&#39;</span><span class="p">)],</span>
-<span class="p">]</span>
-
-<span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;jpeg&quot;</span><span class="p">]</span>
-
-<span class="n">window</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;又拍云水印系统 v</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s1"> -悟空&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span><span class="o">.</span><span class="n">Finalize</span><span class="p">()</span>
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">jpg_and_pngs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">event</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Exit&#39;</span><span class="p">):</span>
-        <span class="k">break</span>
-    <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;OK&#39;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_FOLDER_&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_WORDS_&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;水印文字不能为空!&quot;</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
-                <span class="n">files</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;_FOLDER_&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/*.</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="n">this_type_files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
-                <span class="n">jpg_and_pngs</span> <span class="o">+=</span> <span class="n">this_type_files</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">jpg_and_pngs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;没有发现图片!&quot;</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">jpg_and_pngs</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">IsValidImage</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-                        <span class="n">add_mark_png</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_WORDS_&#39;</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;_SCALE_&#39;</span><span class="p">])</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;图片格式与后缀名不符!&quot;</span><span class="p">)</span>
-                        <span class="k">continue</span>
-            <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;处理完毕!&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sg</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="s2">&quot;目录不能为空!&quot;</span><span class="p">)</span>
-<span class="n">window</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/gui.html">gui</a> <a href="https://shaodongjun.github.io/tag/tkinter.html">tkinter</a> </p>        
+</footer><!-- /.post-info -->                        <h2>什么是FreeSimpleGUI？</h2>
+<p><strong>FreeSimpleGUI</strong>是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁 …</p>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
@@ -127,7 +210,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/ppt.html">ppt</a> <a href="https://shaodongjun.github.io/tag/pptx.html">pptx</a> </p>        
 </footer><!-- /.post-info -->                        <h2>python-pptx&nbsp;库简介</h2>
 <p><a href="https://python-pptx.readthedocs.io/">python-pptx</a> 是一个用于创建和修改 PowerPoint (.pptx) 文件的 Python&nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进 …</p>
                         <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/05/python-pptx-powerpoint/">read more</a>
@@ -150,7 +233,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/selenium.html">selenium</a> <a href="https://shaodongjun.github.io/tag/web.html">web</a> </p>        
 </footer><!-- /.post-info -->                        <p><strong>Selenium</strong> 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是 Web …</p>
                         <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/">read more</a>
                     </div><!-- /.entry-content -->
@@ -172,7 +255,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/requests.html">requests</a> <a href="https://shaodongjun.github.io/tag/beautifulsoup.html">beautifulsoup</a> <a href="https://shaodongjun.github.io/tag/bs.html">bs</a> <a href="https://shaodongjun.github.io/tag/web.html">web</a> </p>        
 </footer><!-- /.post-info -->                        <p>Python有两个很好用第三方模块<code>requests</code>库和<code>beautifulsoup</code>库，简单学习下模块用法：</p>
 <h2>requests模块</h2>
 <p>标准库中提供了：<strong>urllib、urllib2、httplib</strong> 等模块以供Http请求，使用起来较为麻烦。
@@ -197,7 +280,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/pandas.html">pandas</a> <a href="https://shaodongjun.github.io/tag/excel.html">excel</a> <a href="https://shaodongjun.github.io/tag/xls.html">xls</a> <a href="https://shaodongjun.github.io/tag/xlsx.html">xlsx</a> </p>        
 </footer><!-- /.post-info -->                        <p><strong>Pandas</strong> 一个强大的分析结构化数据的工具集，基础是 <a href="https://www.runoob.com/numpy/numpy-tutorial.html">Numpy</a>（提供高性能的矩阵运算）。</p>
 <h2>数据结构</h2>
 <p>Pandas 的主要数据结构是 Series （一维数据）与 …</p>
@@ -221,7 +304,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/pillow.html">pillow</a> <a href="https://shaodongjun.github.io/tag/pil.html">pil</a> </p>        
 </footer><!-- /.post-info -->                        <p>使用<code>PIL</code>代码实现了从图像中裁剪出一个<code>logo</code>，并将其作为水印添加到其他图像上。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
@@ -249,7 +332,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/word.html">word</a> <a href="https://shaodongjun.github.io/tag/pdf.html">pdf</a> <a href="https://shaodongjun.github.io/tag/pypdf.html">pypdf</a> <a href="https://shaodongjun.github.io/tag/pandoc.html">pandoc</a> </p>        
 </footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>PyPDF</code> 和 <code>Pandoc</code> 实现word/pdf转换</p>
 <p>关于<a href="https://medium.com/@daneallist/3-simple-ways-to-merge-word-documents-using-python-862112ff4152">Pandoc的具体用法</a></p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pypandoc</span> <span class="kn">import</span> <span class="n">convert_file</span>
@@ -279,7 +362,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/doc.html">doc</a> <a href="https://shaodongjun.github.io/tag/docx.html">docx</a> </p>        
 </footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>python-docx</code> 库创建和修改 Word&nbsp;文件。</p>
 <h2>可运行代码</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">docx</span> <span class="kn">import</span> <span class="n">Document</span>
@@ -309,7 +392,7 @@
                         By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> </p>        
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/xls.html">xls</a> <a href="https://shaodongjun.github.io/tag/xlsx.html">xlsx</a> <a href="https://shaodongjun.github.io/tag/openpyxl.html">openpyxl</a> <a href="https://shaodongjun.github.io/tag/excel.html">excel</a> </p>        
 </footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
 <h2>可运行代码</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openpyxl</span>
@@ -321,31 +404,14 @@
                         <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/">read more</a>
                     </div><!-- /.entry-content -->
                 </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/" rel="bookmark"
-                               title="Permalink to My first post">My first&nbsp;post</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-31T12:00:00+08:00">
-                Published: 五 31 一月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/sui-bi.html">随笔</a> </p>        
-</footer><!-- /.post-info -->                        <h5>开篇小记</h5>
-<p>今天是个好日子！</p>
-<p>This is the <em>first post</em> by Pelican Blog. <strong><span class="caps">YAY</span>!</strong></p>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
                     </ol><!-- /#posts-list -->
+  <nav>
+    <ul>
+      <li>Page 1 / 2</li>
+        <li><a href="https://shaodongjun.github.io/tag/blog2.html">&rang;</a></li>
+        <li><a href="https://shaodongjun.github.io/tag/blog2.html">&Rang;</a></li>
+    </ul>
+  </nav>
                     </section><!-- /#content -->
                 <section id="extras" class="body">
                                 <div class="blogroll">
