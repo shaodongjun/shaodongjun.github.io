@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>使用 configparser 轻松管理配置文件</title>
+                        <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
+                                <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
+                                <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
+    <meta name="description" content="configparser 是什么? configparser 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows INI 文件格式的配置文件。 configparser 模块允许我们 …" />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
+                        <nav><ul>
+                                                <li class="active"><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/" rel="bookmark"
+             title="Permalink to 使用 configparser 轻松管理配置文件">使用 configparser&nbsp;轻松管理配置文件</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2025-02-08T15:30:00+08:00">
+                Published: 六 08 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/config.html">config</a> </p>        
+</footer><!-- /.post-info -->        <h2>configparser&nbsp;是什么?</h2>
+<p><strong>configparser</strong> 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows <span class="caps">INI</span> 文件格式的配置文件。
+configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。</p>
+<h2>configparser&nbsp;优势与应用场景</h2>
+<h3>优势</h3>
+<ul>
+<li>
+<p>简单易用：configparser 模块的 <span class="caps">API</span>&nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。</p>
+</li>
+<li>
+<p>跨平台性：由于其基于类似 Windows <span class="caps">INI</span>&nbsp;文件的格式，在不同操作系统上都能很好地工作。</p>
+</li>
+<li>
+<p>灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。</p>
+</li>
+</ul>
+<h3>应用场景</h3>
+<ul>
+<li>
+<p>项目配置管理：在软件开发项目中，用于存储数据库连接信息、日志配置、服务器参数等<strong>敏感</strong>数据。</p>
+</li>
+<li>
+<p>用户偏好设置：在应用程序中，保存用户的个性化设置，如界面主题、语言等。</p>
+</li>
+<li>
+<p>测试环境配置：在测试过程中，方便地切换不同的测试环境配置。</p>
+</li>
+</ul>
+<h2>configparser&nbsp;基本使用</h2>
+<h3>安装与导入</h3>
+<p>configparser 模块是 Python&nbsp;的内置模块，无需额外安装。使用时，只需导入即可。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
+</code></pre></div>
+
+<h3>读取配置文件</h3>
+<p>假设我们有一个名为<code>config.ini</code>的配置文件，内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>database<span class="o">]</span>
+<span class="nv">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>localhost
+<span class="nv">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>root
+<span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123456</span>
+
+<span class="o">[</span>logging<span class="o">]</span>
+<span class="nv">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>DEBUG
+</code></pre></div>
+
+<p>我们可以使用以下代码读取这个配置文件：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;config.ini&#39;</span><span class="p">)</span>
+
+<span class="c1"># 读取数据库配置</span>
+<span class="n">db_host</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;host&#39;</span><span class="p">)</span>
+<span class="n">db_user</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">)</span>
+<span class="n">db_port</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="mi">3306</span><span class="p">)</span>
+<span class="n">db_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span>
+
+<span class="c1"># 读取日志配置</span>
+<span class="c1"># 可以为配置项指定默认值，以防止配置文件中缺少某些项时程序出错。</span>
+<span class="n">log_level</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logging&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database Host: </span><span class="si">{</span><span class="n">db_host</span><span class="si">}</span><span class="s2">, Port: </span><span class="si">{</span><span class="n">db_port</span><span class="si">}</span><span class="s2">, User: </span><span class="si">{</span><span class="n">db_user</span><span class="si">}</span><span class="s2">, Password: </span><span class="si">{</span><span class="n">db_password</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用<code>getint</code>方法获取整数类型的配置项（对于其他类型，还有<code>getfloat</code>、<code>getboolean</code>等方法）。</p>
+<h3>写入配置文件</h3>
+<p>我们也可以使用 configparser&nbsp;模块来创建或修改配置文件。以下是一个简单的示例：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+
+<span class="c1"># 添加一个新的section</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;webserver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">8080</span><span class="p">,</span>
+    <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span>
+<span class="p">}</span>
+
+<span class="c1"># 将配置写入文件</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;config.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">configfile</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>configparser&nbsp;注意事项</h2>
+<h3>语法要求严格</h3>
+<p>configparser 模块对配置文件的语法有一定要求，例如 section&nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。</p>
+<h3>类型转换问题</h3>
+<p>在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。</p>
+<p>configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&nbsp;模块都值得我们深入学习和掌握。</p>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://www.upyun.com">UP#AI</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
+
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+                <footer id="contentinfo" class="body">
+                        <address id="about" class="vcard body">
+                                Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+                        </address><!-- /#about -->
+
+                        <p>The theme is by <a rel="nofollow" href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+                </footer><!-- /#contentinfo -->
+
+        </body>
+</html>

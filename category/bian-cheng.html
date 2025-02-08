@@ -21,7 +21,119 @@
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/">使用 <span class="caps">PIL</span>(pillow)&nbsp;实现图片水印*优化版</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/">使用 configparser&nbsp;轻松管理配置文件</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-08T15:30:00+08:00">
+                Published: 六 08 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/config.html">config</a> </p>        
+</footer><!-- /.post-info --><h2>configparser&nbsp;是什么?</h2>
+<p><strong>configparser</strong> 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows <span class="caps">INI</span> 文件格式的配置文件。
+configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。</p>
+<h2>configparser&nbsp;优势与应用场景</h2>
+<h3>优势</h3>
+<ul>
+<li>
+<p>简单易用：configparser 模块的 <span class="caps">API</span>&nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。</p>
+</li>
+<li>
+<p>跨平台性：由于其基于类似 Windows <span class="caps">INI</span>&nbsp;文件的格式，在不同操作系统上都能很好地工作。</p>
+</li>
+<li>
+<p>灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。</p>
+</li>
+</ul>
+<h3>应用场景</h3>
+<ul>
+<li>
+<p>项目配置管理：在软件开发项目中，用于存储数据库连接信息、日志配置、服务器参数等<strong>敏感</strong>数据。</p>
+</li>
+<li>
+<p>用户偏好设置：在应用程序中，保存用户的个性化设置，如界面主题、语言等。</p>
+</li>
+<li>
+<p>测试环境配置：在测试过程中，方便地切换不同的测试环境配置。</p>
+</li>
+</ul>
+<h2>configparser&nbsp;基本使用</h2>
+<h3>安装与导入</h3>
+<p>configparser 模块是 Python&nbsp;的内置模块，无需额外安装。使用时，只需导入即可。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
+</code></pre></div>
+
+<h3>读取配置文件</h3>
+<p>假设我们有一个名为<code>config.ini</code>的配置文件，内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>database<span class="o">]</span>
+<span class="nv">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>localhost
+<span class="nv">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>root
+<span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123456</span>
+
+<span class="o">[</span>logging<span class="o">]</span>
+<span class="nv">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>DEBUG
+</code></pre></div>
+
+<p>我们可以使用以下代码读取这个配置文件：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;config.ini&#39;</span><span class="p">)</span>
+
+<span class="c1"># 读取数据库配置</span>
+<span class="n">db_host</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;host&#39;</span><span class="p">)</span>
+<span class="n">db_user</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">)</span>
+<span class="n">db_port</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="mi">3306</span><span class="p">)</span>
+<span class="n">db_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span>
+
+<span class="c1"># 读取日志配置</span>
+<span class="c1"># 可以为配置项指定默认值，以防止配置文件中缺少某些项时程序出错。</span>
+<span class="n">log_level</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logging&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database Host: </span><span class="si">{</span><span class="n">db_host</span><span class="si">}</span><span class="s2">, Port: </span><span class="si">{</span><span class="n">db_port</span><span class="si">}</span><span class="s2">, User: </span><span class="si">{</span><span class="n">db_user</span><span class="si">}</span><span class="s2">, Password: </span><span class="si">{</span><span class="n">db_password</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用<code>getint</code>方法获取整数类型的配置项（对于其他类型，还有<code>getfloat</code>、<code>getboolean</code>等方法）。</p>
+<h3>写入配置文件</h3>
+<p>我们也可以使用 configparser&nbsp;模块来创建或修改配置文件。以下是一个简单的示例：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+
+<span class="c1"># 添加一个新的section</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;webserver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">8080</span><span class="p">,</span>
+    <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span>
+<span class="p">}</span>
+
+<span class="c1"># 将配置写入文件</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;config.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">configfile</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>configparser&nbsp;注意事项</h2>
+<h3>语法要求严格</h3>
+<p>configparser 模块对配置文件的语法有一定要求，例如 section&nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。</p>
+<h3>类型转换问题</h3>
+<p>在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。</p>
+<p>configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&nbsp;模块都值得我们深入学习和掌握。</p>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/" rel="bookmark"
+                               title="Permalink to 使用 PIL(pillow) 实现图片水印*优化版">使用 <span class="caps">PIL</span>(pillow)&nbsp;实现图片水印*优化版</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-07T15:55:00+08:00">
                 Published: 五 07 二月 2025
@@ -32,144 +144,10 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/pillow.html">pillow</a> <a href="https://shaodongjun.github.io/tag/pil.html">pil</a> </p>        
-</footer><!-- /.post-info --><p><strong>Pillow</strong> 是一个用于图像处理的 Python 库，是 Python Imaging Library (<span class="caps">PIL</span>)&nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。</p>
-<h2>优点</h2>
-<ul>
-<li>
-<p>易于使用：Pillow 提供了简单易懂的 <span class="caps">API</span>，适合初学者和专业开发者使用。</p>
-</li>
-<li>
-<p>支持多种格式：可以处理多种图像格式，如 <span class="caps">JPEG</span>、<span class="caps">PNG</span>、<span class="caps">GIF</span>、<span class="caps">BMP</span>&nbsp;等。</p>
-</li>
-<li>
-<p>图像处理功能强大：提供了多种图像处理功能，包括图像增强、过滤、变换、裁剪、旋转等。</p>
-</li>
-<li>
-<p>图像创建：可以方便地创建新图像，绘制文本和图形。</p>
-</li>
-<li>
-<p>快速高效：经过优化，能够处理较大的图像文件而不会显著影响性能。</p>
-</li>
-<li>
-<p>文档完善：Pillow&nbsp;的文档详细，提供了丰富的示例，便于学习和使用。</p>
-</li>
-<li>
-<p>社区支持：作为一个广泛使用的库，Pillow&nbsp;拥有活跃的社区，可以获得各种资源和支持。</p>
-</li>
-</ul>
-<h2>增加文字水印的代码</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">system</span>
-
-<span class="n">version</span> <span class="o">=</span> <span class="mf">0.8</span>
-
-<span class="k">def</span> <span class="nf">IsValidImage</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    判断文件是否为有效（完整）的图片</span>
-<span class="sd">    :param img_path:图片路径</span>
-<span class="sd">    :return:True：有效 False：无效</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">Valid</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">Valid</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="n">Valid</span>
-
-
-<span class="k">def</span> <span class="nf">add_mark_png</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">words</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)):</span>
-    <span class="c1"># 设置所使用的字体</span>
-    <span class="k">if</span> <span class="s2">&quot;Darwin&quot;</span> <span class="ow">in</span> <span class="n">system</span><span class="p">():</span>
-        <span class="n">font_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;/System/Library/Fonts/PingFang.ttc&quot;</span>
-    <span class="k">elif</span> <span class="s2">&quot;Windows&quot;</span> <span class="ow">in</span> <span class="n">system</span><span class="p">():</span>
-        <span class="n">font_file</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\windows\Fonts\msyh.ttc&quot;</span>
-    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">font_file</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
-
-    <span class="c1"># Opening Image &amp; Creating New Text Layer</span>
-    <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.png&quot;</span><span class="p">:</span>
-        <span class="n">txt</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-    <span class="c1"># 针对jpeg无透明通道,先创建水印图片的模式</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">txt</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-
-    <span class="c1"># Creating Draw Object</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
-
-    <span class="c1"># Positioning Text</span>
-    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1"># textwidth, textheight = d.textsize(words, font)</span>
-    <span class="c1"># x=width/2-textwidth/2</span>
-    <span class="c1"># y=height-textheight-300</span>
-
-    <span class="k">while</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">:</span>
-        <span class="n">mark</span> <span class="o">=</span> <span class="n">txt</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mf">16.8</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.png&quot;</span><span class="p">:</span>
-            <span class="n">d</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">words</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">155</span><span class="p">),</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">words</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">+=</span> <span class="mi">50</span>
-        <span class="n">y</span> <span class="o">+=</span> <span class="mi">120</span>
-
-    <span class="c1"># 另存图片</span>
-    <span class="n">dir_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;水印图&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">dir_name</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="n">Path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dir_name</span><span class="p">)</span>
-    <span class="n">file_name</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;_new&quot;</span> <span class="o">+</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-    <span class="n">file_name</span> <span class="o">=</span> <span class="n">dir_name</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.png&quot;</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">watermarked</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">alpha_composite</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">mark</span><span class="p">)</span>
-            <span class="n">watermarked</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">rgb_im</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-            <span class="n">rgb_im</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mark</span><span class="p">)</span>
-            <span class="n">rgb_im</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># 针对jpeg格式的图片,用paste方法</span>
-        <span class="n">img</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mark</span><span class="p">)</span>
-        <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>图片转pdf的代码</h2>
-<ul>
-<li>
-<p>打开图像：使用 Image.open()&nbsp;打开指定路径的图像文件。</p>
-</li>
-<li>
-<p>模式检查与转换：如果图像不是 <span class="caps">RGB</span> 模式，则将其转换为 <span class="caps">RGB</span> 模式。<span class="caps">PDF</span> 格式通常要求图像为 <span class="caps">RGB</span>。</p>
-</li>
-<li>
-<p>保存为 <span class="caps">PDF</span>：使用 image.save() 方法将图像保存为 <span class="caps">PDF</span>&nbsp;文件，同时可以指定分辨率。</p>
-</li>
-<li>
-<p>支持多图像：如果需要支持将多个图像合并为一个 <span class="caps">PDF</span>，可以使用 save() 方法的 append_images&nbsp;参数。</p>
-</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-
-<span class="k">def</span> <span class="nf">image_to_pdf</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">pdf_path</span><span class="p">):</span>
-    <span class="c1"># 打开图像文件</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error opening image: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
-
-    <span class="c1"># 检查图像模式，如果不是 RGB，则转换为 RGB</span>
-    <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;RGB&quot;</span><span class="p">:</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
-
-    <span class="c1"># 保存图像为 PDF 文件</span>
-    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="s2">&quot;PDF&quot;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+</footer><!-- /.post-info -->                        <p><strong>Pillow</strong> 是一个用于图像处理的 Python 库，是 Python Imaging Library (<span class="caps">PIL</span>)&nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式 …</p>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
@@ -375,36 +353,14 @@
                         <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/">read more</a>
                     </div><!-- /.entry-content -->
                 </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="bookmark"
-                               title="Permalink to 使用 openpyxl 创建 Excel 文件">使用 openpyxl 创建 Excel&nbsp;文件</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-01-31T18:00:00+08:00">
-                Published: 五 31 一月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/xls.html">xls</a> <a href="https://shaodongjun.github.io/tag/xlsx.html">xlsx</a> <a href="https://shaodongjun.github.io/tag/openpyxl.html">openpyxl</a> <a href="https://shaodongjun.github.io/tag/excel.html">excel</a> </p>        
-</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
-<h2>可运行代码</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openpyxl</span>
-
-<span class="c1"># 创建一个新的工作簿</span>
-<span class="n">wb</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">()</span>
-
-<span class="c1"># 创建 …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
                     </ol><!-- /#posts-list -->
+  <nav>
+    <ul>
+      <li>Page 1 / 2</li>
+        <li><a href="https://shaodongjun.github.io/category/bian-cheng2.html">&rang;</a></li>
+        <li><a href="https://shaodongjun.github.io/category/bian-cheng2.html">&Rang;</a></li>
+    </ul>
+  </nav>
                     </section><!-- /#content -->
                 <section id="extras" class="body">
                                 <div class="blogroll">

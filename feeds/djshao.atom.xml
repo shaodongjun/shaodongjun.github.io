@@ -1,5 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>ShaoDJ's World - DJ.shao</title><link href="https://shaodongjun.github.io/" rel="alternate"></link><link href="https://shaodongjun.github.io/feeds/djshao.atom.xml" rel="self"></link><id>https://shaodongjun.github.io/</id><updated>2025-02-07T15:55:00+08:00</updated><entry><title>使用 PIL(pillow) 实现图片水印*优化版</title><link href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/" rel="alternate"></link><published>2025-02-07T15:55:00+08:00</published><updated>2025-02-07T15:55:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-07:/posts/2025/02/07/python-pillow-watermark/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>ShaoDJ's World - DJ.shao</title><link href="https://shaodongjun.github.io/" rel="alternate"></link><link href="https://shaodongjun.github.io/feeds/djshao.atom.xml" rel="self"></link><id>https://shaodongjun.github.io/</id><updated>2025-02-08T15:30:00+08:00</updated><entry><title>使用 configparser 轻松管理配置文件</title><link href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/" rel="alternate"></link><published>2025-02-08T15:30:00+08:00</published><updated>2025-02-08T15:30:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-08:/posts/2025/02/08/python-configparser/</id><summary type="html">&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt; 文件格式的配置文件。
+configparser&amp;nbsp;模块允许我们 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt; 文件格式的配置文件。
+configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。&lt;/p&gt;
+&lt;h2&gt;configparser&amp;nbsp;优势与应用场景&lt;/h2&gt;
+&lt;h3&gt;优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;简单易用：configparser 模块的 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;跨平台性：由于其基于类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt;&amp;nbsp;文件的格式，在不同操作系统上都能很好地工作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;应用场景&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;项目配置管理：在软件开发项目中，用于存储数据库连接信息、日志配置、服务器参数等&lt;strong&gt;敏感&lt;/strong&gt;数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用户偏好设置：在应用程序中，保存用户的个性化设置，如界面主题、语言等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;测试环境配置：在测试过程中，方便地切换不同的测试环境配置。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;configparser&amp;nbsp;基本使用&lt;/h2&gt;
+&lt;h3&gt;安装与导入&lt;/h3&gt;
+&lt;p&gt;configparser 模块是 Python&amp;nbsp;的内置模块，无需额外安装。使用时，只需导入即可。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;读取配置文件&lt;/h3&gt;
+&lt;p&gt;假设我们有一个名为&lt;code&gt;config.ini&lt;/code&gt;的配置文件，内容如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;[&lt;/span&gt;database&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;host&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;localhost
+&lt;span class="nv"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;root
+&lt;span class="nv"&gt;password&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;123456&lt;/span&gt;
+
+&lt;span class="o"&gt;[&lt;/span&gt;logging&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nv"&gt;level&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;DEBUG
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;我们可以使用以下代码读取这个配置文件：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
+
+&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;configparser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ConfigParser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;config.ini&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# 读取数据库配置&lt;/span&gt;
+&lt;span class="n"&gt;db_host&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;database&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;host&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;db_user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;database&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;db_port&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;database&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;port&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;fallback&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3306&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;db_password&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;database&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;password&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# 读取日志配置&lt;/span&gt;
+&lt;span class="c1"&gt;# 可以为配置项指定默认值，以防止配置文件中缺少某些项时程序出错。&lt;/span&gt;
+&lt;span class="n"&gt;log_level&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;logging&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;level&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;fallback&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;INFO&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Database Host: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;db_host&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;, Port: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;db_port&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;, User: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;db_user&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;, Password: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;db_password&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用&lt;code&gt;getint&lt;/code&gt;方法获取整数类型的配置项（对于其他类型，还有&lt;code&gt;getfloat&lt;/code&gt;、&lt;code&gt;getboolean&lt;/code&gt;等方法）。&lt;/p&gt;
+&lt;h3&gt;写入配置文件&lt;/h3&gt;
+&lt;p&gt;我们也可以使用 configparser&amp;nbsp;模块来创建或修改配置文件。以下是一个简单的示例：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
+
+&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;configparser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ConfigParser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="c1"&gt;# 添加一个新的section&lt;/span&gt;
+&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;webserver&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;host&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;127.0.0.1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;port&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;8080&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;debug&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;False&amp;#39;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;# 将配置写入文件&lt;/span&gt;
+&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;config.ini&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;a+&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;configfile&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;configfile&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;configparser&amp;nbsp;注意事项&lt;/h2&gt;
+&lt;h3&gt;语法要求严格&lt;/h3&gt;
+&lt;p&gt;configparser 模块对配置文件的语法有一定要求，例如 section&amp;nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。&lt;/p&gt;
+&lt;h3&gt;类型转换问题&lt;/h3&gt;
+&lt;p&gt;在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。&lt;/p&gt;
+&lt;p&gt;configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&amp;nbsp;模块都值得我们深入学习和掌握。&lt;/p&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="config"></category></entry><entry><title>使用 PIL(pillow) 实现图片水印*优化版</title><link href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/" rel="alternate"></link><published>2025-02-07T15:55:00+08:00</published><updated>2025-02-07T15:55:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-07:/posts/2025/02/07/python-pillow-watermark/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。&lt;/p&gt;
 &lt;h2&gt;优点&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;

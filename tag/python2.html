@@ -4,7 +4,7 @@
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                         <meta name="generator" content="Pelican" />
-                        <title>ShaoDJ's World</title>
+                        <title>ShaoDJ's World - python</title>
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
@@ -18,36 +18,46 @@
                                                 <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->
-    <section id="content" class="body">
-        <h1>Archives for 2025</h1>
 
-        <dl>
-                <dt>六 08 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/">使用 configparser&nbsp;轻松管理配置文件</a></dd>
-                <dt>五 07 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/">使用 <span class="caps">PIL</span>(pillow)&nbsp;实现图片水印*优化版</a></dd>
-                <dt>四 06 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/">使用 FreeSimpleGUI&nbsp;定制图形界面</a></dd>
-                <dt>三 05 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/05/python-pptx-powerpoint/">使用 python-pptx&nbsp;库制作PowerPoint</a></dd>
-                <dt>二 04 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/">使用 Selenium <span class="amp">&amp;</span> webdriver&nbsp;自动化测试</a></dd>
-                <dt>一 03 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/">使用 BeautifulSoup <span class="amp">&amp;</span> Requests&nbsp;解析网页</a></dd>
-                <dt>日 02 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/">使用 Pandas&nbsp;实现基本的数据分析</a></dd>
-                <dt>六 01 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/">使用 <span class="caps">PIL</span>(pillow) 实现图片绘制 <span class="amp">&amp;</span> 裁剪 <span class="amp">&amp;</span>&nbsp;水印</a></dd>
-                <dt>六 01 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">使用 PyPDF 和 Pandoc&nbsp;实现word/pdf转换</a></dd>
-                <dt>六 01 二月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/">使用 python-docx 创建 word&nbsp;文件</a></dd>
-                <dt>五 31 一月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/">使用 openpyxl 创建 Excel&nbsp;文件</a></dd>
-                <dt>五 31 一月 2025</dt>
-                <dd><a href="https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/">My first&nbsp;post</a></dd>
-        </dl>
-    </section>
+                    <section id="content" class="body">
+                        <ol id="posts-list" class="hfeed" start="9">
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="bookmark"
+                               title="Permalink to 使用 openpyxl 创建 Excel 文件">使用 openpyxl 创建 Excel&nbsp;文件</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2025-01-31T18:00:00+08:00">
+                Published: 五 31 一月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/xls.html">xls</a> <a href="https://shaodongjun.github.io/tag/xlsx.html">xlsx</a> <a href="https://shaodongjun.github.io/tag/openpyxl.html">openpyxl</a> <a href="https://shaodongjun.github.io/tag/excel.html">excel</a> </p>        
+</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
+<h2>可运行代码</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openpyxl</span>
+
+<span class="c1"># 创建一个新的工作簿</span>
+<span class="n">wb</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">()</span>
+
+<span class="c1"># 创建 …</span></code></pre></div>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+                    </ol><!-- /#posts-list -->
+  <nav>
+    <ul>
+        <li><a href="https://shaodongjun.github.io/tag/python.html">&Lang;</a></li>
+        <li><a href="https://shaodongjun.github.io/tag/python.html">&lang;</a></li>
+      <li>Page 2 / 2</li>
+    </ul>
+  </nav>
+                    </section><!-- /#content -->
                 <section id="extras" class="body">
                                 <div class="blogroll">
                                         <h2>links</h2>
