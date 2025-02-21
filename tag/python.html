@@ -15,13 +15,221 @@
                         <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
                         <nav><ul>
                                                 <li><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li><a href="https://shaodongjun.github.io/category/yun-wei.html">运维</a></li>
                                                 <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/">使用 configparser&nbsp;轻松管理配置文件</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/">DevOps工程师最常用的可重用Playbook</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-02-21T16:18:00+08:00">
+                Published: 五 21 二月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/yun-wei.html">运维</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/linux.html">linux</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/devops.html">devops</a> </p>        
+</footer><!-- /.post-info --><p>最重要常用的 7个 Ansible&nbsp;Playbook</p>
+<div class="highlight"><pre><span></span><code><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">-</span><span class="n">i</span> <span class="n">lists</span><span class="o">-</span><span class="n">hosts</span> <span class="n">ops</span><span class="o">.</span><span class="n">yaml</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;host=OPK-JUMPS&quot;</span> 
+</code></pre></div>
+
+<h1>1. 安装常用软件包的&nbsp;Playbook</h1>
+<p>此 Playbook&nbsp;确保在所有服务器上安装常用的系统工具。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装常用软件包</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">更新软件包列表</span>
+      <span class="n">package</span><span class="p">:</span>
+        <span class="n">update_cache</span><span class="p">:</span>  <span class="n">yes</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装必备软件包</span>
+      <span class="n">package</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span>
+          <span class="o">-</span> <span class="n">curl</span>
+          <span class="o">-</span> <span class="n">vim</span>
+          <span class="o">-</span> <span class="n">git</span>
+          <span class="o">-</span> <span class="n">unzip</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+</code></pre></div>
+
+<ul>
+<li>become: yes: 确保任务以 sudo&nbsp;权限执行。</li>
+</ul>
+<h1>2. 用户账户管理的&nbsp;Playbook</h1>
+<p>此 Playbook&nbsp;创建具有特定权限的用户账户。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">管理用户账号</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">创建新用户</span>
+      <span class="n">user</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">devops</span>
+        <span class="n">shell</span><span class="p">:</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+        <span class="n">groups</span><span class="p">:</span> <span class="n">wheel</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">为用户设置密码</span>
+      <span class="n">authorized_key</span><span class="p">:</span>
+        <span class="n">user</span><span class="p">:</span> <span class="n">devops</span>
+        <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;{{ lookup(&#39;file&#39;, &#39;/root/.ssh/id_rsa.pub&#39;&#39;&#39;) }}&quot;</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+</code></pre></div>
+
+<ul>
+<li>user 模块: 创建新用户（‘devops’）并将其分配到 ‘sudo’&nbsp;组。</li>
+<li>authorized_key 模块: 添加 <span class="caps">SSH</span>&nbsp;密钥以保障安全访问。</li>
+</ul>
+<h1>3. 配置 Nginx 的&nbsp;Playbook</h1>
+<p>使用此 Playbook 安装并配置 Nginx Web&nbsp;服务器。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装并配置Nginx</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装Nginx</span>
+      <span class="n">package</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+    <span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">复制Nginx配置文件</span>
+      <span class="n">template</span><span class="p">:</span>
+        <span class="n">src</span><span class="p">:</span> <span class="n">templates</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">j2</span>
+        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span>
+    <span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">重启Nginx</span>
+      <span class="n">service</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">restarted</span>
+</code></pre></div>
+
+<ul>
+<li>template 模块: 将 Jinja2&nbsp;模板复制到服务器以实现动态配置。</li>
+<li>service 模块: 确保 Nginx&nbsp;在配置更改后重启。</li>
+</ul>
+<h1>4. 防火墙配置的&nbsp;Playbook</h1>
+<p>此 Playbook 使用 <span class="caps">UFW</span>&nbsp;配置基本防火墙。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">配置UFW防火墙</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">允许SSH连接</span>
+      <span class="n">ufw</span><span class="p">:</span>
+        <span class="n">rule</span><span class="p">:</span> <span class="n">allow</span>
+        <span class="n">port</span><span class="p">:</span> <span class="mi">22</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">允许HTTP和HTTPS流量</span>
+      <span class="n">ufw</span><span class="p">:</span>
+        <span class="n">rule</span><span class="p">:</span> <span class="n">allow</span>
+        <span class="n">port</span><span class="p">:</span> <span class="s2">&quot;{{ item }}&quot;</span>
+      <span class="n">loop</span><span class="p">:</span>
+        <span class="o">-</span> <span class="mi">80</span>
+        <span class="o">-</span> <span class="mi">443</span>
+    <span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">启用UFW</span>
+      <span class="n">ufw</span><span class="p">:</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">enabled</span>
+</code></pre></div>
+
+<ul>
+<li>ufw 模块: 配置 Uncomplicated Firewall (<span class="caps">UFW</span>)，允许 <span class="caps">SSH</span> (22) 和 Web 流量 (80, 443)&nbsp;等必要端口。</li>
+</ul>
+<h1>5. 应用部署的&nbsp;Playbook</h1>
+<p>使用此可重用 Playbook&nbsp;自动化应用部署。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">部署PythonWeb应用</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装Python依赖</span>
+      <span class="n">package</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span>
+          <span class="o">-</span> <span class="n">python3</span>
+          <span class="o">-</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装所需的Python包</span>
+      <span class="n">pip</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span>
+          <span class="o">-</span> <span class="n">flask</span>
+          <span class="o">-</span> <span class="n">gunicorn</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">复制应用代码</span>
+      <span class="n">copy</span><span class="p">:</span>
+        <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">app</span>
+        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启动应用</span>
+      <span class="n">shell</span><span class="p">:</span> <span class="o">|</span>
+        <span class="n">nohup</span> <span class="n">gunicorn</span> <span class="o">-</span><span class="n">b</span> <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">8000</span> <span class="n">app</span><span class="p">:</span><span class="n">app</span> <span class="o">&amp;</span>
+      <span class="n">args</span><span class="p">:</span>
+        <span class="n">chdir</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
+</code></pre></div>
+
+<ul>
+<li>pip 模块: 安装 Flask 和 Gunicorn 等 Python&nbsp;包。</li>
+<li>shell 模块: 使用 Gunicorn&nbsp;作为后台进程启动应用。</li>
+</ul>
+<h1>6. 数据库设置的&nbsp;Playbook</h1>
+<p>快速设置并保护 MySQL&nbsp;数据库。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置MySQL</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="n">db_servers</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装MySQL服务器</span>
+      <span class="n">package</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">mysql</span><span class="o">-</span><span class="n">server</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置MySQLroot密码</span>
+      <span class="n">mysql_user</span><span class="p">:</span>
+        <span class="n">login_user</span><span class="p">:</span> <span class="n">root</span>
+        <span class="n">login_password</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">root</span>
+        <span class="n">password</span><span class="p">:</span> <span class="n">secure_password</span>
+        <span class="n">host_all</span><span class="p">:</span> <span class="n">true</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
+</code></pre></div>
+
+<ul>
+<li>mysql_user 模块: 创建并保护 MySQL 的 root&nbsp;用户。</li>
+</ul>
+<h1>7. 系统监控的&nbsp;Playbook</h1>
+<p>自动化安装 Prometheus 和 Node Exporter&nbsp;等监控工具。</p>
+<div class="highlight"><pre><span></span><code><span class="o">---</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置系统监控</span>
+  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
+  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装NodeExporter</span>
+      <span class="n">get_url</span><span class="p">:</span>
+        <span class="n">url</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">prometheus</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="mf">.6.0</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">-</span><span class="mf">1.6.0</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">解压NodeExporter</span>
+      <span class="n">unarchive</span><span class="p">:</span>
+        <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span>
+        <span class="n">remote_src</span><span class="p">:</span> <span class="n">yes</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启动NodeExporter</span>
+      <span class="n">shell</span><span class="p">:</span> <span class="o">|</span>
+        <span class="n">nohup</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">node_exporter</span> <span class="o">&amp;</span>
+</code></pre></div>
+
+<ul>
+<li>get_url 模块: 下载 Node Exporter&nbsp;二进制文件。</li>
+<li>unarchive 模块:&nbsp;将二进制文件解压到指定位置。</li>
+</ul>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/" rel="bookmark"
+                               title="Permalink to 使用 configparser 轻松管理配置文件">使用 configparser&nbsp;轻松管理配置文件</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-08T15:30:00+08:00">
                 Published: 六 08 二月 2025
@@ -32,100 +240,12 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/config.html">config</a> </p>        
-</footer><!-- /.post-info --><h2>configparser&nbsp;是什么?</h2>
+</footer><!-- /.post-info -->                        <h2>configparser&nbsp;是什么?</h2>
 <p><strong>configparser</strong> 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows <span class="caps">INI</span> 文件格式的配置文件。
-configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。</p>
-<h2>configparser&nbsp;优势与应用场景</h2>
-<h3>优势</h3>
-<ul>
-<li>
-<p>简单易用：configparser 模块的 <span class="caps">API</span>&nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。</p>
-</li>
-<li>
-<p>跨平台性：由于其基于类似 Windows <span class="caps">INI</span>&nbsp;文件的格式，在不同操作系统上都能很好地工作。</p>
-</li>
-<li>
-<p>灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。</p>
-</li>
-</ul>
-<h3>应用场景</h3>
-<ul>
-<li>
-<p>项目配置管理：在软件开发项目中，用于存储数据库连接信息、日志配置、服务器参数等<strong>敏感</strong>数据。</p>
-</li>
-<li>
-<p>用户偏好设置：在应用程序中，保存用户的个性化设置，如界面主题、语言等。</p>
-</li>
-<li>
-<p>测试环境配置：在测试过程中，方便地切换不同的测试环境配置。</p>
-</li>
-</ul>
-<h2>configparser&nbsp;基本使用</h2>
-<h3>安装与导入</h3>
-<p>configparser 模块是 Python&nbsp;的内置模块，无需额外安装。使用时，只需导入即可。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
-</code></pre></div>
-
-<h3>读取配置文件</h3>
-<p>假设我们有一个名为<code>config.ini</code>的配置文件，内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="o">[</span>database<span class="o">]</span>
-<span class="nv">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>localhost
-<span class="nv">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>root
-<span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123456</span>
-
-<span class="o">[</span>logging<span class="o">]</span>
-<span class="nv">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>DEBUG
-</code></pre></div>
-
-<p>我们可以使用以下代码读取这个配置文件：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
-
-<span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;config.ini&#39;</span><span class="p">)</span>
-
-<span class="c1"># 读取数据库配置</span>
-<span class="n">db_host</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;host&#39;</span><span class="p">)</span>
-<span class="n">db_user</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">)</span>
-<span class="n">db_port</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="mi">3306</span><span class="p">)</span>
-<span class="n">db_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span>
-
-<span class="c1"># 读取日志配置</span>
-<span class="c1"># 可以为配置项指定默认值，以防止配置文件中缺少某些项时程序出错。</span>
-<span class="n">log_level</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logging&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database Host: </span><span class="si">{</span><span class="n">db_host</span><span class="si">}</span><span class="s2">, Port: </span><span class="si">{</span><span class="n">db_port</span><span class="si">}</span><span class="s2">, User: </span><span class="si">{</span><span class="n">db_user</span><span class="si">}</span><span class="s2">, Password: </span><span class="si">{</span><span class="n">db_password</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用<code>getint</code>方法获取整数类型的配置项（对于其他类型，还有<code>getfloat</code>、<code>getboolean</code>等方法）。</p>
-<h3>写入配置文件</h3>
-<p>我们也可以使用 configparser&nbsp;模块来创建或修改配置文件。以下是一个简单的示例：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
-
-<span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-
-<span class="c1"># 添加一个新的section</span>
-<span class="n">config</span><span class="p">[</span><span class="s1">&#39;webserver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">8080</span><span class="p">,</span>
-    <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span>
-<span class="p">}</span>
-
-<span class="c1"># 将配置写入文件</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;config.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">configfile</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>configparser&nbsp;注意事项</h2>
-<h3>语法要求严格</h3>
-<p>configparser 模块对配置文件的语法有一定要求，例如 section&nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。</p>
-<h3>类型转换问题</h3>
-<p>在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。</p>
-<p>configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&nbsp;模块都值得我们深入学习和掌握。</p>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+configparser&nbsp;模块允许我们 …</p>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
@@ -321,36 +441,6 @@ configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这�
 <span class="k">def</span> <span class="nf">find_doc_files</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;docx&quot;</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f …</span></code></pre></div>
                         <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/" rel="bookmark"
-                               title="Permalink to 使用 python-docx 创建 word 文件">使用 python-docx 创建 word&nbsp;文件</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-01T10:52:00+08:00">
-                Published: 六 01 二月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/doc.html">doc</a> <a href="https://shaodongjun.github.io/tag/docx.html">docx</a> </p>        
-</footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>python-docx</code> 库创建和修改 Word&nbsp;文件。</p>
-<h2>可运行代码</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">docx</span> <span class="kn">import</span> <span class="n">Document</span>
-<span class="kn">from</span> <span class="nn">docx.oxml.ns</span> <span class="kn">import</span> <span class="n">qn</span>
-<span class="kn">from</span> <span class="nn">docx.shared</span> <span class="kn">import</span> <span class="n">Inches</span><span class="p">,</span> <span class="n">Pt</span><span class="p">,</span> <span class="n">RGBColor</span> 
-
-<span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;demo.docx&quot;</span>
-<span class="n">name_placeholder</span> <span class="o">=</span> <span class="s2">&quot;&lt;name&gt;&quot;</span>
-<span class="n">sex_placeholder</span> <span class="o">=</span> <span class="s2">&quot;&lt;sex …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/">read more</a>
                     </div><!-- /.entry-content -->
                 </article></li>
                     </ol><!-- /#posts-list -->
