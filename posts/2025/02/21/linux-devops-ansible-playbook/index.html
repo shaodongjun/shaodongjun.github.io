@@ -101,11 +101,11 @@
       <span class="n">package</span><span class="p">:</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-    <span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">复制Nginx配置文件</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">复制Nginx配置文件</span>
       <span class="n">template</span><span class="p">:</span>
         <span class="n">src</span><span class="p">:</span> <span class="n">templates</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">j2</span>
         <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span>
-    <span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">重启Nginx</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">重启Nginx</span>
       <span class="n">service</span><span class="p">:</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">restarted</span>
@@ -133,7 +133,7 @@
       <span class="n">loop</span><span class="p">:</span>
         <span class="o">-</span> <span class="mi">80</span>
         <span class="o">-</span> <span class="mi">443</span>
-    <span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">启用UFW</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启用UFW</span>
       <span class="n">ufw</span><span class="p">:</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">enabled</span>
 </code></pre></div>
@@ -213,6 +213,7 @@
       <span class="n">unarchive</span><span class="p">:</span>
         <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
         <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span>
+        <span class="n">extra_opts</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;--strip-components=1&quot;</span><span class="p">]</span>  <span class="c1"># 去掉一层目录结构</span>
         <span class="n">remote_src</span><span class="p">:</span> <span class="n">yes</span>
     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启动NodeExporter</span>
       <span class="n">shell</span><span class="p">:</span> <span class="o">|</span>
