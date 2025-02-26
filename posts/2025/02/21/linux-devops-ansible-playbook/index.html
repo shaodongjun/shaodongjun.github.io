@@ -98,23 +98,64 @@
   <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
   <span class="n">tasks</span><span class="p">:</span>
     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装Nginx</span>
-      <span class="n">package</span><span class="p">:</span>
+      <span class="n">apt</span><span class="p">:</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">复制Nginx配置文件</span>
-      <span class="n">template</span><span class="p">:</span>
-        <span class="n">src</span><span class="p">:</span> <span class="n">templates</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">j2</span>
-        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">install</span>
+
     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">重启Nginx</span>
       <span class="n">service</span><span class="p">:</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">restarted</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">restart</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">配置proxy_cache功能</span>
+      <span class="n">template</span><span class="p">:</span>
+        <span class="n">src</span><span class="p">:</span>  <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">proxy_cache</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">j2</span>
+        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">proxy_cache</span><span class="o">.</span><span class="n">conf</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">config</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">创建cache目录</span>
+      <span class="n">file</span><span class="p">:</span>
+        <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">nginx_cache</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">directory</span>
+        <span class="n">owner</span><span class="p">:</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span>
+        <span class="n">group</span><span class="p">:</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;0755&#39;</span>  <span class="c1"># 设置目录权限，可选</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">config</span>
 </code></pre></div>
 
 <ul>
-<li>template 模块: 将 Jinja2&nbsp;模板复制到服务器以实现动态配置。</li>
 <li>service 模块: 确保 Nginx&nbsp;在配置更改后重启。</li>
+<li>template 模块: 将 Jinja2&nbsp;模板复制到服务器以实现动态配置。</li>
 </ul>
+<div class="highlight"><pre><span></span><code>proxy_cache_path<span class="w"> </span>/var/cache/nginx_cache<span class="w"> </span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span>:2<span class="w"> </span><span class="nv">keys_zone</span><span class="o">=</span>my_cache:100m<span class="w"> </span><span class="nv">inactive</span><span class="o">=</span>60m<span class="w"> </span><span class="nv">use_temp_path</span><span class="o">=</span>off<span class="w"> </span><span class="nv">max_size</span><span class="o">=</span>1g<span class="p">;</span>
+
+upstream<span class="w"> </span>www<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>server<span class="w"> </span>localhost:80<span class="p">;</span>
+<span class="o">}</span>
+
+server<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>listen<span class="w"> </span><span class="o">{{</span><span class="w"> </span>server_port<span class="w"> </span><span class="p">|</span><span class="w"> </span>default<span class="o">(</span><span class="m">8080</span><span class="o">)</span><span class="w"> </span><span class="o">}}</span><span class="p">;</span>
+
+<span class="w">        </span>location<span class="w"> </span>~<span class="w"> </span><span class="se">\.</span><span class="o">(</span>txt<span class="p">|</span>psd<span class="p">|</span>gif<span class="p">|</span>jpg<span class="p">|</span>jpeg<span class="p">|</span>png<span class="p">|</span>ico<span class="p">|</span>js<span class="p">|</span>css<span class="o">)</span>$<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span>proxy_cache<span class="w"> </span>my_cache<span class="p">;</span>
+<span class="w">                </span>proxy_cache_key<span class="w"> </span><span class="nv">$uri</span><span class="p">;</span>
+<span class="w">                </span>proxy_cache_valid<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="m">302</span><span class="w"> </span>24h<span class="p">;</span>
+<span class="w">                </span>proxy_cache_valid<span class="w"> </span><span class="m">301</span><span class="w"> </span>30d<span class="p">;</span>
+<span class="w">                </span>proxy_cache_valid<span class="w"> </span>any<span class="w"> </span>5m<span class="p">;</span>
+<span class="w">                </span>add_header<span class="w"> </span>X-CACHE<span class="w"> </span><span class="s2">&quot;Give me five&quot;</span><span class="p">;</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="o">(</span><span class="w"> </span>!-e<span class="w"> </span><span class="nv">$request_filename</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                        </span>proxy_pass<span class="w"> </span>http://www<span class="p">;</span>
+<span class="w">                </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+
+<span class="w">        </span>location<span class="w"> </span>/<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span>proxy_pass<span class="w"> </span>http://www<span class="p">;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+
 <h1>4. 防火墙配置的&nbsp;Playbook</h1>
 <p>此 Playbook 使用 <span class="caps">UFW</span>&nbsp;配置基本防火墙。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
@@ -144,12 +185,12 @@
 <h1>5. 应用部署的&nbsp;Playbook</h1>
 <p>使用此可重用 Playbook&nbsp;自动化应用部署。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">部署PythonWeb应用</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">部署Python</span> <span class="n">Web应用</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
   <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
   <span class="n">tasks</span><span class="p">:</span>
     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装Python依赖</span>
-      <span class="n">package</span><span class="p">:</span>
+      <span class="n">apt</span><span class="p">:</span>
         <span class="n">name</span><span class="p">:</span>
           <span class="o">-</span> <span class="n">python3</span>
           <span class="o">-</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
@@ -159,9 +200,14 @@
         <span class="n">name</span><span class="p">:</span>
           <span class="o">-</span> <span class="n">flask</span>
           <span class="o">-</span> <span class="n">gunicorn</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">创建目录</span>
+      <span class="n">file</span><span class="p">:</span>
+        <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">directory</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;0755&#39;</span>  <span class="c1"># 设置目录权限，可选</span>
     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">复制应用代码</span>
       <span class="n">copy</span><span class="p">:</span>
-        <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">app</span>
+        <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">app</span><span class="o">.</span><span class="n">py</span>
         <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
     <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启动应用</span>
       <span class="n">shell</span><span class="p">:</span> <span class="o">|</span>
@@ -173,7 +219,16 @@
 <ul>
 <li>pip 模块: 安装 Flask 和 Gunicorn 等 Python&nbsp;包。</li>
 <li>shell 模块: 使用 Gunicorn&nbsp;作为后台进程启动应用。</li>
+<li>app.py&nbsp;是个最简单的flask应用</li>
 </ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello_flask</span><span class="p">():</span>
+  <span class="k">return</span> <span class="s1">&#39;Hello, Flask!&#39;</span>
+</code></pre></div>
+
 <h1>6. 数据库设置的&nbsp;Playbook</h1>
 <p>快速设置并保护 MySQL&nbsp;数据库。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
