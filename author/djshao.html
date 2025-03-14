@@ -15,6 +15,7 @@
                         <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
                         <nav><ul>
                                                 <li><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li><a href="https://shaodongjun.github.io/category/ren-gong-zhi-neng.html">人工智能</a></li>
                                                 <li><a href="https://shaodongjun.github.io/category/yun-wei.html">运维</a></li>
                                                 <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
                         </ul></nav>
@@ -22,7 +23,103 @@
 
                 <aside id="featured" class="body">
                     <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/">DevOps工程师最常用的可重用Playbook</a></h1>
+                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/03/14/future-aigc-mcp/">从API引申到MCP协议</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2025-03-14T11:08:00+08:00">
+                Published: 五 14 三月 2025
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/ren-gong-zhi-neng.html">人工智能</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/aigc.html">aigc</a> <a href="https://shaodongjun.github.io/tag/llm.html">llm</a> </p>        
+</footer><!-- /.post-info --><h1>MCP协议详解</h1>
+<p><span class="caps">MCP</span>（Model Context&nbsp;Protocol）是一种新的开放协议，目的是为LLM提供标准化的上下文信息传递方式，从而实现AI智能体与外部数据及工具的结合。</p>
+<p>通俗的话讲，MCP就像是专为AI应用设计的通用接口，类似我们日常使用的USB-C。</p>
+<p>正如USB-C简化了不同设备与计算机的连接方式，MCP简化了AI模型与数据、工具和服务之间的交互方式。</p>
+<p>通过MCP，AI助手不仅能够「读懂」代码，还能「理解」团队讨论、涉及文档等外部信息，提供更加精准的回答。</p>
+<p><img alt="mcp archintcture" src="/images/mcp_architecture.png"></p>
+<h1>MCP协议的优点</h1>
+<p>MCP是一种标准化协议，用于连接AI智能体与各种外部工具和数据源。</p>
+<p>其主要优势如下：</p>
+<ul>
+<li>
+<p>开发简化：一次编写，多次集成，无需为每个新集成重写定制代码</p>
+</li>
+<li>
+<p>灵活性：切换AI模型或工具时，不需要复杂的重新配置</p>
+</li>
+<li>
+<p>实时响应：MCP连接保持活跃状态，支持实时上下文更新和交互</p>
+</li>
+<li>
+<p>安全性和合规性：内置访问控制机制和标准化的安全实践</p>
+</li>
+<li>
+<p>可扩展性：随着AI生态系统的扩展，只需连接新的MCP服务器即可轻松添加新功能</p>
+</li>
+</ul>
+<p>相比之下，在没有MCP之前，AI助手要想与外部工具互动，必须通过编写代码并调用API，这意味着每一种具体的连接都需要提前手动编程，效率低下且耗时费力。</p>
+<p>更棘手的是，每个AI助手与每个外部工具之间都需要单独进行配置。如果有1000个AI助手和1000个外部工具，理论上需要编写1000×1000=100万个独立的连接代码，工作量简直是个天文数字。</p>
+<p><font color=red>在MCP模式下，每方只需实现一次协议，总共只需2千次配置。这直接使配置效率提高了不止一个维度。</font></p>
+<p>MCP的灵活性也非常突出，它既可以在云端运行，也可以在本地设备上部署，适应性极强。</p>
+<p>可以说，MCP就像为AI助手和外部系统之间架设了一条高速路，取代了过去需要技术人员一桥一桥手工搭建的低效模式。</p>
+<p>和传统的API相比，MCP的区别在于：</p>
+<ul>
+<li>
+<p>单一协议：MCP作为一种标准化的「通用接口」，集成一个MCP意味着可以访问多个工具和服务，而不仅仅是单一服务。</p>
+</li>
+<li>
+<p>动态发现：MCP允许AI模型动态发现并与可用工具交互，无需预先设定每个集成的固定代码。</p>
+</li>
+<li>
+<p>双向通信：MCP支持持续、实时的双向通信——类似于WebSockets。AI模型既可以获取信息，也可以实时触发操作。</p>
+</li>
+</ul>
+<p>其中，实时双向通信的机制如下：</p>
+<ul>
+<li>
+<p>拉取数据：LLM向服务器查询上下文信息。例如，查看你的日历安排。</p>
+</li>
+<li>
+<p>触发操作：LLM指示服务器执行具体操作。例如，重新安排会议、发送电子邮件。</p>
+</li>
+</ul>
+<h1>MCP系统架构</h1>
+<p>MCP采用简单的客户端-服务器架构模式：</p>
+<ul>
+<li>
+<p>MCP主机：需要访问外部数据或工具的应用程序（如Claude&nbsp;Desktop或AI驱动的集成开发环境）</p>
+</li>
+<li>
+<p>MCP客户端：与MCP服务器维持专属的一对一连接</p>
+</li>
+<li>
+<p>MCP服务器：轻量级服务器，通过MCP协议提供特定功能，连接到本地或远程数据源</p>
+</li>
+<li>
+<p>本地数据源：MCP服务器安全访问的文件、数据库或服务</p>
+</li>
+<li>
+<p>远程服务：MCP服务器访问的基于互联网的外部API或服务</p>
+</li>
+</ul>
+<p>将MCP比作一座桥梁可以更清晰地理解：MCP本身不处理复杂逻辑；它只是协调AI模型和各种工具之间的数据和指令流通。
+<img alt="mcp server and client" src="/images/mcp_server_arch.png"></p>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/" rel="bookmark"
+                               title="Permalink to DevOps工程师最常用的可重用Playbook">DevOps工程师最常用的可重用Playbook</a></h1>
+                    </header>
+
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-21T16:18:00+08:00">
                 Published: 五 21 二月 2025
@@ -33,251 +130,17 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/yun-wei.html">运维</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/linux.html">linux</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/devops.html">devops</a> </p>        
-</footer><!-- /.post-info --><p>最重要常用的 7个 Ansible&nbsp;Playbook</p>
+</footer><!-- /.post-info -->                        <p>最重要常用的 7个 Ansible&nbsp;Playbook</p>
 <div class="highlight"><pre><span></span><code><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">-</span><span class="n">i</span> <span class="n">lists</span><span class="o">-</span><span class="n">hosts</span> <span class="n">ops</span><span class="o">.</span><span class="n">yaml</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;host=OPK-JUMPS&quot;</span> 
 </code></pre></div>
 
 <h1>1. 安装常用软件包的&nbsp;Playbook</h1>
 <p>此 Playbook&nbsp;确保在所有服务器上安装常用的系统工具。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装常用软件包</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">更新软件包列表</span>
-      <span class="n">package</span><span class="p">:</span>
-        <span class="n">update_cache</span><span class="p">:</span>  <span class="n">yes</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装必备软件包</span>
-      <span class="n">package</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span>
-          <span class="o">-</span> <span class="n">curl</span>
-          <span class="o">-</span> <span class="n">vim</span>
-          <span class="o">-</span> <span class="n">git</span>
-          <span class="o">-</span> <span class="n">unzip</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-</code></pre></div>
-
-<ul>
-<li>become: yes: 确保任务以 sudo&nbsp;权限执行。</li>
-</ul>
-<h1>2. 用户账户管理的&nbsp;Playbook</h1>
-<p>此 Playbook&nbsp;创建具有特定权限的用户账户。</p>
-<div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">管理用户账号</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">创建新用户</span>
-      <span class="n">user</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">devops</span>
-        <span class="n">shell</span><span class="p">:</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-        <span class="n">groups</span><span class="p">:</span> <span class="n">wheel</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">为用户设置密码</span>
-      <span class="n">authorized_key</span><span class="p">:</span>
-        <span class="n">user</span><span class="p">:</span> <span class="n">devops</span>
-        <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;{{ lookup(&#39;file&#39;, &#39;/root/.ssh/id_rsa.pub&#39;&#39;&#39;) }}&quot;</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-</code></pre></div>
-
-<ul>
-<li>user 模块: 创建新用户（‘devops’）并将其分配到 ‘sudo’&nbsp;组。</li>
-<li>authorized_key 模块: 添加 <span class="caps">SSH</span>&nbsp;密钥以保障安全访问。</li>
-</ul>
-<h1>3. 配置 Nginx 的&nbsp;Playbook</h1>
-<p>使用此 Playbook 安装并配置 Nginx Web&nbsp;服务器。</p>
-<div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装并配置Nginx</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装Nginx</span>
-      <span class="n">apt</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-      <span class="n">tags</span><span class="p">:</span> <span class="n">install</span>
-
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">重启Nginx</span>
-      <span class="n">service</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">nginx</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">restarted</span>
-      <span class="n">tags</span><span class="p">:</span> <span class="n">restart</span>
-
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">配置proxy_cache功能</span>
-      <span class="n">template</span><span class="p">:</span>
-        <span class="n">src</span><span class="p">:</span>  <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">proxy_cache</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">j2</span>
-        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">proxy_cache</span><span class="o">.</span><span class="n">conf</span>
-      <span class="n">tags</span><span class="p">:</span> <span class="n">config</span>
-
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">创建cache目录</span>
-      <span class="n">file</span><span class="p">:</span>
-        <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">nginx_cache</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">directory</span>
-        <span class="n">owner</span><span class="p">:</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span>
-        <span class="n">group</span><span class="p">:</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span>
-        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;0755&#39;</span>  <span class="c1"># 设置目录权限，可选</span>
-      <span class="n">tags</span><span class="p">:</span> <span class="n">config</span>
-</code></pre></div>
-
-<ul>
-<li>service 模块: 确保 Nginx&nbsp;在配置更改后重启。</li>
-<li>template 模块: 将 Jinja2&nbsp;模板复制到服务器以实现动态配置。</li>
-</ul>
-<div class="highlight"><pre><span></span><code>proxy_cache_path<span class="w"> </span>/var/cache/nginx_cache<span class="w"> </span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span>:2<span class="w"> </span><span class="nv">keys_zone</span><span class="o">=</span>my_cache:100m<span class="w"> </span><span class="nv">inactive</span><span class="o">=</span>60m<span class="w"> </span><span class="nv">use_temp_path</span><span class="o">=</span>off<span class="w"> </span><span class="nv">max_size</span><span class="o">=</span>1g<span class="p">;</span>
-
-upstream<span class="w"> </span>www<span class="w"> </span><span class="o">{</span>
-<span class="w">        </span>server<span class="w"> </span>localhost:80<span class="p">;</span>
-<span class="o">}</span>
-
-server<span class="w"> </span><span class="o">{</span>
-<span class="w">        </span>listen<span class="w"> </span><span class="o">{{</span><span class="w"> </span>server_port<span class="w"> </span><span class="p">|</span><span class="w"> </span>default<span class="o">(</span><span class="m">8080</span><span class="o">)</span><span class="w"> </span><span class="o">}}</span><span class="p">;</span>
-
-<span class="w">        </span>location<span class="w"> </span>~<span class="w"> </span><span class="se">\.</span><span class="o">(</span>txt<span class="p">|</span>psd<span class="p">|</span>gif<span class="p">|</span>jpg<span class="p">|</span>jpeg<span class="p">|</span>png<span class="p">|</span>ico<span class="p">|</span>js<span class="p">|</span>css<span class="o">)</span>$<span class="w"> </span><span class="o">{</span>
-<span class="w">                </span>proxy_cache<span class="w"> </span>my_cache<span class="p">;</span>
-<span class="w">                </span>proxy_cache_key<span class="w"> </span><span class="nv">$uri</span><span class="p">;</span>
-<span class="w">                </span>proxy_cache_valid<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="m">302</span><span class="w"> </span>24h<span class="p">;</span>
-<span class="w">                </span>proxy_cache_valid<span class="w"> </span><span class="m">301</span><span class="w"> </span>30d<span class="p">;</span>
-<span class="w">                </span>proxy_cache_valid<span class="w"> </span>any<span class="w"> </span>5m<span class="p">;</span>
-<span class="w">                </span>add_header<span class="w"> </span>X-CACHE<span class="w"> </span><span class="s2">&quot;Give me five&quot;</span><span class="p">;</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="o">(</span><span class="w"> </span>!-e<span class="w"> </span><span class="nv">$request_filename</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
-<span class="w">                        </span>proxy_pass<span class="w"> </span>http://www<span class="p">;</span>
-<span class="w">                </span><span class="o">}</span>
-<span class="w">        </span><span class="o">}</span>
-
-<span class="w">        </span>location<span class="w"> </span>/<span class="w"> </span><span class="o">{</span>
-<span class="w">                </span>proxy_pass<span class="w"> </span>http://www<span class="p">;</span>
-<span class="w">        </span><span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
-
-<h1>4. 防火墙配置的&nbsp;Playbook</h1>
-<p>此 Playbook 使用 <span class="caps">UFW</span>&nbsp;配置基本防火墙。</p>
-<div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">配置UFW防火墙</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">允许SSH连接</span>
-      <span class="n">ufw</span><span class="p">:</span>
-        <span class="n">rule</span><span class="p">:</span> <span class="n">allow</span>
-        <span class="n">port</span><span class="p">:</span> <span class="mi">22</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">允许HTTP和HTTPS流量</span>
-      <span class="n">ufw</span><span class="p">:</span>
-        <span class="n">rule</span><span class="p">:</span> <span class="n">allow</span>
-        <span class="n">port</span><span class="p">:</span> <span class="s2">&quot;{{ item }}&quot;</span>
-      <span class="n">loop</span><span class="p">:</span>
-        <span class="o">-</span> <span class="mi">80</span>
-        <span class="o">-</span> <span class="mi">443</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启用UFW</span>
-      <span class="n">ufw</span><span class="p">:</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">enabled</span>
-</code></pre></div>
-
-<ul>
-<li>ufw 模块: 配置 Uncomplicated Firewall (<span class="caps">UFW</span>)，允许 <span class="caps">SSH</span> (22) 和 Web 流量 (80, 443)&nbsp;等必要端口。</li>
-</ul>
-<h1>5. 应用部署的&nbsp;Playbook</h1>
-<p>使用此可重用 Playbook&nbsp;自动化应用部署。</p>
-<div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">部署Python</span> <span class="n">Web应用</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装Python依赖</span>
-      <span class="n">apt</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span>
-          <span class="o">-</span> <span class="n">python3</span>
-          <span class="o">-</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装所需的Python包</span>
-      <span class="n">pip</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span>
-          <span class="o">-</span> <span class="n">flask</span>
-          <span class="o">-</span> <span class="n">gunicorn</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">创建目录</span>
-      <span class="n">file</span><span class="p">:</span>
-        <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">directory</span>
-        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;0755&#39;</span>  <span class="c1"># 设置目录权限，可选</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">复制应用代码</span>
-      <span class="n">copy</span><span class="p">:</span>
-        <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">app</span><span class="o">.</span><span class="n">py</span>
-        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启动应用</span>
-      <span class="n">shell</span><span class="p">:</span> <span class="o">|</span>
-        <span class="n">nohup</span> <span class="n">gunicorn</span> <span class="o">-</span><span class="n">b</span> <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">8000</span> <span class="n">app</span><span class="p">:</span><span class="n">app</span> <span class="o">&amp;</span>
-      <span class="n">args</span><span class="p">:</span>
-        <span class="n">chdir</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">myapp</span>
-</code></pre></div>
-
-<ul>
-<li>pip 模块: 安装 Flask 和 Gunicorn 等 Python&nbsp;包。</li>
-<li>shell 模块: 使用 Gunicorn&nbsp;作为后台进程启动应用。</li>
-<li>app.py&nbsp;是个最简单的flask应用</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello_flask</span><span class="p">():</span>
-  <span class="k">return</span> <span class="s1">&#39;Hello, Flask!&#39;</span>
-</code></pre></div>
-
-<h1>6. 数据库设置的&nbsp;Playbook</h1>
-<p>快速设置并保护 MySQL&nbsp;数据库。</p>
-<div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置MySQL</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="n">db_servers</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装MySQL服务器</span>
-      <span class="n">package</span><span class="p">:</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">mysql</span><span class="o">-</span><span class="n">server</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置MySQLroot密码</span>
-      <span class="n">mysql_user</span><span class="p">:</span>
-        <span class="n">login_user</span><span class="p">:</span> <span class="n">root</span>
-        <span class="n">login_password</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">root</span>
-        <span class="n">password</span><span class="p">:</span> <span class="n">secure_password</span>
-        <span class="n">host_all</span><span class="p">:</span> <span class="n">true</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">present</span>
-</code></pre></div>
-
-<ul>
-<li>mysql_user 模块: 创建并保护 MySQL 的 root&nbsp;用户。</li>
-</ul>
-<h1>7. 系统监控的&nbsp;Playbook</h1>
-<p>自动化安装 Prometheus 和 Node Exporter&nbsp;等监控工具。</p>
-<div class="highlight"><pre><span></span><code><span class="o">---</span>
-<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置系统监控</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
-  <span class="n">tasks</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装NodeExporter</span>
-      <span class="n">get_url</span><span class="p">:</span>
-        <span class="n">url</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">prometheus</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="mf">.6.0</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">-</span><span class="mf">1.6.0</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">解压NodeExporter</span>
-      <span class="n">unarchive</span><span class="p">:</span>
-        <span class="n">src</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">node_exporter</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-        <span class="n">dest</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span>
-        <span class="n">extra_opts</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;--strip-components=1&quot;</span><span class="p">]</span>  <span class="c1"># 去掉一层目录结构</span>
-        <span class="n">remote_src</span><span class="p">:</span> <span class="n">yes</span>
-    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">启动NodeExporter</span>
-      <span class="n">shell</span><span class="p">:</span> <span class="o">|</span>
-        <span class="n">nohup</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">node_exporter</span> <span class="o">&amp;</span>
-</code></pre></div>
-
-<ul>
-<li>get_url 模块: 下载 Node Exporter&nbsp;二进制文件。</li>
-<li>unarchive 模块:&nbsp;将二进制文件解压到指定位置。</li>
-</ul>                    </article>
-                </aside><!-- /#featured -->
-                    <section id="content" class="body">
-                        <h1>Other articles</h1>
-                        <hr />
-                        <ol id="posts-list" class="hfeed">
+<span class="o">-</span> <span class="n">name …</span></code></pre></div>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
 
                 <li><article class="hentry">
                     <header>
@@ -463,34 +326,6 @@ configparser&nbsp;模块允许我们 …</p>
 <h2>数据结构</h2>
 <p>Pandas 的主要数据结构是 Series （一维数据）与 …</p>
                         <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/">read more</a>
-                    </div><!-- /.entry-content -->
-                </article></li>
-
-                <li><article class="hentry">
-                    <header>
-                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/" rel="bookmark"
-                               title="Permalink to 使用 PIL(pillow) 实现图片绘制 & 裁剪 & 水印">使用 <span class="caps">PIL</span>(pillow) 实现图片绘制 <span class="amp">&amp;</span> 裁剪 <span class="amp">&amp;</span>&nbsp;水印</a></h1>
-                    </header>
-
-                    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2025-02-01T20:32:00+08:00">
-                Published: 六 01 二月 2025
-        </abbr>
-
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
-                </address>
-        <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/pillow.html">pillow</a> <a href="https://shaodongjun.github.io/tag/pil.html">pil</a> </p>        
-</footer><!-- /.post-info -->                        <p>使用<code>PIL</code>代码实现了从图像中裁剪出一个<code>logo</code>，并将其作为水印添加到其他图像上。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageDraw</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/apple …</span></code></pre></div>
-                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/">read more</a>
                     </div><!-- /.entry-content -->
                 </article></li>
                     </ol><!-- /#posts-list -->
