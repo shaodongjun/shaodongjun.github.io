@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>ShaoDJ's World - DJ.shao</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Fri, 14 Mar 2025 11:08:00 +0800</lastBuildDate><item><title>从API引申到MCP协议</title><link>https://shaodongjun.github.io/posts/2025/03/14/future-aigc-mcp/</link><description>&lt;h1&gt;MCP协议详解&lt;/h1&gt;
+<rss version="2.0"><channel><title>ShaoDJ's World - DJ.shao</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Fri, 14 Mar 2025 11:08:00 +0800</lastBuildDate><item><title>从API引申到MCP协议</title><link>https://shaodongjun.github.io/posts/2025/03/14/future-aigc-mcp/</link><description>&lt;h1&gt;三分钟看懂MCP现状和未来&lt;/h1&gt;
+&lt;h2&gt;MCP协议详解&lt;/h2&gt;
 &lt;p&gt;&lt;span class="caps"&gt;MCP&lt;/span&gt;（Model Context&amp;nbsp;Protocol）是一种新的开放协议，目的是为LLM提供标准化的上下文信息传递方式，从而实现AI智能体与外部数据及工具的结合。&lt;/p&gt;
 &lt;p&gt;通俗的话讲，MCP就像是专为AI应用设计的通用接口，类似我们日常使用的USB-C。&lt;/p&gt;
 &lt;p&gt;正如USB-C简化了不同设备与计算机的连接方式，MCP简化了AI模型与数据、工具和服务之间的交互方式。&lt;/p&gt;
 &lt;p&gt;通过MCP，AI助手不仅能够「读懂」代码，还能「理解」团队讨论、涉及文档等外部信息，提供更加精准的回答。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="mcp archintcture" src="/images/mcp_architecture.png"&gt;&lt;/p&gt;
-&lt;h1&gt;MCP协议的优点&lt;/h1&gt;
+&lt;h2&gt;MCP协议的优点&lt;/h2&gt;
 &lt;p&gt;MCP是一种标准化协议，用于连接AI智能体与各种外部工具和数据源。&lt;/p&gt;
 &lt;p&gt;其主要优势如下：&lt;/p&gt;
 &lt;ul&gt;
@@ -51,7 +52,7 @@
 &lt;p&gt;触发操作：LLM指示服务器执行具体操作。例如，重新安排会议、发送电子邮件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;MCP系统架构&lt;/h1&gt;
+&lt;h2&gt;MCP系统架构&lt;/h2&gt;
 &lt;p&gt;MCP采用简单的客户端-服务器架构模式：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -71,7 +72,10 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;将MCP比作一座桥梁可以更清晰地理解：MCP本身不处理复杂逻辑；它只是协调AI模型和各种工具之间的数据和指令流通。
-&lt;img alt="mcp server and client" src="/images/mcp_server_arch.png"&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 14 Mar 2025 11:08:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-03-14:/posts/2025/03/14/future-aigc-mcp/</guid><category>人工智能</category><category>blog</category><category>aigc</category><category>llm</category></item><item><title>DevOps工程师最常用的可重用Playbook</title><link>https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/</link><description>&lt;p&gt;最重要常用的 7个 Ansible&amp;nbsp;Playbook&lt;/p&gt;
+&lt;img alt="mcp server and client" src="/images/mcp_server_arch.png"&gt;&lt;/p&gt;
+&lt;h2&gt;MCP的未来&lt;/h2&gt;
+&lt;p&gt;不管是使用 &lt;span class="caps"&gt;XML&lt;/span&gt; 还是 &lt;span class="caps"&gt;JSON&lt;/span&gt;，不管是本地二进制中寻找 symbol 还是通过 &lt;span class="caps"&gt;HTTP&lt;/span&gt; 进行交换，我们一路走来，早已习惯了使用结构化的数据格式和预先定义的 &lt;span class="caps"&gt;API&lt;/span&gt; 完成各种任务。在 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;的调用方和提供方，都需要人工维护及稳定的接口契约来规定参数类型、格式、调用方式。&lt;/p&gt;
+&lt;p&gt;随着 &lt;span class="caps"&gt;LLM&lt;/span&gt; 和 &lt;span class="caps"&gt;AI&lt;/span&gt; 时代的到来，无论是 function calling 还是 &lt;span class="caps"&gt;MCP&lt;/span&gt; 定义的协议，都迈出了新一步：&lt;font color=red&gt;它们在现有 &lt;span class="caps"&gt;API&lt;/span&gt; 上新增了 &lt;span class="caps"&gt;AI&lt;/span&gt; 友好层 (如自然语言代理端点)，实现了对传统 &lt;span class="caps"&gt;API&lt;/span&gt; 设计的渐进式改进。&lt;/font&gt;在调用 &lt;span class="caps"&gt;API&lt;/span&gt; 时，我们使用自然语言描述，并交由 &lt;span class="caps"&gt;LLM&lt;/span&gt; 为我们生成结构化的调用方法和参数，从而简化了 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;使用侧的负担。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 14 Mar 2025 11:08:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-03-14:/posts/2025/03/14/future-aigc-mcp/</guid><category>人工智能</category><category>blog</category><category>aigc</category><category>llm</category></item><item><title>DevOps工程师最常用的可重用Playbook</title><link>https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/</link><description>&lt;p&gt;最重要常用的 7个 Ansible&amp;nbsp;Playbook&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ansible&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;playbook&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;lists&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="n"&gt;ops&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;yaml&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;host=OPK-JUMPS&amp;quot;&lt;/span&gt; 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 

@@ -34,13 +34,14 @@
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/ren-gong-zhi-neng.html">人工智能</a>.</p>
 <p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/aigc.html">aigc</a> <a href="https://shaodongjun.github.io/tag/llm.html">llm</a> </p>        
-</footer><!-- /.post-info --><h1>MCP协议详解</h1>
+</footer><!-- /.post-info --><h1>三分钟看懂MCP现状和未来</h1>
+<h2>MCP协议详解</h2>
 <p><span class="caps">MCP</span>（Model Context&nbsp;Protocol）是一种新的开放协议，目的是为LLM提供标准化的上下文信息传递方式，从而实现AI智能体与外部数据及工具的结合。</p>
 <p>通俗的话讲，MCP就像是专为AI应用设计的通用接口，类似我们日常使用的USB-C。</p>
 <p>正如USB-C简化了不同设备与计算机的连接方式，MCP简化了AI模型与数据、工具和服务之间的交互方式。</p>
 <p>通过MCP，AI助手不仅能够「读懂」代码，还能「理解」团队讨论、涉及文档等外部信息，提供更加精准的回答。</p>
 <p><img alt="mcp archintcture" src="/images/mcp_architecture.png"></p>
-<h1>MCP协议的优点</h1>
+<h2>MCP协议的优点</h2>
 <p>MCP是一种标准化协议，用于连接AI智能体与各种外部工具和数据源。</p>
 <p>其主要优势如下：</p>
 <ul>
@@ -86,7 +87,7 @@
 <p>触发操作：LLM指示服务器执行具体操作。例如，重新安排会议、发送电子邮件。</p>
 </li>
 </ul>
-<h1>MCP系统架构</h1>
+<h2>MCP系统架构</h2>
 <p>MCP采用简单的客户端-服务器架构模式：</p>
 <ul>
 <li>
@@ -106,7 +107,10 @@
 </li>
 </ul>
 <p>将MCP比作一座桥梁可以更清晰地理解：MCP本身不处理复杂逻辑；它只是协调AI模型和各种工具之间的数据和指令流通。
-<img alt="mcp server and client" src="/images/mcp_server_arch.png"></p>                    </article>
+<img alt="mcp server and client" src="/images/mcp_server_arch.png"></p>
+<h2>MCP的未来</h2>
+<p>不管是使用 <span class="caps">XML</span> 还是 <span class="caps">JSON</span>，不管是本地二进制中寻找 symbol 还是通过 <span class="caps">HTTP</span> 进行交换，我们一路走来，早已习惯了使用结构化的数据格式和预先定义的 <span class="caps">API</span> 完成各种任务。在 <span class="caps">API</span>&nbsp;的调用方和提供方，都需要人工维护及稳定的接口契约来规定参数类型、格式、调用方式。</p>
+<p>随着 <span class="caps">LLM</span> 和 <span class="caps">AI</span> 时代的到来，无论是 function calling 还是 <span class="caps">MCP</span> 定义的协议，都迈出了新一步：<font color=red>它们在现有 <span class="caps">API</span> 上新增了 <span class="caps">AI</span> 友好层 (如自然语言代理端点)，实现了对传统 <span class="caps">API</span> 设计的渐进式改进。</font>在调用 <span class="caps">API</span> 时，我们使用自然语言描述，并交由 <span class="caps">LLM</span> 为我们生成结构化的调用方法和参数，从而简化了 <span class="caps">API</span>&nbsp;使用侧的负担。</p>                    </article>
                 </aside><!-- /#featured -->
                     <section id="content" class="body">
                         <h1>Other articles</h1>
