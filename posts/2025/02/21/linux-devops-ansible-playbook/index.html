@@ -8,7 +8,7 @@
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
-    <meta name="description" content="最重要常用的 7个 Ansible Playbook ansible-playbook -i lists-hosts ops.yaml -e "host=OPK-JUMPS" 1. 安装常用软件包的 Playbook 此 Playbook 确保在所有服务器上安装常用的系统工具。 --- - name …" />
+    <meta name="description" content="最重要常用的 7个 Ansible Playbook ansible-playbook -i lists-hosts ops.yaml -e "host=OPK-JUMPS" 1. 安装常用软件包的 Playbook 此 Playbook 确保在所有服务器上安装常用的系统工具。 --- - name …" />
         </head>
 
         <body id="index" class="home">
@@ -36,16 +36,15 @@
         </abbr>
 
                 <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                        By <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/yun-wei.html">运维</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/linux.html">linux</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/devops.html">devops</a> </p>        
-</footer><!-- /.post-info -->        <p>最重要常用的 7个 Ansible&nbsp;Playbook</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/linux.html">linux</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/devops.html">devops</a> </p></footer><!-- /.post-info -->        <p>最重要常用的 7个&nbsp;Ansible&nbsp;Playbook</p>
 <div class="highlight"><pre><span></span><code><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">-</span><span class="n">i</span> <span class="n">lists</span><span class="o">-</span><span class="n">hosts</span> <span class="n">ops</span><span class="o">.</span><span class="n">yaml</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;host=OPK-JUMPS&quot;</span> 
 </code></pre></div>
 
-<h1>1. 安装常用软件包的&nbsp;Playbook</h1>
-<p>此 Playbook&nbsp;确保在所有服务器上安装常用的系统工具。</p>
+<h1>1.&nbsp;安装常用软件包的&nbsp;Playbook</h1>
+<p>此&nbsp;Playbook&nbsp;确保在所有服务器上安装常用的系统工具。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装常用软件包</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
@@ -65,10 +64,10 @@
 </code></pre></div>
 
 <ul>
-<li>become: yes: 确保任务以 sudo&nbsp;权限执行。</li>
+<li>become: yes: 确保任务以&nbsp;sudo&nbsp;权限执行。</li>
 </ul>
-<h1>2. 用户账户管理的&nbsp;Playbook</h1>
-<p>此 Playbook&nbsp;创建具有特定权限的用户账户。</p>
+<h1>2.&nbsp;用户账户管理的&nbsp;Playbook</h1>
+<p>此&nbsp;Playbook&nbsp;创建具有特定权限的用户账户。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">管理用户账号</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
@@ -88,11 +87,11 @@
 </code></pre></div>
 
 <ul>
-<li>user 模块: 创建新用户（‘devops’）并将其分配到 ‘sudo’&nbsp;组。</li>
-<li>authorized_key 模块: 添加 <span class="caps">SSH</span>&nbsp;密钥以保障安全访问。</li>
+<li>user 模块: 创建新用户（‘devops’）并将其分配到&nbsp;‘sudo’&nbsp;组。</li>
+<li>authorized_key 模块: 添加 <span class="caps"><span class="caps">SSH</span></span>&nbsp;密钥以保障安全访问。</li>
 </ul>
-<h1>3. 配置 Nginx 的&nbsp;Playbook</h1>
-<p>使用此 Playbook 安装并配置 Nginx Web&nbsp;服务器。</p>
+<h1>3. 配置 Nginx&nbsp;的&nbsp;Playbook</h1>
+<p>使用此 Playbook 安装并配置 Nginx&nbsp;Web&nbsp;服务器。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">安装并配置Nginx</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
@@ -127,8 +126,8 @@
 </code></pre></div>
 
 <ul>
-<li>service 模块: 确保 Nginx&nbsp;在配置更改后重启。</li>
-<li>template 模块: 将 Jinja2&nbsp;模板复制到服务器以实现动态配置。</li>
+<li>service 模块: 确保&nbsp;Nginx&nbsp;在配置更改后重启。</li>
+<li>template 模块: 将&nbsp;Jinja2&nbsp;模板复制到服务器以实现动态配置。</li>
 </ul>
 <div class="highlight"><pre><span></span><code>proxy_cache_path<span class="w"> </span>/var/cache/nginx_cache<span class="w"> </span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span>:2<span class="w"> </span><span class="nv">keys_zone</span><span class="o">=</span>my_cache:100m<span class="w"> </span><span class="nv">inactive</span><span class="o">=</span>60m<span class="w"> </span><span class="nv">use_temp_path</span><span class="o">=</span>off<span class="w"> </span><span class="nv">max_size</span><span class="o">=</span>1g<span class="p">;</span>
 
@@ -157,8 +156,8 @@ server<span class="w"> </span><span class="o">{</span>
 <span class="o">}</span>
 </code></pre></div>
 
-<h1>4. 防火墙配置的&nbsp;Playbook</h1>
-<p>此 Playbook 使用 <span class="caps">UFW</span>&nbsp;配置基本防火墙。</p>
+<h1>4.&nbsp;防火墙配置的&nbsp;Playbook</h1>
+<p>此 Playbook 使用 <span class="caps"><span class="caps">UFW</span></span>&nbsp;配置基本防火墙。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">配置UFW防火墙</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
@@ -181,10 +180,10 @@ server<span class="w"> </span><span class="o">{</span>
 </code></pre></div>
 
 <ul>
-<li>ufw 模块: 配置 Uncomplicated Firewall (<span class="caps">UFW</span>)，允许 <span class="caps">SSH</span> (22) 和 Web 流量 (80, 443)&nbsp;等必要端口。</li>
+<li>ufw 模块: 配置 Uncomplicated Firewall (<span class="caps"><span class="caps">UFW</span></span>)，允许 <span class="caps"><span class="caps">SSH</span></span> (22) 和 Web 流量 (80,&nbsp;443)&nbsp;等必要端口。</li>
 </ul>
-<h1>5. 应用部署的&nbsp;Playbook</h1>
-<p>使用此可重用 Playbook&nbsp;自动化应用部署。</p>
+<h1>5.&nbsp;应用部署的&nbsp;Playbook</h1>
+<p>使用此可重用&nbsp;Playbook&nbsp;自动化应用部署。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">部署Python</span> <span class="n">Web应用</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
@@ -218,8 +217,8 @@ server<span class="w"> </span><span class="o">{</span>
 </code></pre></div>
 
 <ul>
-<li>pip 模块: 安装 Flask 和 Gunicorn 等 Python&nbsp;包。</li>
-<li>shell 模块: 使用 Gunicorn&nbsp;作为后台进程启动应用。</li>
+<li>pip 模块: 安装 Flask 和 Gunicorn 等&nbsp;Python&nbsp;包。</li>
+<li>shell 模块: 使用&nbsp;Gunicorn&nbsp;作为后台进程启动应用。</li>
 <li>app.py&nbsp;是个最简单的flask应用</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
@@ -230,8 +229,8 @@ server<span class="w"> </span><span class="o">{</span>
   <span class="k">return</span> <span class="s1">&#39;Hello, Flask!&#39;</span>
 </code></pre></div>
 
-<h1>6. 数据库设置的&nbsp;Playbook</h1>
-<p>快速设置并保护 MySQL&nbsp;数据库。</p>
+<h1>6.&nbsp;数据库设置的&nbsp;Playbook</h1>
+<p>快速设置并保护&nbsp;MySQL&nbsp;数据库。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置MySQL</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="n">db_servers</span>
@@ -252,10 +251,10 @@ server<span class="w"> </span><span class="o">{</span>
 </code></pre></div>
 
 <ul>
-<li>mysql_user 模块: 创建并保护 MySQL 的 root&nbsp;用户。</li>
+<li>mysql_user 模块: 创建并保护 MySQL 的&nbsp;root&nbsp;用户。</li>
 </ul>
-<h1>7. 系统监控的&nbsp;Playbook</h1>
-<p>自动化安装 Prometheus 和 Node Exporter&nbsp;等监控工具。</p>
+<h1>7.&nbsp;系统监控的&nbsp;Playbook</h1>
+<p>自动化安装 Prometheus 和 Node&nbsp;Exporter&nbsp;等监控工具。</p>
 <div class="highlight"><pre><span></span><code><span class="o">---</span>
 <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">设置系统监控</span>
   <span class="n">hosts</span><span class="p">:</span> <span class="s2">&quot;{{ host }}&quot;</span>
@@ -277,8 +276,8 @@ server<span class="w"> </span><span class="o">{</span>
 </code></pre></div>
 
 <ul>
-<li>get_url 模块: 下载 Node Exporter&nbsp;二进制文件。</li>
-<li>unarchive 模块:&nbsp;将二进制文件解压到指定位置。</li>
+<li>get_url 模块: 下载 Node&nbsp;Exporter&nbsp;二进制文件。</li>
+<li>unarchive&nbsp;模块:&nbsp;将二进制文件解压到指定位置。</li>
 </ul>
       </div><!-- /.entry-content -->
 
@@ -294,9 +293,8 @@ server<span class="w"> </span><span class="o">{</span>
                                 <div class="social">
                                         <h2>social</h2>
                                         <ul>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
-
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
                                         </ul>
                                 </div><!-- /.social -->
                 </section><!-- /#extras -->

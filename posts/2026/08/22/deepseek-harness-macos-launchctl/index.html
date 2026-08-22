@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>在 macOS 上部署 DeepSeek Harness 并用 launchctl 托管进程</title>
+                        <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
+                                <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
+                                <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
+    <meta name="description" content="DeepSeek Harness 是 DeepSeek 开源的一款 Agent 运行时（命令行工具叫 dsh），提供会话管理、工具调用、工作区沙箱和 Web UI。它本身不跑模型推理，而是调 …" />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="https://shaodongjun.github.io/">ShaoDJ's World</a></h1>
+                        <nav><ul>
+                                                <li><a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a></li>
+                                                <li class="active"><a href="https://shaodongjun.github.io/category/ren-gong-zhi-neng.html">人工智能</a></li>
+                                                <li><a href="https://shaodongjun.github.io/category/yun-wei.html">运维</a></li>
+                                                <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+  <section id="content" class="body">
+    <article>
+      <header>
+        <h1 class="entry-title">
+          <a href="https://shaodongjun.github.io/posts/2026/08/22/deepseek-harness-macos-launchctl/" rel="bookmark"
+             title="Permalink to 在 macOS 上部署 DeepSeek Harness 并用 launchctl 托管进程">在 macOS 上部署 DeepSeek Harness 并用 launchctl&nbsp;托管进程</a></h1>
+      </header>
+
+      <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2026-08-22T20:30:00+08:00">
+                Published: 六 22 八月 2026
+        </abbr>
+
+                <address class="vcard author">
+                        By <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                </address>
+        <p>In <a href="https://shaodongjun.github.io/category/ren-gong-zhi-neng.html">人工智能</a>.</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/ai.html">ai</a> <a href="https://shaodongjun.github.io/tag/agent.html">agent</a> <a href="https://shaodongjun.github.io/tag/deepseek.html">deepseek</a> <a href="https://shaodongjun.github.io/tag/macos.html">macos</a> <a href="https://shaodongjun.github.io/tag/launchctl.html">launchctl</a> </p></footer><!-- /.post-info -->        <p><a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> 是 DeepSeek 开源的一款 Agent&nbsp;运行时（命令行工具叫 <code>dsh</code>），提供会话管理、工具调用、工作区沙箱和 Web <span class="caps">UI</span>。它本身不跑模型推理，而是调用 DeepSeek <span class="caps">API</span>（如 <code>deepseek-v4-flash</code>），所以一台普通 Mac&nbsp;就能把它跑起来。</p>
+<p>本文记录在 macOS&nbsp;上从零部署，并用 <code>launchctl</code> 把它变成开机自启、崩溃自动重启的常驻服务。</p>
+<h2>环境准备</h2>
+<p>Harness 基于 Node.js，要求 <strong>Node.js 22.19+ 或 24+</strong>。用 Homebrew&nbsp;安装：</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>node@22
+</code></pre></div>
+
+<p>验证版本：</p>
+<div class="highlight"><pre><span></span><code>node<span class="w"> </span>--version<span class="w">   </span><span class="c1"># v22.x 或 v24.x</span>
+npm<span class="w"> </span>--version
+</code></pre></div>
+
+<h2>手动跑起来</h2>
+<p>先申请一个 <a href="https://platform.deepseek.com/">DeepSeek <span class="caps">API</span> Key</a>，然后直接启动：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">DEEPSEEK_API_KEY</span><span class="o">=</span><span class="s2">&quot;sk-xxxxxxxx&quot;</span>
+npx<span class="w"> </span>@deepseek-ai/dsh<span class="w"> </span>web
+</code></pre></div>
+
+<p>看到启动成功后，浏览器打开 <a href="http://127.0.0.1:3080">http://127.0.0.1:3080</a>，接受开发者预览声明，在 Settings → Models 里填入 <span class="caps">API</span> Key&nbsp;并选择模型即可开始使用。</p>
+<blockquote>
+<p>注意：<code>DEEPSEEK_API_KEY</code> 只在当前终端会话生效，关掉终端服务就停了——这正是下一步要用 launchctl&nbsp;的原因。</p>
+</blockquote>
+<h2>编写 LaunchAgent&nbsp;配置</h2>
+<p>macOS 推荐用 <strong>LaunchAgent</strong>（用户级服务）托管这类常驻进程。创建 <code>~/Library/LaunchAgents/com.deepseek.dsh.plist</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot;</span>
+<span class="cp"> &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
+<span class="nt">&lt;plist</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;string&gt;</span>com.deepseek.dsh<span class="nt">&lt;/string&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;array&gt;</span>
+<span class="w">        </span><span class="cm">&lt;!-- 改成 which npx 的实际路径 --&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>/opt/homebrew/bin/npx<span class="nt">&lt;/string&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>@deepseek-ai/dsh<span class="nt">&lt;/string&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>web<span class="nt">&lt;/string&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>--port<span class="nt">&lt;/string&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>3080<span class="nt">&lt;/string&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/array&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- 环境变量：API Key 和 PATH --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>EnvironmentVariables<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;dict&gt;</span>
+<span class="w">        </span><span class="nt">&lt;key&gt;</span>DEEPSEEK_API_KEY<span class="nt">&lt;/key&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>sk-xxxxxxxx<span class="nt">&lt;/string&gt;</span>
+<span class="w">        </span><span class="nt">&lt;key&gt;</span>PATH<span class="nt">&lt;/key&gt;</span>
+<span class="w">        </span><span class="nt">&lt;string&gt;</span>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin<span class="nt">&lt;/string&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/dict&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>WorkingDirectory<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;string&gt;</span>/Users/shaodj/dsh-workspaces/sandbox-project<span class="nt">&lt;/string&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- 登录时自动启动 --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;true/&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- 进程退出后自动拉起（无论正常还是异常退出） --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;true/&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- 日志输出 --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;string&gt;</span>/tmp/dsh.log<span class="nt">&lt;/string&gt;</span>
+<span class="w">    </span><span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+<span class="w">    </span><span class="nt">&lt;string&gt;</span>/tmp/dsh.err.log<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/plist&gt;</span>
+</code></pre></div>
+
+<p>几个关键点：</p>
+<ul>
+<li><code>ProgramArguments</code> 必须写<strong>绝对路径</strong>，launchd 不继承 shell 的 <span class="caps">PATH</span>；先用 <code>which npx</code> 查一下自己的路径。</li>
+<li><code>WorkingDirectory</code> 指向 Agent&nbsp;的工作区目录，建议单独建一个测试目录，不要直接用家目录。</li>
+<li><code>KeepAlive</code> 设为 <code>true</code> 后进程挂了会被自动重启。</li>
+</ul>
+<h2>加载与管理服务</h2>
+<p>macOS&nbsp;新版推荐 <code>bootstrap</code>/<code>bootout</code> 语法：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 加载并立即启动</span>
+launchctl<span class="w"> </span>bootstrap<span class="w"> </span>gui/<span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span><span class="w"> </span>~/Library/LaunchAgents/com.deepseek.dsh.plist
+
+<span class="c1"># 查看状态</span>
+launchctl<span class="w"> </span>print<span class="w"> </span>gui/<span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span>/com.deepseek.dsh<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>state
+
+<span class="c1"># 重启服务</span>
+launchctl<span class="w"> </span>kickstart<span class="w"> </span>-k<span class="w"> </span>gui/<span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span>/com.deepseek.dsh
+
+<span class="c1"># 卸载服务</span>
+launchctl<span class="w"> </span>bootout<span class="w"> </span>gui/<span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span>/com.deepseek.dsh
+</code></pre></div>
+
+<p>老式的 <code>load</code>/<code>unload</code> 也仍然可用：</p>
+<div class="highlight"><pre><span></span><code>launchctl<span class="w"> </span>load<span class="w">   </span>~/Library/LaunchAgents/com.deepseek.dsh.plist
+launchctl<span class="w"> </span>unload<span class="w"> </span>~/Library/LaunchAgents/com.deepseek.dsh.plist
+</code></pre></div>
+
+<p>修改 plist&nbsp;后需要先 <code>bootout</code> 再 <code>bootstrap</code> 重新加载才会生效。</p>
+<h2>验证</h2>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-sI<span class="w"> </span>http://127.0.0.1:3080<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+<span class="c1"># HTTP/1.1 200 OK</span>
+
+tail<span class="w"> </span>-f<span class="w"> </span>/tmp/dsh.log
+</code></pre></div>
+
+<p>再测一下崩溃自愈：<code>kill</code> 掉 dsh&nbsp;进程后几秒内 <code>launchctl print</code> 会看到它被重新拉起，这正是 <code>KeepAlive</code> 在起作用。</p>
+<h2>小结</h2>
+<p>整个过程三步：装 Node.js → 写 plist&nbsp;→ <code>bootstrap</code> 加载。之后 Harness 就像系统服务一样常驻后台，重启 Mac&nbsp;也会自动恢复，配合浏览器随时可用。</p>
+      </div><!-- /.entry-content -->
+
+    </article>
+  </section>
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://www.upyun.com">UP#AI</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+                <footer id="contentinfo" class="body">
+                        <address id="about" class="vcard body">
+                                Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+                        </address><!-- /#about -->
+
+                        <p>The theme is by <a rel="nofollow" href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+                </footer><!-- /#contentinfo -->
+
+        </body>
+</html>

@@ -4,7 +4,7 @@
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                         <meta name="generator" content="Pelican" />
-                        <title>ShaoDJ's World - pandoc</title>
+                        <title>ShaoDJ's World</title>
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
@@ -20,21 +20,27 @@
                                                 <li><a href="https://shaodongjun.github.io/category/za-ji.html">杂记</a></li>
                         </ul></nav>
                 </header><!-- /#banner -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/" rel="bookmark"
+                               title="Permalink to 使用 PyPDF 和 Pandoc 实现word/pdf转换">使用 PyPDF 和 Pandoc&nbsp;实现word/pdf转换</a></h1>
+                    </header>
 
-                <aside id="featured" class="body">
-                    <article>
-                        <h1 class="entry-title"><a href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">使用 PyPDF 和 Pandoc&nbsp;实现word/pdf转换</a></h1>
+                    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2025-02-01T15:04:00+08:00">
                 Published: 六 01 二月 2025
         </abbr>
 
                 <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                        By <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/word.html">word</a> <a href="https://shaodongjun.github.io/tag/pdf.html">pdf</a> <a href="https://shaodongjun.github.io/tag/pypdf.html">pypdf</a> <a href="https://shaodongjun.github.io/tag/pandoc.html">pandoc</a> </p>        
-</footer><!-- /.post-info --><p>代码示例展示了如何使用 <code>PyPDF</code> 和 <code>Pandoc</code> 实现word/pdf转换</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/word.html">word</a> <a href="https://shaodongjun.github.io/tag/pdf.html">pdf</a> <a href="https://shaodongjun.github.io/tag/pypdf.html">pypdf</a> <a href="https://shaodongjun.github.io/tag/pandoc.html">pandoc</a> </p></footer><!-- /.post-info -->                        <p>代码示例展示了如何使用 <code>PyPDF</code> 和 <code>Pandoc</code> 实现word/pdf转换</p>
 <p>关于<a href="https://medium.com/@daneallist/3-simple-ways-to-merge-word-documents-using-python-862112ff4152">Pandoc的具体用法</a></p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pypandoc</span> <span class="kn">import</span> <span class="n">convert_file</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -42,57 +48,12 @@
 <span class="n">unused</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;demo&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">find_doc_files</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;docx&quot;</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;*.</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-             <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unused</span><span class="p">)</span>
-    <span class="p">]</span>
-
-<span class="k">def</span> <span class="nf">convert_pdf</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
-    <span class="n">convert_file</span><span class="p">(</span>
-        <span class="n">infile</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> 
-        <span class="n">extra_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--pdf-engine=weasyprint&#39;</span><span class="p">])</span>
-
-<span class="k">def</span> <span class="nf">add_watermark</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">watermark</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
-    <span class="n">old_file</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
-    <span class="n">new_file</span> <span class="o">=</span> <span class="n">PdfWriter</span><span class="p">()</span>
-
-    <span class="k">for</span> <span class="n">pageNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">old_file</span><span class="o">.</span><span class="n">pages</span><span class="p">)):</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="n">old_file</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">pageNum</span><span class="p">]</span>
-        <span class="n">page</span><span class="o">.</span><span class="n">merge_page</span><span class="p">(</span><span class="n">watermark</span><span class="p">)</span>
-        <span class="n">new_file</span><span class="o">.</span><span class="n">add_page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">watermark_file</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="s2">&quot;watermark.pdf&quot;</span><span class="p">)</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="n">watermark_file</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">file_list</span> <span class="o">=</span> <span class="n">find_doc_files</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;docx&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_list</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
-        <span class="n">convert_pdf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
-        <span class="n">add_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">watermark</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mark.pdf&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>代码分析</h2>
-<h3>查找 docx&nbsp;文件：</h3>
-<ul>
-<li>find_doc_files 函数使用 Path.rglob 方法递归查找指定目录中的 <span class="caps">DOCX</span> 文件，排除以 unused&nbsp;元组中指定的前缀开头的文件。</li>
-</ul>
-<h3><span class="caps">PDF</span>&nbsp;转换：</h3>
-<ul>
-<li>convert_pdf 函数使用 pypandoc 的 convert_file 方法将 docx 文件转换为 <span class="caps">PDF</span>，使用 WeasyPrint 作为 <span class="caps">PDF</span>&nbsp;引擎。</li>
-</ul>
-<h3>添加水印：</h3>
-<ul>
-<li>add_watermark 函数读取输入 <span class="caps">PDF</span>，使用 PyPDF2&nbsp;将水印添加到每一页，并保存为新文件。</li>
-</ul>
-<h2>注意事项</h2>
-<h3>依赖库安装：</h3>
-<p>确保已安装 pypandoc、PyPDF2 和&nbsp;WeasyPrint。可以通过以下命令安装：</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pypandoc<span class="w"> </span>PyPDF2<span class="w"> </span>WeasyPrint
-</code></pre></div>                    </article>
-                </aside><!-- /#featured -->
+    <span class="k">return</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f …</span></code></pre></div>
+                        <a class="readmore" href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+                    </ol><!-- /#posts-list -->
+                    </section><!-- /#content -->
                 <section id="extras" class="body">
                                 <div class="blogroll">
                                         <h2>links</h2>
@@ -103,9 +64,8 @@
                                 <div class="social">
                                         <h2>social</h2>
                                         <ul>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
-
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
                                         </ul>
                                 </div><!-- /.social -->
                 </section><!-- /#extras -->

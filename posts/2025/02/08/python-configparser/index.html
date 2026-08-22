@@ -8,7 +8,7 @@
                         <link rel="stylesheet" href="https://shaodongjun.github.io/theme/css/main.css" />
                                 <link href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="ShaoDJ's World Atom Feed" />
                                 <link href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="ShaoDJ's World RSS Feed" />
-    <meta name="description" content="configparser 是什么? configparser 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows INI 文件格式的配置文件。 configparser 模块允许我们 …" />
+    <meta name="description" content="configparser 是什么? configparser 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows INI 文件格式的配置文件。 configparser 模块允许我们 …" />
         </head>
 
         <body id="index" class="home">
@@ -36,21 +36,19 @@
         </abbr>
 
                 <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                        By <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/config.html">config</a> </p>        
-</footer><!-- /.post-info -->        <h2>configparser&nbsp;是什么?</h2>
-<p><strong>configparser</strong> 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows <span class="caps">INI</span> 文件格式的配置文件。
-configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/config.html">config</a> </p></footer><!-- /.post-info -->        <h2>configparser&nbsp;是什么?</h2>
+<p><strong>configparser</strong> 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows <span class="caps"><span class="caps">INI</span></span> 文件格式的配置文件。&nbsp;configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。</p>
 <h2>configparser&nbsp;优势与应用场景</h2>
 <h3>优势</h3>
 <ul>
 <li>
-<p>简单易用：configparser 模块的 <span class="caps">API</span>&nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。</p>
+<p>简单易用：configparser 模块的 <span class="caps"><span class="caps">API</span></span>&nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。</p>
 </li>
 <li>
-<p>跨平台性：由于其基于类似 Windows <span class="caps">INI</span>&nbsp;文件的格式，在不同操作系统上都能很好地工作。</p>
+<p>跨平台性：由于其基于类似 Windows <span class="caps"><span class="caps">INI</span></span>&nbsp;文件的格式，在不同操作系统上都能很好地工作。</p>
 </li>
 <li>
 <p>灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。</p>
@@ -70,7 +68,7 @@ configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这�
 </ul>
 <h2>configparser&nbsp;基本使用</h2>
 <h3>安装与导入</h3>
-<p>configparser 模块是 Python&nbsp;的内置模块，无需额外安装。使用时，只需导入即可。</p>
+<p>configparser 模块是&nbsp;Python&nbsp;的内置模块，无需额外安装。使用时，只需导入即可。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
 </code></pre></div>
 
@@ -106,7 +104,7 @@ configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这�
 
 <p>在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用<code>getint</code>方法获取整数类型的配置项（对于其他类型，还有<code>getfloat</code>、<code>getboolean</code>等方法）。</p>
 <h3>写入配置文件</h3>
-<p>我们也可以使用 configparser&nbsp;模块来创建或修改配置文件。以下是一个简单的示例：</p>
+<p>我们也可以使用&nbsp;configparser&nbsp;模块来创建或修改配置文件。以下是一个简单的示例：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">configparser</span>
 
 <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -125,10 +123,10 @@ configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这�
 
 <h2>configparser&nbsp;注意事项</h2>
 <h3>语法要求严格</h3>
-<p>configparser 模块对配置文件的语法有一定要求，例如 section&nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。</p>
+<p>configparser 模块对配置文件的语法有一定要求，例如&nbsp;section&nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。</p>
 <h3>类型转换问题</h3>
 <p>在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。</p>
-<p>configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&nbsp;模块都值得我们深入学习和掌握。</p>
+<p>configparser 模块作为 Python&nbsp;中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&nbsp;模块都值得我们深入学习和掌握。</p>
       </div><!-- /.entry-content -->
 
     </article>
@@ -143,9 +141,8 @@ configparser&nbsp;模块允许我们可以轻松地读取、写入和操作这�
                                 <div class="social">
                                         <h2>social</h2>
                                         <ul>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
-
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
                                         </ul>
                                 </div><!-- /.social -->
                 </section><!-- /#extras -->

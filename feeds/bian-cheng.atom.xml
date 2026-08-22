@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>ShaoDJ's World - 编程</title><link href="https://shaodongjun.github.io/" rel="alternate"></link><link href="https://shaodongjun.github.io/feeds/bian-cheng.atom.xml" rel="self"></link><id>https://shaodongjun.github.io/</id><updated>2025-02-08T15:30:00+08:00</updated><entry><title>使用 configparser 轻松管理配置文件</title><link href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/" rel="alternate"></link><published>2025-02-08T15:30:00+08:00</published><updated>2025-02-08T15:30:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-08:/posts/2025/02/08/python-configparser/</id><summary type="html">&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt; 文件格式的配置文件。
-configparser&amp;nbsp;模块允许我们 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt; 文件格式的配置文件。
-configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>ShaoDJ's World - 编程</title><link href="https://shaodongjun.github.io/" rel="alternate"/><link href="https://shaodongjun.github.io/feeds/bian-cheng.atom.xml" rel="self"/><id>https://shaodongjun.github.io/</id><updated>2025-02-08T15:30:00+08:00</updated><entry><title>使用 configparser 轻松管理配置文件</title><link href="https://shaodongjun.github.io/posts/2025/02/08/python-configparser/" rel="alternate"/><published>2025-02-08T15:30:00+08:00</published><updated>2025-02-08T15:30:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-08:/posts/2025/02/08/python-configparser/</id><summary type="html">&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;&lt;span class="caps"&gt;INI&lt;/span&gt;&lt;/span&gt; 文件格式的配置文件。&amp;nbsp;configparser&amp;nbsp;模块允许我们 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;&lt;span class="caps"&gt;INI&lt;/span&gt;&lt;/span&gt; 文件格式的配置文件。&amp;nbsp;configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。&lt;/p&gt;
 &lt;h2&gt;configparser&amp;nbsp;优势与应用场景&lt;/h2&gt;
 &lt;h3&gt;优势&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;简单易用：configparser 模块的 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。&lt;/p&gt;
+&lt;p&gt;简单易用：configparser 模块的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;&amp;nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;跨平台性：由于其基于类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt;&amp;nbsp;文件的格式，在不同操作系统上都能很好地工作。&lt;/p&gt;
+&lt;p&gt;跨平台性：由于其基于类似 Windows &lt;span class="caps"&gt;&lt;span class="caps"&gt;INI&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件的格式，在不同操作系统上都能很好地工作。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。&lt;/p&gt;
@@ -31,7 +29,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/ul&gt;
 &lt;h2&gt;configparser&amp;nbsp;基本使用&lt;/h2&gt;
 &lt;h3&gt;安装与导入&lt;/h3&gt;
-&lt;p&gt;configparser 模块是 Python&amp;nbsp;的内置模块，无需额外安装。使用时，只需导入即可。&lt;/p&gt;
+&lt;p&gt;configparser 模块是&amp;nbsp;Python&amp;nbsp;的内置模块，无需额外安装。使用时，只需导入即可。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -67,7 +65,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
 &lt;p&gt;在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用&lt;code&gt;getint&lt;/code&gt;方法获取整数类型的配置项（对于其他类型，还有&lt;code&gt;getfloat&lt;/code&gt;、&lt;code&gt;getboolean&lt;/code&gt;等方法）。&lt;/p&gt;
 &lt;h3&gt;写入配置文件&lt;/h3&gt;
-&lt;p&gt;我们也可以使用 configparser&amp;nbsp;模块来创建或修改配置文件。以下是一个简单的示例：&lt;/p&gt;
+&lt;p&gt;我们也可以使用&amp;nbsp;configparser&amp;nbsp;模块来创建或修改配置文件。以下是一个简单的示例：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
 
 &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;configparser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ConfigParser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
@@ -86,17 +84,17 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
 &lt;h2&gt;configparser&amp;nbsp;注意事项&lt;/h2&gt;
 &lt;h3&gt;语法要求严格&lt;/h3&gt;
-&lt;p&gt;configparser 模块对配置文件的语法有一定要求，例如 section&amp;nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。&lt;/p&gt;
+&lt;p&gt;configparser 模块对配置文件的语法有一定要求，例如&amp;nbsp;section&amp;nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。&lt;/p&gt;
 &lt;h3&gt;类型转换问题&lt;/h3&gt;
 &lt;p&gt;在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。&lt;/p&gt;
-&lt;p&gt;configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&amp;nbsp;模块都值得我们深入学习和掌握。&lt;/p&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="config"></category></entry><entry><title>使用 PIL(pillow) 实现图片水印*优化版</title><link href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/" rel="alternate"></link><published>2025-02-07T15:55:00+08:00</published><updated>2025-02-07T15:55:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-07:/posts/2025/02/07/python-pillow-watermark/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。&lt;/p&gt;
+&lt;p&gt;configparser 模块作为 Python&amp;nbsp;中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&amp;nbsp;模块都值得我们深入学习和掌握。&lt;/p&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="config"/></entry><entry><title>使用 PIL(pillow) 实现图片水印*优化版</title><link href="https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/" rel="alternate"/><published>2025-02-07T15:55:00+08:00</published><updated>2025-02-07T15:55:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-07:/posts/2025/02/07/python-pillow-watermark/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;&lt;span class="caps"&gt;PIL&lt;/span&gt;&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;&lt;span class="caps"&gt;PIL&lt;/span&gt;&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。&lt;/p&gt;
 &lt;h2&gt;优点&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;易于使用：Pillow 提供了简单易懂的 &lt;span class="caps"&gt;API&lt;/span&gt;，适合初学者和专业开发者使用。&lt;/p&gt;
+&lt;p&gt;易于使用：Pillow 提供了简单易懂的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;，适合初学者和专业开发者使用。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;支持多种格式：可以处理多种图像格式，如 &lt;span class="caps"&gt;JPEG&lt;/span&gt;、&lt;span class="caps"&gt;PNG&lt;/span&gt;、&lt;span class="caps"&gt;GIF&lt;/span&gt;、&lt;span class="caps"&gt;BMP&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
+&lt;p&gt;支持多种格式：可以处理多种图像格式，如 &lt;span class="caps"&gt;&lt;span class="caps"&gt;JPEG&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;PNG&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;GIF&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;BMP&lt;/span&gt;&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;图像处理功能强大：提供了多种图像处理功能，包括图像增强、过滤、变换、裁剪、旋转等。&lt;/p&gt;
@@ -193,16 +191,16 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;h2&gt;图片转pdf的代码&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;打开图像：使用 Image.open()&amp;nbsp;打开指定路径的图像文件。&lt;/p&gt;
+&lt;p&gt;打开图像：使用&amp;nbsp;Image.open()&amp;nbsp;打开指定路径的图像文件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;模式检查与转换：如果图像不是 &lt;span class="caps"&gt;RGB&lt;/span&gt; 模式，则将其转换为 &lt;span class="caps"&gt;RGB&lt;/span&gt; 模式。&lt;span class="caps"&gt;PDF&lt;/span&gt; 格式通常要求图像为 &lt;span class="caps"&gt;RGB&lt;/span&gt;。&lt;/p&gt;
+&lt;p&gt;模式检查与转换：如果图像不是 &lt;span class="caps"&gt;&lt;span class="caps"&gt;RGB&lt;/span&gt;&lt;/span&gt; 模式，则将其转换为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;RGB&lt;/span&gt;&lt;/span&gt; 模式。&lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt; 格式通常要求图像为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;RGB&lt;/span&gt;&lt;/span&gt;。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;保存为 &lt;span class="caps"&gt;PDF&lt;/span&gt;：使用 image.save() 方法将图像保存为 &lt;span class="caps"&gt;PDF&lt;/span&gt;&amp;nbsp;文件，同时可以指定分辨率。&lt;/p&gt;
+&lt;p&gt;保存为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;：使用 image.save() 方法将图像保存为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件，同时可以指定分辨率。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;支持多图像：如果需要支持将多个图像合并为一个 &lt;span class="caps"&gt;PDF&lt;/span&gt;，可以使用 save() 方法的 append_images&amp;nbsp;参数。&lt;/p&gt;
+&lt;p&gt;支持多图像：如果需要支持将多个图像合并为一个 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;，可以使用 save() 方法的&amp;nbsp;append_images&amp;nbsp;参数。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;PIL&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Image&lt;/span&gt;
@@ -221,9 +219,9 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
     &lt;span class="c1"&gt;# 保存图像为 PDF 文件&lt;/span&gt;
     &lt;span class="n"&gt;image&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pdf_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;PDF&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;resolution&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;100.0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="pillow"></category><category term="pil"></category></entry><entry><title>使用 FreeSimpleGUI 定制图形界面</title><link href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/" rel="alternate"></link><published>2025-02-06T17:18:00+08:00</published><updated>2025-02-06T17:18:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-06:/posts/2025/02/06/python-freesimplegui/</id><summary type="html">&lt;h2&gt;什么是FreeSimpleGUI？&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="pillow"/><category term="pil"/></entry><entry><title>使用 FreeSimpleGUI 定制图形界面</title><link href="https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/" rel="alternate"/><published>2025-02-06T17:18:00+08:00</published><updated>2025-02-06T17:18:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-06:/posts/2025/02/06/python-freesimplegui/</id><summary type="html">&lt;h2&gt;什么是FreeSimpleGUI？&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;FreeSimpleGUI&lt;/strong&gt;是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;什么是FreeSimpleGUI？&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;FreeSimpleGUI&lt;/strong&gt;是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁的布局定义系统，支持多种流行的 &lt;span class="caps"&gt;GUI&lt;/span&gt; 框架，包括 tkinter、Qt、WxPython 和 Remi。它通过封装这些框架的常用功能，提供了更简洁的 &lt;span class="caps"&gt;API&lt;/span&gt;，让你专注于应用逻辑而非繁杂的UI细节。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FreeSimpleGUI&lt;/strong&gt;是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁的布局定义系统，支持多种流行的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;GUI&lt;/span&gt;&lt;/span&gt; 框架，包括 tkinter、Qt、WxPython 和 Remi。它通过封装这些框架的常用功能，提供了更简洁的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;，让你专注于应用逻辑而非繁杂的UI细节。&lt;/p&gt;
 &lt;h2&gt;FreeSimpleGUI的特点&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -295,16 +293,16 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
         &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="n"&gt;sg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;popup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;目录不能为空!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;window&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="gui"></category><category term="tkinter"></category></entry><entry><title>使用 python-pptx 库制作PowerPoint</title><link href="https://shaodongjun.github.io/posts/2025/02/05/python-pptx-powerpoint/" rel="alternate"></link><published>2025-02-05T17:38:00+08:00</published><updated>2025-02-05T17:38:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-05:/posts/2025/02/05/python-pptx-powerpoint/</id><summary type="html">&lt;h2&gt;python-pptx&amp;nbsp;库简介&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://python-pptx.readthedocs.io/"&gt;python-pptx&lt;/a&gt; 是一个用于创建和修改 PowerPoint (.pptx) 文件的 Python&amp;nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;python-pptx&amp;nbsp;库简介&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://python-pptx.readthedocs.io/"&gt;python-pptx&lt;/a&gt; 是一个用于创建和修改 PowerPoint (.pptx) 文件的 Python&amp;nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进行各种格式的自定义。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="gui"/><category term="tkinter"/></entry><entry><title>使用 python-pptx 库制作PowerPoint</title><link href="https://shaodongjun.github.io/posts/2025/02/05/python-pptx-powerpoint/" rel="alternate"/><published>2025-02-05T17:38:00+08:00</published><updated>2025-02-05T17:38:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-05:/posts/2025/02/05/python-pptx-powerpoint/</id><summary type="html">&lt;h2&gt;python-pptx&amp;nbsp;库简介&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://python-pptx.readthedocs.io/"&gt;python-pptx&lt;/a&gt; 是一个用于创建和修改 PowerPoint (.pptx) 文件的&amp;nbsp;Python&amp;nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进 …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;python-pptx&amp;nbsp;库简介&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://python-pptx.readthedocs.io/"&gt;python-pptx&lt;/a&gt; 是一个用于创建和修改 PowerPoint (.pptx) 文件的&amp;nbsp;Python&amp;nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进行各种格式的自定义。&lt;/p&gt;
 &lt;h2&gt;特性&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;创建新演示文稿：可以从零开始创建新的 PowerPoint&amp;nbsp;文件。&lt;/p&gt;
+&lt;p&gt;创建新演示文稿：可以从零开始创建新的&amp;nbsp;PowerPoint&amp;nbsp;文件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;修改现有文件：支持打开和编辑已有的 .pptx&amp;nbsp;文件。&lt;/p&gt;
+&lt;p&gt;修改现有文件：支持打开和编辑已有的&amp;nbsp;.pptx&amp;nbsp;文件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;添加幻灯片：可以轻松地添加、删除和重新排列幻灯片。&lt;/p&gt;
@@ -320,10 +318,10 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;注意事项：&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;python-pptx &lt;u&gt;本身不支持&lt;/u&gt;&lt;/strong&gt; 复杂的动画效果，如果需要更复杂的动画，可以在生成的 PowerPoint&amp;nbsp;文件中手动设置。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;python-pptx &lt;u&gt;本身不支持&lt;/u&gt;&lt;/strong&gt; 复杂的动画效果，如果需要更复杂的动画，可以在生成的&amp;nbsp;PowerPoint&amp;nbsp;文件中手动设置。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;基本用法&lt;/h2&gt;
-&lt;p&gt;以下是一个简单的示例，展示如何使用 python-pptx&amp;nbsp;创建一个包含文本的幻灯片：&lt;/p&gt;
+&lt;p&gt;以下是一个简单的示例，展示如何使用&amp;nbsp;python-pptx&amp;nbsp;创建一个包含文本的幻灯片：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pptx&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Presentation&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pptx.util&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Inches&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pptx.enum.shapes&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;MSO_SHAPE&lt;/span&gt;
@@ -418,7 +416,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;span class="n"&gt;prs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;example_presentation.pptx&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PPT 文件已创建成功！&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="ppt"></category><category term="pptx"></category></entry><entry><title>使用 Selenium &amp; webdriver 自动化测试</title><link href="https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/" rel="alternate"></link><published>2025-02-04T14:08:00+08:00</published><updated>2025-02-04T14:08:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-04:/posts/2025/02/04/python-selenium-web/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Selenium&lt;/strong&gt; 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是 Web …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Selenium&lt;/strong&gt; 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是 Web&amp;nbsp;爬虫、任务自动化（如表单提交、网页截图、数据抓取等），&lt;code&gt;Selenium&lt;/code&gt; 都是一个优秀的选择。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="ppt"/><category term="pptx"/></entry><entry><title>使用 Selenium &amp; webdriver 自动化测试</title><link href="https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/" rel="alternate"/><published>2025-02-04T14:08:00+08:00</published><updated>2025-02-04T14:08:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-04:/posts/2025/02/04/python-selenium-web/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Selenium&lt;/strong&gt; 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是&amp;nbsp;Web …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Selenium&lt;/strong&gt; 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是&amp;nbsp;Web&amp;nbsp;爬虫、任务自动化（如表单提交、网页截图、数据抓取等），&lt;code&gt;Selenium&lt;/code&gt; 都是一个优秀的选择。&lt;/p&gt;
 &lt;h2&gt;Selenium&amp;nbsp;的一些优秀特性和用途：&lt;/h2&gt;
 &lt;hr&gt;
 &lt;h2&gt;1.&amp;nbsp;跨浏览器支持&lt;/h2&gt;
@@ -440,9 +438,9 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;&lt;strong&gt;Opera&lt;/strong&gt;&amp;nbsp;等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这使得 Selenium&amp;nbsp;可以在不同的浏览器环境中运行相同的脚本，确保兼容性。&lt;/p&gt;
+&lt;p&gt;这使得&amp;nbsp;Selenium&amp;nbsp;可以在不同的浏览器环境中运行相同的脚本，确保兼容性。&lt;/p&gt;
 &lt;h2&gt;2.&amp;nbsp;支持多种编程语言&lt;/h2&gt;
-&lt;p&gt;Selenium 不仅支持&amp;nbsp;Python，还支持：&lt;/p&gt;
+&lt;p&gt;Selenium&amp;nbsp;不仅支持&amp;nbsp;Python，还支持：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Java&lt;/p&gt;
@@ -457,7 +455,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;Ruby&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;span class="caps"&gt;PHP&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
+&lt;p&gt;&lt;span class="caps"&gt;&lt;span class="caps"&gt;PHP&lt;/span&gt;&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;这使得开发者可以使用自己熟悉的语言来编写自动化脚本。&lt;/p&gt;
@@ -465,7 +463,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;Selenium&amp;nbsp;提供了多种定位网页元素的方式，例如：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;ID&lt;/span&gt;&lt;/strong&gt;: &lt;code&gt;find_element(By.ID, "element_id")&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;&lt;span class="caps"&gt;ID&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;: &lt;code&gt;find_element(By.ID, "element_id")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;By Class Name&lt;/strong&gt;: &lt;code&gt;find_element(By.CLASS_NAME, "class_name")&lt;/code&gt;&lt;/p&gt;
@@ -477,29 +475,29 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;&lt;strong&gt;By Tag Name&lt;/strong&gt;: &lt;code&gt;find_element(By.TAG_NAME, "tag_name")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;CSS&lt;/span&gt; Selector&lt;/strong&gt;: &lt;code&gt;find_element(By.CSS_SELECTOR, "css_selector")&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;&lt;span class="caps"&gt;CSS&lt;/span&gt;&lt;/span&gt; Selector&lt;/strong&gt;: &lt;code&gt;find_element(By.CSS_SELECTOR, "css_selector")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;By XPath&lt;/strong&gt;: &lt;code&gt;find_element(By.XPATH, "xpath_expression")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这些定位方式使得 Selenium&amp;nbsp;可以灵活地与网页中的任何元素交互。&lt;/p&gt;
+&lt;p&gt;这些定位方式使得&amp;nbsp;Selenium&amp;nbsp;可以灵活地与网页中的任何元素交互。&lt;/p&gt;
 &lt;h2&gt;4.&amp;nbsp;丰富的操作功能&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;不仅可以点击按钮、输入文本，还可以：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;提交表单&lt;/li&gt;
 &lt;li&gt;处理下拉菜单&lt;/li&gt;
 &lt;li&gt;上传文件&lt;/li&gt;
-&lt;li&gt;执行 JavaScript&amp;nbsp;代码&lt;/li&gt;
+&lt;li&gt;执行&amp;nbsp;JavaScript&amp;nbsp;代码&lt;/li&gt;
 &lt;li&gt;截图&lt;/li&gt;
 &lt;li&gt;处理弹窗（如警告框、确认框）&lt;/li&gt;
 &lt;li&gt;切换窗口或&amp;nbsp;iframe&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这些功能使得 Selenium&amp;nbsp;可以模拟几乎所有的用户操作。&lt;/p&gt;
+&lt;p&gt;这些功能使得&amp;nbsp;Selenium&amp;nbsp;可以模拟几乎所有的用户操作。&lt;/p&gt;
 &lt;h2&gt;5.&amp;nbsp;支持动态网页&lt;/h2&gt;
-&lt;p&gt;Selenium 可以处理 JavaScript&amp;nbsp;动态加载的内容，这是它与传统爬虫工具（如 &lt;code&gt;requests&lt;/code&gt; 库）相比的最大优势。它能够等待页面完全加载后再进行操作，甚至可以与动态生成的元素交互。&lt;/p&gt;
-&lt;h2&gt;6. 支持无头模式（Headless&amp;nbsp;Mode）&lt;/h2&gt;
-&lt;p&gt;通过启用无头模式（如 &lt;code&gt;options.add_argument('headless')&lt;/code&gt;），Selenium 可以在后台运行浏览器，无需打开 &lt;span class="caps"&gt;GUI&lt;/span&gt;&amp;nbsp;界面。这对于服务器环境或自动化任务非常有用，可以节省资源并提高效率。&lt;/p&gt;
+&lt;p&gt;Selenium 可以处理&amp;nbsp;JavaScript&amp;nbsp;动态加载的内容，这是它与传统爬虫工具（如 &lt;code&gt;requests&lt;/code&gt; 库）相比的最大优势。它能够等待页面完全加载后再进行操作，甚至可以与动态生成的元素交互。&lt;/p&gt;
+&lt;h2&gt;6.&amp;nbsp;支持无头模式（Headless&amp;nbsp;Mode）&lt;/h2&gt;
+&lt;p&gt;通过启用无头模式（如 &lt;code&gt;options.add_argument('headless')&lt;/code&gt;），Selenium 可以在后台运行浏览器，无需打开 &lt;span class="caps"&gt;&lt;span class="caps"&gt;GUI&lt;/span&gt;&lt;/span&gt;&amp;nbsp;界面。这对于服务器环境或自动化任务非常有用，可以节省资源并提高效率。&lt;/p&gt;
 &lt;h2&gt;7.&amp;nbsp;强大的等待机制&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;提供了两种等待机制来处理异步加载的内容：&lt;/p&gt;
 &lt;ul&gt;
@@ -521,7 +519,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;8.&amp;nbsp;支持分布式测试&lt;/h2&gt;
-&lt;p&gt;通过 Selenium&amp;nbsp;Grid，可以在多台机器上并行运行测试脚本，显著提高测试效率。&lt;/p&gt;
+&lt;p&gt;通过&amp;nbsp;Selenium&amp;nbsp;Grid，可以在多台机器上并行运行测试脚本，显著提高测试效率。&lt;/p&gt;
 &lt;h2&gt;9.&amp;nbsp;社区支持和文档丰富&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;拥有庞大的用户社区和丰富的文档资源，遇到问题时可以轻松找到解决方案。&lt;/p&gt;
 &lt;h2&gt;10.&amp;nbsp;应用场景广泛&lt;/h2&gt;
@@ -559,7 +557,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;h2&gt;12.&amp;nbsp;开源和免费&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;是一个开源项目，完全免费使用，适合个人和企业。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h1&gt;使用Selenium v4&amp;nbsp;编写脚本&lt;/h1&gt;
+&lt;h1&gt;使用Selenium&amp;nbsp;v4&amp;nbsp;编写脚本&lt;/h1&gt;
 &lt;h2&gt;预约球场&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
@@ -606,7 +604,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
 &lt;span class="k"&gt;finally&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
   &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="selenium"></category><category term="web"></category></entry><entry><title>使用 BeautifulSoup &amp; Requests 解析网页</title><link href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/" rel="alternate"></link><published>2025-02-03T15:53:00+08:00</published><updated>2025-02-03T15:53:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-03:/posts/2025/02/03/python-bs4-requests/</id><summary type="html">&lt;p&gt;Python有两个很好用第三方模块&lt;code&gt;requests&lt;/code&gt;库和&lt;code&gt;beautifulsoup&lt;/code&gt;库，简单学习下模块用法：&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="selenium"/><category term="web"/></entry><entry><title>使用 BeautifulSoup &amp; Requests 解析网页</title><link href="https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/" rel="alternate"/><published>2025-02-03T15:53:00+08:00</published><updated>2025-02-03T15:53:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-03:/posts/2025/02/03/python-bs4-requests/</id><summary type="html">&lt;p&gt;Python有两个很好用第三方模块&lt;code&gt;requests&lt;/code&gt;库和&lt;code&gt;beautifulsoup&lt;/code&gt;库，简单学习下模块用法：&lt;/p&gt;
 &lt;h2&gt;requests模块&lt;/h2&gt;
 &lt;p&gt;标准库中提供了：&lt;strong&gt;urllib、urllib2、httplib&lt;/strong&gt; 等模块以供Http请求，使用起来较为麻烦。
 &lt;a href="https://requests.readthedocs.io"&gt;requests&lt;/a&gt;是基于Python开发的HTTP第三方库，在Python内置模块的基础上进行了高度的封装，使用了 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Python有两个很好用第三方模块&lt;code&gt;requests&lt;/code&gt;库和&lt;code&gt;beautifulsoup&lt;/code&gt;库，简单学习下模块用法：&lt;/p&gt;
@@ -627,7 +625,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;BeautifulSoup模块&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;BeautifulSoup&lt;/code&gt;模块是一个可以从 &lt;strong&gt;HTML或XML&lt;/strong&gt; 文件中提取数据的Python第三方库。&amp;nbsp;它将一个html或xml字符串（或文档句柄）文档被转换成Unicode，利用解析器来解析这段文档。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;BeautifulSoup&lt;/code&gt;模块是一个可以从 &lt;strong&gt;HTML或XML&lt;/strong&gt;&amp;nbsp;文件中提取数据的Python第三方库。&amp;nbsp;它将一个html或xml字符串（或文档句柄）文档被转换成Unicode，利用解析器来解析这段文档。&lt;/p&gt;
 &lt;h3&gt;BeautifulSoup&amp;nbsp;支持几种不同的解析器：&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -684,11 +682,11 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 6号场, 12:00,13:00
 1号场, 18:00,20:00
 2号场, 18:00,20:00
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="requests"></category><category term="beautifulsoup"></category><category term="bs"></category><category term="web"></category></entry><entry><title>使用 Pandas 实现基本的数据分析</title><link href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/" rel="alternate"></link><published>2025-02-02T10:16:00+08:00</published><updated>2025-02-02T10:16:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-02:/posts/2025/02/02/python-pandas/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Pandas&lt;/strong&gt; 一个强大的分析结构化数据的工具集，基础是 &lt;a href="https://www.runoob.com/numpy/numpy-tutorial.html"&gt;Numpy&lt;/a&gt;（提供高性能的矩阵运算）。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="requests"/><category term="beautifulsoup"/><category term="bs"/><category term="web"/></entry><entry><title>使用 Pandas 实现基本的数据分析</title><link href="https://shaodongjun.github.io/posts/2025/02/02/python-pandas/" rel="alternate"/><published>2025-02-02T10:16:00+08:00</published><updated>2025-02-02T10:16:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-02:/posts/2025/02/02/python-pandas/</id><summary type="html">&lt;p&gt;&lt;strong&gt;Pandas&lt;/strong&gt; 一个强大的分析结构化数据的工具集，基础是 &lt;a href="https://www.runoob.com/numpy/numpy-tutorial.html"&gt;Numpy&lt;/a&gt;（提供高性能的矩阵运算）。&lt;/p&gt;
 &lt;h2&gt;数据结构&lt;/h2&gt;
-&lt;p&gt;Pandas 的主要数据结构是 Series （一维数据）与 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Pandas&lt;/strong&gt; 一个强大的分析结构化数据的工具集，基础是 &lt;a href="https://www.runoob.com/numpy/numpy-tutorial.html"&gt;Numpy&lt;/a&gt;（提供高性能的矩阵运算）。&lt;/p&gt;
+&lt;p&gt;Pandas 的主要数据结构是 Series&amp;nbsp;（一维数据）与 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Pandas&lt;/strong&gt; 一个强大的分析结构化数据的工具集，基础是 &lt;a href="https://www.runoob.com/numpy/numpy-tutorial.html"&gt;Numpy&lt;/a&gt;（提供高性能的矩阵运算）。&lt;/p&gt;
 &lt;h2&gt;数据结构&lt;/h2&gt;
-&lt;p&gt;Pandas 的主要数据结构是 Series （一维数据）与&amp;nbsp;DataFrame（二维数据）。&lt;/p&gt;
+&lt;p&gt;Pandas 的主要数据结构是 Series&amp;nbsp;（一维数据）与&amp;nbsp;DataFrame（二维数据）。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Series 是一种类似于一维数组的对象，它由一组数据（各种 Numpy 数据类型）以及一组与之相关的数据标签（即索引）组成。
@@ -703,7 +701,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h2&gt;Pandas&amp;nbsp;应用&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Pandas 可以从各种文件格式比如 &lt;span class="caps"&gt;CSV&lt;/span&gt;、&lt;span class="caps"&gt;JSON&lt;/span&gt;、&lt;span class="caps"&gt;SQL&lt;/span&gt;、Microsoft Excel&amp;nbsp;导入数据。&lt;/p&gt;
+&lt;p&gt;Pandas 可以从各种文件格式比如 &lt;span class="caps"&gt;&lt;span class="caps"&gt;CSV&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;JSON&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;SQL&lt;/span&gt;&lt;/span&gt;、Microsoft&amp;nbsp;Excel&amp;nbsp;导入数据。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Pandas&amp;nbsp;可以对各种数据进行运算操作，比如归并、再成形、选择，还有数据清洗和数据加工特征。&lt;/p&gt;
@@ -726,7 +724,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;p&gt;数据分析：进行统计分析、聚合、分组等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;数据可视化：通过整合 Matplotlib 和 Seaborn&amp;nbsp;等库，可以进行数据可视化。&lt;/p&gt;
+&lt;p&gt;数据可视化：通过整合 Matplotlib 和&amp;nbsp;Seaborn&amp;nbsp;等库，可以进行数据可视化。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Pandas 是 Python&lt;/strong&gt;&amp;nbsp;数据科学领域中不可或缺的工具之一，它的灵活性和强大的功能使得数据处理和分析变得更加简单和高效。&lt;/p&gt;
@@ -789,7 +787,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;员工薪水&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Salary&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;blue&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="pandas"></category><category term="excel"></category><category term="xls"></category><category term="xlsx"></category></entry><entry><title>使用 PIL(pillow) 实现图片绘制 &amp; 裁剪 &amp; 水印</title><link href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/" rel="alternate"></link><published>2025-02-01T20:32:00+08:00</published><updated>2025-02-01T20:32:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pillow-pil/</id><summary type="html">&lt;p&gt;使用&lt;code&gt;PIL&lt;/code&gt;代码实现了从图像中裁剪出一个&lt;code&gt;logo&lt;/code&gt;，并将其作为水印添加到其他图像上。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="pandas"/><category term="excel"/><category term="xls"/><category term="xlsx"/></entry><entry><title>使用 PIL(pillow) 实现图片绘制 &amp; 裁剪 &amp; 水印</title><link href="https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/" rel="alternate"/><published>2025-02-01T20:32:00+08:00</published><updated>2025-02-01T20:32:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pillow-pil/</id><summary type="html">&lt;p&gt;使用&lt;code&gt;PIL&lt;/code&gt;代码实现了从图像中裁剪出一个&lt;code&gt;logo&lt;/code&gt;，并将其作为水印添加到其他图像上。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;PIL&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Image&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;PIL&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ImageDraw&lt;/span&gt;
@@ -855,24 +853,24 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h2&gt;代码分析&lt;/h2&gt;
 &lt;h3&gt;裁剪&amp;nbsp;Logo：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;crop_logo 函数从输入图像中裁剪出一个 100x100&amp;nbsp;像素的区域，并将其保存为水印。&lt;/li&gt;
+&lt;li&gt;crop_logo 函数从输入图像中裁剪出一个&amp;nbsp;100x100&amp;nbsp;像素的区域，并将其保存为水印。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;添加水印：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;img_watermark 函数将裁剪出的 logo&amp;nbsp;作为水印添加到指定的图像上，放置在右下角。&lt;/li&gt;
+&lt;li&gt;img_watermark 函数将裁剪出的&amp;nbsp;logo&amp;nbsp;作为水印添加到指定的图像上，放置在右下角。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;绘制&amp;nbsp;Logo：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;draw_logo 函数创建一个新的 400x400 像素的图像，在其中绘制了一些图形和文本，并保存为 logo&amp;nbsp;图像。&lt;/li&gt;
+&lt;li&gt;draw_logo 函数创建一个新的 400x400 像素的图像，在其中绘制了一些图形和文本，并保存为&amp;nbsp;logo&amp;nbsp;图像。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;遍历 &lt;span class="caps"&gt;PNG&lt;/span&gt;&amp;nbsp;文件：&lt;/h3&gt;
+&lt;h3&gt;遍历 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PNG&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 Path.rglob() 方法查找指定目录下的所有 &lt;span class="caps"&gt;PNG&lt;/span&gt;&amp;nbsp;文件，并对每个文件应用水印。&lt;/li&gt;
+&lt;li&gt;使用 Path.rglob() 方法查找指定目录下的所有 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PNG&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件，并对每个文件应用水印。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;改进建议&lt;/h2&gt;
 &lt;h3&gt;路径处理：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 os.path.join()&amp;nbsp;以确保路径在不同操作系统上兼容。&lt;/li&gt;
+&lt;li&gt;使用&amp;nbsp;os.path.join()&amp;nbsp;以确保路径在不同操作系统上兼容。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;异常处理：&lt;/h3&gt;
 &lt;ul&gt;
@@ -881,7 +879,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h3&gt;参数化：&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;考虑将某些参数（如裁剪区域、图像大小等）作为函数参数，以提高灵活性。&lt;/li&gt;
-&lt;/ul&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="pillow"></category><category term="pil"></category></entry><entry><title>使用 PyPDF 和 Pandoc 实现word/pdf转换</title><link href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/" rel="alternate"></link><published>2025-02-01T15:04:00+08:00</published><updated>2025-02-01T15:04:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pypdf-pandoc/</id><summary type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;PyPDF&lt;/code&gt; 和 &lt;code&gt;Pandoc&lt;/code&gt; 实现word/pdf转换&lt;/p&gt;
+&lt;/ul&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="pillow"/><category term="pil"/></entry><entry><title>使用 PyPDF 和 Pandoc 实现word/pdf转换</title><link href="https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/" rel="alternate"/><published>2025-02-01T15:04:00+08:00</published><updated>2025-02-01T15:04:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pypdf-pandoc/</id><summary type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;PyPDF&lt;/code&gt; 和 &lt;code&gt;Pandoc&lt;/code&gt; 实现word/pdf转换&lt;/p&gt;
 &lt;p&gt;关于&lt;a href="https://medium.com/@daneallist/3-simple-ways-to-merge-word-documents-using-python-862112ff4152"&gt;Pandoc的具体用法&lt;/a&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pypandoc&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;convert_file&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
@@ -930,23 +928,23 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;代码分析&lt;/h2&gt;
-&lt;h3&gt;查找 docx&amp;nbsp;文件：&lt;/h3&gt;
+&lt;h3&gt;查找&amp;nbsp;docx&amp;nbsp;文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;find_doc_files 函数使用 Path.rglob 方法递归查找指定目录中的 &lt;span class="caps"&gt;DOCX&lt;/span&gt; 文件，排除以 unused&amp;nbsp;元组中指定的前缀开头的文件。&lt;/li&gt;
+&lt;li&gt;find_doc_files 函数使用 Path.rglob 方法递归查找指定目录中的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;DOCX&lt;/span&gt;&lt;/span&gt; 文件，排除以&amp;nbsp;unused&amp;nbsp;元组中指定的前缀开头的文件。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&amp;nbsp;转换：&lt;/h3&gt;
+&lt;h3&gt;&lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;&amp;nbsp;转换：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;convert_pdf 函数使用 pypandoc 的 convert_file 方法将 docx 文件转换为 &lt;span class="caps"&gt;PDF&lt;/span&gt;，使用 WeasyPrint 作为 &lt;span class="caps"&gt;PDF&lt;/span&gt;&amp;nbsp;引擎。&lt;/li&gt;
+&lt;li&gt;convert_pdf 函数使用 pypandoc 的 convert_file 方法将 docx 文件转换为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;，使用 WeasyPrint 作为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;&amp;nbsp;引擎。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;添加水印：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;add_watermark 函数读取输入 &lt;span class="caps"&gt;PDF&lt;/span&gt;，使用 PyPDF2&amp;nbsp;将水印添加到每一页，并保存为新文件。&lt;/li&gt;
+&lt;li&gt;add_watermark 函数读取输入 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;，使用&amp;nbsp;PyPDF2&amp;nbsp;将水印添加到每一页，并保存为新文件。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;注意事项&lt;/h2&gt;
 &lt;h3&gt;依赖库安装：&lt;/h3&gt;
-&lt;p&gt;确保已安装 pypandoc、PyPDF2 和&amp;nbsp;WeasyPrint。可以通过以下命令安装：&lt;/p&gt;
+&lt;p&gt;确保已安装 pypandoc、PyPDF2&amp;nbsp;和&amp;nbsp;WeasyPrint。可以通过以下命令安装：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;pypandoc&lt;span class="w"&gt; &lt;/span&gt;PyPDF2&lt;span class="w"&gt; &lt;/span&gt;WeasyPrint
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="word"></category><category term="pdf"></category><category term="pypdf"></category><category term="pandoc"></category></entry><entry><title>使用 python-docx 创建 word 文件</title><link href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/" rel="alternate"></link><published>2025-02-01T10:52:00+08:00</published><updated>2025-02-01T10:52:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pydocx/</id><summary type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;python-docx&lt;/code&gt; 库创建和修改 Word&amp;nbsp;文件。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="word"/><category term="pdf"/><category term="pypdf"/><category term="pandoc"/></entry><entry><title>使用 python-docx 创建 word 文件</title><link href="https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/" rel="alternate"/><published>2025-02-01T10:52:00+08:00</published><updated>2025-02-01T10:52:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pydocx/</id><summary type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;python-docx&lt;/code&gt; 库创建和修改&amp;nbsp;Word&amp;nbsp;文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;docx&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Document&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;docx.oxml.ns&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;qn&lt;/span&gt;
@@ -954,7 +952,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 
 &lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;demo.docx&amp;quot;&lt;/span&gt;
 &lt;span class="n"&gt;name_placeholder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;lt;name&amp;gt;&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;sex_placeholder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;lt;sex …&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;python-docx&lt;/code&gt; 库创建和修改 Word&amp;nbsp;文件。&lt;/p&gt;
+&lt;span class="n"&gt;sex_placeholder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;lt;sex …&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;python-docx&lt;/code&gt; 库创建和修改&amp;nbsp;Word&amp;nbsp;文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;docx&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Document&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;docx.oxml.ns&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;qn&lt;/span&gt;
@@ -1024,7 +1022,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;span class="c1"&gt;# 创建新文档并替换占位符&lt;/span&gt;
 &lt;span class="n"&gt;new_doc&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;invite&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;东俊&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;男&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="doc"></category><category term="docx"></category></entry><entry><title>使用 openpyxl 创建 Excel 文件</title><link href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="alternate"></link><published>2025-01-31T18:00:00+08:00</published><updated>2025-01-31T18:00:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-01-31:/posts/2025/01/31/python-openpyxl/</id><summary type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="doc"/><category term="docx"/></entry><entry><title>使用 openpyxl 创建 Excel 文件</title><link href="https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/" rel="alternate"/><published>2025-01-31T18:00:00+08:00</published><updated>2025-01-31T18:00:00+08:00</updated><author><name>DJ.shao</name></author><id>tag:shaodongjun.github.io,2025-01-31:/posts/2025/01/31/python-openpyxl/</id><summary type="html">&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;openpyxl&lt;/span&gt;
 
@@ -1057,25 +1055,25 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h2&gt;代码解释&lt;/h2&gt;
 &lt;h3&gt;创建工作簿和工作表：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 openpyxl.Workbook()&amp;nbsp;创建一个新的工作簿。&lt;/li&gt;
-&lt;li&gt;create_sheet(&amp;#8220;人员名单&amp;#8221;, 0) 创建一个新的工作表并将其命名为&amp;nbsp;&amp;#8220;人员名单&amp;#8221;。&lt;/li&gt;
+&lt;li&gt;使用&amp;nbsp;openpyxl.Workbook()&amp;nbsp;创建一个新的工作簿。&lt;/li&gt;
+&lt;li&gt;create_sheet(&amp;#8220;人员名单&amp;#8221;, 0)&amp;nbsp;创建一个新的工作表并将其命名为&amp;nbsp;&amp;#8220;人员名单&amp;#8221;。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;读取文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;打开文本文件，确保使用正确的编码（如 &lt;span class="caps"&gt;UTF&lt;/span&gt;-8）。&lt;/li&gt;
+&lt;li&gt;打开文本文件，确保使用正确的编码（如 &lt;span class="caps"&gt;&lt;span class="caps"&gt;UTF&lt;/span&gt;&lt;/span&gt;-8）。&lt;/li&gt;
 &lt;li&gt;enumerate(f.readlines())&amp;nbsp;用于逐行读取文件内容，并在循环中获得行索引。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;处理数据：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 strip().split(&amp;#8220;,&amp;#8221;)&amp;nbsp;去除行首尾空白并根据逗号分隔字符串。&lt;/li&gt;
-&lt;li&gt;检查 people&amp;nbsp;列表的长度，确保至少有两个元素（姓名和性别）。&lt;/li&gt;
+&lt;li&gt;使用&amp;nbsp;strip().split(&amp;#8220;,&amp;#8221;)&amp;nbsp;去除行首尾空白并根据逗号分隔字符串。&lt;/li&gt;
+&lt;li&gt;检查&amp;nbsp;people&amp;nbsp;列表的长度，确保至少有两个元素（姓名和性别）。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;写入工作表：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 wt.cell(row=row, column=1, value=name)&amp;nbsp;将姓名写入第一列，性别写入第二列。&lt;/li&gt;
+&lt;li&gt;使用 wt.cell(row=row, column=1,&amp;nbsp;value=name)&amp;nbsp;将姓名写入第一列，性别写入第二列。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;保存文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 wb.save(&amp;#8220;测试名单.xlsx&amp;#8221;)&amp;nbsp;保存工作簿。&lt;/li&gt;
-&lt;li&gt;注意，openpyxl 支持 .xlsx 格式，而不是&amp;nbsp;.xls。&lt;/li&gt;
-&lt;/ul&gt;</content><category term="编程"></category><category term="blog"></category><category term="python"></category><category term="xls"></category><category term="xlsx"></category><category term="openpyxl"></category><category term="excel"></category></entry></feed>
+&lt;li&gt;使用&amp;nbsp;wb.save(&amp;#8220;测试名单.xlsx&amp;#8221;)&amp;nbsp;保存工作簿。&lt;/li&gt;
+&lt;li&gt;注意，openpyxl 支持 .xlsx&amp;nbsp;格式，而不是&amp;nbsp;.xls。&lt;/li&gt;
+&lt;/ul&gt;</content><category term="编程"/><category term="blog"/><category term="python"/><category term="xls"/><category term="xlsx"/><category term="openpyxl"/><category term="excel"/></entry></feed>

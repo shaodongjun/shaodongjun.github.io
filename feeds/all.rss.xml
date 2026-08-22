@@ -1,5 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>ShaoDJ's World</title><link>https://shaodongjun.github.io/</link><description></description><lastBuildDate>Sat, 22 Mar 2025 17:18:00 +0800</lastBuildDate><item><title>一个行李箱随时跑路：极简物品清单</title><link>https://shaodongjun.github.io/posts/2025/03/22/Minimalist-living-box-for-travel/</link><description>&lt;h2&gt;为什么列极简物品清单？&lt;/h2&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ShaoDJ's World</title><link>https://shaodongjun.github.io/</link><description/><atom:link href="https://shaodongjun.github.io/feeds/all.rss.xml" rel="self"/><lastBuildDate>Sat, 22 Aug 2026 20:30:00 +0800</lastBuildDate><item><title>在 macOS 上部署 DeepSeek Harness 并用 launchctl 托管进程</title><link>https://shaodongjun.github.io/posts/2026/08/22/deepseek-harness-macos-launchctl/</link><description>&lt;p&gt;&lt;a href="https://github.com/deepseek-ai/deepseek-harness"&gt;DeepSeek Harness&lt;/a&gt; 是 DeepSeek 开源的一款 Agent&amp;nbsp;运行时（命令行工具叫 &lt;code&gt;dsh&lt;/code&gt;），提供会话管理、工具调用、工作区沙箱和 Web &lt;span class="caps"&gt;UI&lt;/span&gt;。它本身不跑模型推理，而是调用 DeepSeek &lt;span class="caps"&gt;API&lt;/span&gt;（如 &lt;code&gt;deepseek-v4-flash&lt;/code&gt;），所以一台普通 Mac&amp;nbsp;就能把它跑起来。&lt;/p&gt;
+&lt;p&gt;本文记录在 macOS&amp;nbsp;上从零部署，并用 &lt;code&gt;launchctl&lt;/code&gt; 把它变成开机自启、崩溃自动重启的常驻服务。&lt;/p&gt;
+&lt;h2&gt;环境准备&lt;/h2&gt;
+&lt;p&gt;Harness 基于 Node.js，要求 &lt;strong&gt;Node.js 22.19+ 或 24+&lt;/strong&gt;。用 Homebrew&amp;nbsp;安装：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;brew&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;node@22
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;验证版本：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;node&lt;span class="w"&gt; &lt;/span&gt;--version&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="c1"&gt;# v22.x 或 v24.x&lt;/span&gt;
+npm&lt;span class="w"&gt; &lt;/span&gt;--version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;手动跑起来&lt;/h2&gt;
+&lt;p&gt;先申请一个 &lt;a href="https://platform.deepseek.com/"&gt;DeepSeek &lt;span class="caps"&gt;API&lt;/span&gt; Key&lt;/a&gt;，然后直接启动：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;DEEPSEEK_API_KEY&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;sk-xxxxxxxx&amp;quot;&lt;/span&gt;
+npx&lt;span class="w"&gt; &lt;/span&gt;@deepseek-ai/dsh&lt;span class="w"&gt; &lt;/span&gt;web
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;看到启动成功后，浏览器打开 &lt;a href="http://127.0.0.1:3080"&gt;http://127.0.0.1:3080&lt;/a&gt;，接受开发者预览声明，在 Settings → Models 里填入 &lt;span class="caps"&gt;API&lt;/span&gt; Key&amp;nbsp;并选择模型即可开始使用。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：&lt;code&gt;DEEPSEEK_API_KEY&lt;/code&gt; 只在当前终端会话生效，关掉终端服务就停了——这正是下一步要用 launchctl&amp;nbsp;的原因。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;编写 LaunchAgent&amp;nbsp;配置&lt;/h2&gt;
+&lt;p&gt;macOS 推荐用 &lt;strong&gt;LaunchAgent&lt;/strong&gt;（用户级服务）托管这类常驻进程。创建 &lt;code&gt;~/Library/LaunchAgents/com.deepseek.dsh.plist&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="cp"&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class="cp"&gt;&amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple//DTD PLIST 1.0//EN&amp;quot;&lt;/span&gt;
+&lt;span class="cp"&gt; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;plist&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="na"&gt;version=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;1.0&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;dict&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;Label&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;com.deepseek.dsh&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;ProgramArguments&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;array&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="cm"&gt;&amp;lt;!-- 改成 which npx 的实际路径 --&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/opt/homebrew/bin/npx&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;@deepseek-ai/dsh&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;web&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;--port&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;3080&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;/array&amp;gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="cm"&gt;&amp;lt;!-- 环境变量：API Key 和 PATH --&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;EnvironmentVariables&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;dict&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;DEEPSEEK_API_KEY&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;sk-xxxxxxxx&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;PATH&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;/dict&amp;gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;WorkingDirectory&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/Users/shaodj/dsh-workspaces/sandbox-project&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="cm"&gt;&amp;lt;!-- 登录时自动启动 --&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;RunAtLoad&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;true/&amp;gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="cm"&gt;&amp;lt;!-- 进程退出后自动拉起（无论正常还是异常退出） --&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;KeepAlive&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;true/&amp;gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="cm"&gt;&amp;lt;!-- 日志输出 --&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;StandardOutPath&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/tmp/dsh.log&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;key&amp;gt;&lt;/span&gt;StandardErrorPath&lt;span class="nt"&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;/tmp/dsh.err.log&lt;span class="nt"&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/dict&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/plist&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;几个关键点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ProgramArguments&lt;/code&gt; 必须写&lt;strong&gt;绝对路径&lt;/strong&gt;，launchd 不继承 shell 的 &lt;span class="caps"&gt;PATH&lt;/span&gt;；先用 &lt;code&gt;which npx&lt;/code&gt; 查一下自己的路径。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WorkingDirectory&lt;/code&gt; 指向 Agent&amp;nbsp;的工作区目录，建议单独建一个测试目录，不要直接用家目录。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;KeepAlive&lt;/code&gt; 设为 &lt;code&gt;true&lt;/code&gt; 后进程挂了会被自动重启。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;加载与管理服务&lt;/h2&gt;
+&lt;p&gt;macOS&amp;nbsp;新版推荐 &lt;code&gt;bootstrap&lt;/code&gt;/&lt;code&gt;bootout&lt;/code&gt; 语法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# 加载并立即启动&lt;/span&gt;
+launchctl&lt;span class="w"&gt; &lt;/span&gt;bootstrap&lt;span class="w"&gt; &lt;/span&gt;gui/&lt;span class="k"&gt;$(&lt;/span&gt;id&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;~/Library/LaunchAgents/com.deepseek.dsh.plist
+
+&lt;span class="c1"&gt;# 查看状态&lt;/span&gt;
+launchctl&lt;span class="w"&gt; &lt;/span&gt;print&lt;span class="w"&gt; &lt;/span&gt;gui/&lt;span class="k"&gt;$(&lt;/span&gt;id&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="k"&gt;)&lt;/span&gt;/com.deepseek.dsh&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;grep&lt;span class="w"&gt; &lt;/span&gt;state
+
+&lt;span class="c1"&gt;# 重启服务&lt;/span&gt;
+launchctl&lt;span class="w"&gt; &lt;/span&gt;kickstart&lt;span class="w"&gt; &lt;/span&gt;-k&lt;span class="w"&gt; &lt;/span&gt;gui/&lt;span class="k"&gt;$(&lt;/span&gt;id&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="k"&gt;)&lt;/span&gt;/com.deepseek.dsh
+
+&lt;span class="c1"&gt;# 卸载服务&lt;/span&gt;
+launchctl&lt;span class="w"&gt; &lt;/span&gt;bootout&lt;span class="w"&gt; &lt;/span&gt;gui/&lt;span class="k"&gt;$(&lt;/span&gt;id&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="k"&gt;)&lt;/span&gt;/com.deepseek.dsh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;老式的 &lt;code&gt;load&lt;/code&gt;/&lt;code&gt;unload&lt;/code&gt; 也仍然可用：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;launchctl&lt;span class="w"&gt; &lt;/span&gt;load&lt;span class="w"&gt;   &lt;/span&gt;~/Library/LaunchAgents/com.deepseek.dsh.plist
+launchctl&lt;span class="w"&gt; &lt;/span&gt;unload&lt;span class="w"&gt; &lt;/span&gt;~/Library/LaunchAgents/com.deepseek.dsh.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;修改 plist&amp;nbsp;后需要先 &lt;code&gt;bootout&lt;/code&gt; 再 &lt;code&gt;bootstrap&lt;/code&gt; 重新加载才会生效。&lt;/p&gt;
+&lt;h2&gt;验证&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;curl&lt;span class="w"&gt; &lt;/span&gt;-sI&lt;span class="w"&gt; &lt;/span&gt;http://127.0.0.1:3080&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;head&lt;span class="w"&gt; &lt;/span&gt;-1
+&lt;span class="c1"&gt;# HTTP/1.1 200 OK&lt;/span&gt;
+
+tail&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;/tmp/dsh.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;再测一下崩溃自愈：&lt;code&gt;kill&lt;/code&gt; 掉 dsh&amp;nbsp;进程后几秒内 &lt;code&gt;launchctl print&lt;/code&gt; 会看到它被重新拉起，这正是 &lt;code&gt;KeepAlive&lt;/code&gt; 在起作用。&lt;/p&gt;
+&lt;h2&gt;小结&lt;/h2&gt;
+&lt;p&gt;整个过程三步：装 Node.js → 写 plist&amp;nbsp;→ &lt;code&gt;bootstrap&lt;/code&gt; 加载。之后 Harness 就像系统服务一样常驻后台，重启 Mac&amp;nbsp;也会自动恢复，配合浏览器随时可用。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 22 Aug 2026 20:30:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2026-08-22:/posts/2026/08/22/deepseek-harness-macos-launchctl/</guid><category>人工智能</category><category>blog</category><category>ai</category><category>agent</category><category>deepseek</category><category>macos</category><category>launchctl</category></item><item><title>一个行李箱随时跑路：极简物品清单</title><link>https://shaodongjun.github.io/posts/2025/03/22/Minimalist-living-box-for-travel/</link><description>&lt;h2&gt;为什么列极简物品清单？&lt;/h2&gt;
 &lt;p&gt;假如我要每3个月换一个地方生活，&amp;nbsp;所以我打算头脑风暴一下，在极端的情况下，一个人要维持半年的生活，所需要的最少物品是多少呢？&lt;/p&gt;
 &lt;h2&gt;我的必要清单&lt;/h2&gt;
 &lt;p&gt;&lt;font color=red size=+1&gt;身份证、手机、钥匙、钱 &lt;/font&gt;&lt;/p&gt;
@@ -24,16 +131,16 @@
 &lt;p&gt;保暖覆盖到零下10度即可。 &lt;/p&gt;
 &lt;h3&gt;极简包包&amp;nbsp;3&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;双肩包 1&amp;nbsp;个&lt;/li&gt;
-&lt;li&gt;斜挎包 1&amp;nbsp;个&lt;/li&gt;
-&lt;li&gt;棒球帽 1&amp;nbsp;个&lt;/li&gt;
+&lt;li&gt;双肩包&amp;nbsp;1&amp;nbsp;个&lt;/li&gt;
+&lt;li&gt;斜挎包&amp;nbsp;1&amp;nbsp;个&lt;/li&gt;
+&lt;li&gt;棒球帽&amp;nbsp;1&amp;nbsp;个&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;极简鞋子&amp;nbsp;4&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;凉鞋 1&amp;nbsp;双&lt;/li&gt;
-&lt;li&gt;运动鞋 / 休闲鞋（如帆布、板鞋之类的） 1&amp;nbsp;双&lt;/li&gt;
-&lt;li&gt;靴子 1&amp;nbsp;双（防水，雨天必备）&lt;/li&gt;
-&lt;li&gt;冬季加绒靴子 1&amp;nbsp;双（防水，不怕雨雪泥泞）&lt;/li&gt;
+&lt;li&gt;凉鞋&amp;nbsp;1&amp;nbsp;双&lt;/li&gt;
+&lt;li&gt;运动鞋 / 休闲鞋（如帆布、板鞋之类的）&amp;nbsp;1&amp;nbsp;双&lt;/li&gt;
+&lt;li&gt;靴子&amp;nbsp;1&amp;nbsp;双（防水，雨天必备）&lt;/li&gt;
+&lt;li&gt;冬季加绒靴子&amp;nbsp;1&amp;nbsp;双（防水，不怕雨雪泥泞）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;极简护肤和化妆&amp;nbsp;6&lt;/h3&gt;
 &lt;ul&gt;
@@ -45,10 +152,10 @@
 &lt;/ul&gt;
 &lt;h3&gt;电子产品&amp;nbsp;4&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;笔记本电脑💻 1&amp;nbsp;台（及充电线）&lt;/li&gt;
+&lt;li&gt;笔记本电脑💻&amp;nbsp;1&amp;nbsp;台（及充电线）&lt;/li&gt;
 &lt;li&gt;手机📱（及充电线）&lt;/li&gt;
 &lt;li&gt;智能手表&lt;/li&gt;
-&lt;li&gt;耳机 1&amp;nbsp;副（蓝牙或者线控耳机，只选择一种）&lt;/li&gt;
+&lt;li&gt;耳机&amp;nbsp;1&amp;nbsp;副（蓝牙或者线控耳机，只选择一种）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;生活物品&amp;nbsp;4&lt;/h3&gt;
 &lt;ul&gt;
@@ -57,9 +164,9 @@
 &lt;li&gt;眼镜（近视镜，必备）&lt;/li&gt;
 &lt;li&gt;1&amp;nbsp;个行李箱（装以上所有物品）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;极简主义，是精心挑选接触之物。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 22 Mar 2025 17:18:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-03-22:/posts/2025/03/22/Minimalist-living-box-for-travel/</guid><category>杂记</category><category>blog</category><category>misc</category><category>life</category></item><item><title>从API引申到MCP协议</title><link>https://shaodongjun.github.io/posts/2025/03/14/future-aigc-mcp/</link><description>&lt;h1&gt;三分钟看懂MCP现状和未来&lt;/h1&gt;
+&lt;p&gt;极简主义，是精心挑选接触之物。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 22 Mar 2025 17:18:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-03-22:/posts/2025/03/22/Minimalist-living-box-for-travel/</guid><category>杂记</category><category>blog</category><category>misc</category><category>life</category></item><item><title>从API引申到MCP协议</title><link>https://shaodongjun.github.io/posts/2025/03/14/future-aigc-mcp/</link><description>&lt;h1&gt;三分钟看懂MCP现状和未来&lt;/h1&gt;
 &lt;h2&gt;MCP协议详解&lt;/h2&gt;
-&lt;p&gt;&lt;span class="caps"&gt;MCP&lt;/span&gt;（Model Context&amp;nbsp;Protocol）是一种新的开放协议，目的是为LLM提供标准化的上下文信息传递方式，从而实现AI智能体与外部数据及工具的结合。&lt;/p&gt;
+&lt;p&gt;&lt;span class="caps"&gt;&lt;span class="caps"&gt;MCP&lt;/span&gt;&lt;/span&gt;（Model&amp;nbsp;Context&amp;nbsp;Protocol）是一种新的开放协议，目的是为LLM提供标准化的上下文信息传递方式，从而实现AI智能体与外部数据及工具的结合。&lt;/p&gt;
 &lt;p&gt;通俗的话讲，MCP就像是专为AI应用设计的通用接口，类似我们日常使用的USB-C。&lt;/p&gt;
 &lt;p&gt;正如USB-C简化了不同设备与计算机的连接方式，MCP简化了AI模型与数据、工具和服务之间的交互方式。&lt;/p&gt;
 &lt;p&gt;通过MCP，AI助手不仅能够「读懂」代码，还能「理解」团队讨论、涉及文档等外部信息，提供更加精准的回答。&lt;/p&gt;
@@ -132,13 +239,13 @@
 &lt;p&gt;将MCP比作一座桥梁可以更清晰地理解：MCP本身不处理复杂逻辑；它只是协调AI模型和各种工具之间的数据和指令流通。
 &lt;img alt="mcp server and client" src="/images/mcp_server_arch.png"&gt;&lt;/p&gt;
 &lt;h2&gt;MCP的未来&lt;/h2&gt;
-&lt;p&gt;不管是使用 &lt;span class="caps"&gt;XML&lt;/span&gt; 还是 &lt;span class="caps"&gt;JSON&lt;/span&gt;，不管是本地二进制中寻找 symbol 还是通过 &lt;span class="caps"&gt;HTTP&lt;/span&gt; 进行交换，我们一路走来，早已习惯了使用结构化的数据格式和预先定义的 &lt;span class="caps"&gt;API&lt;/span&gt; 完成各种任务。在 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;的调用方和提供方，都需要人工维护及稳定的接口契约来规定参数类型、格式、调用方式。&lt;/p&gt;
-&lt;p&gt;随着 &lt;span class="caps"&gt;LLM&lt;/span&gt; 和 &lt;span class="caps"&gt;AI&lt;/span&gt; 时代的到来，无论是 function calling 还是 &lt;span class="caps"&gt;MCP&lt;/span&gt; 定义的协议，都迈出了新一步：&lt;font color=red&gt;它们在现有 &lt;span class="caps"&gt;API&lt;/span&gt; 上新增了 &lt;span class="caps"&gt;AI&lt;/span&gt; 友好层 (如自然语言代理端点)，实现了对传统 &lt;span class="caps"&gt;API&lt;/span&gt; 设计的渐进式改进。&lt;/font&gt;在调用 &lt;span class="caps"&gt;API&lt;/span&gt; 时，我们使用自然语言描述，并交由 &lt;span class="caps"&gt;LLM&lt;/span&gt; 为我们生成结构化的调用方法和参数，从而简化了 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;使用侧的负担。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 14 Mar 2025 11:08:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-03-14:/posts/2025/03/14/future-aigc-mcp/</guid><category>人工智能</category><category>blog</category><category>aigc</category><category>llm</category></item><item><title>DevOps工程师最常用的可重用Playbook</title><link>https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/</link><description>&lt;p&gt;最重要常用的 7个 Ansible&amp;nbsp;Playbook&lt;/p&gt;
+&lt;p&gt;不管是使用 &lt;span class="caps"&gt;&lt;span class="caps"&gt;XML&lt;/span&gt;&lt;/span&gt; 还是 &lt;span class="caps"&gt;&lt;span class="caps"&gt;JSON&lt;/span&gt;&lt;/span&gt;，不管是本地二进制中寻找 symbol 还是通过 &lt;span class="caps"&gt;&lt;span class="caps"&gt;HTTP&lt;/span&gt;&lt;/span&gt; 进行交换，我们一路走来，早已习惯了使用结构化的数据格式和预先定义的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt; 完成各种任务。在 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;&amp;nbsp;的调用方和提供方，都需要人工维护及稳定的接口契约来规定参数类型、格式、调用方式。&lt;/p&gt;
+&lt;p&gt;随着 &lt;span class="caps"&gt;&lt;span class="caps"&gt;LLM&lt;/span&gt;&lt;/span&gt; 和 &lt;span class="caps"&gt;&lt;span class="caps"&gt;AI&lt;/span&gt;&lt;/span&gt; 时代的到来，无论是 function calling 还是 &lt;span class="caps"&gt;&lt;span class="caps"&gt;MCP&lt;/span&gt;&lt;/span&gt; 定义的协议，都迈出了新一步：&lt;font color=red&gt;它们在现有 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt; 上新增了 &lt;span class="caps"&gt;&lt;span class="caps"&gt;AI&lt;/span&gt;&lt;/span&gt; 友好层 (如自然语言代理端点)，实现了对传统 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt; 设计的渐进式改进。&lt;/font&gt;在调用 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt; 时，我们使用自然语言描述，并交由 &lt;span class="caps"&gt;&lt;span class="caps"&gt;LLM&lt;/span&gt;&lt;/span&gt; 为我们生成结构化的调用方法和参数，从而简化了 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;&amp;nbsp;使用侧的负担。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 14 Mar 2025 11:08:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-03-14:/posts/2025/03/14/future-aigc-mcp/</guid><category>人工智能</category><category>blog</category><category>aigc</category><category>llm</category></item><item><title>DevOps工程师最常用的可重用Playbook</title><link>https://shaodongjun.github.io/posts/2025/02/21/linux-devops-ansible-playbook/</link><description>&lt;p&gt;最重要常用的 7个&amp;nbsp;Ansible&amp;nbsp;Playbook&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ansible&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;playbook&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;lists&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="n"&gt;ops&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;yaml&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;host=OPK-JUMPS&amp;quot;&lt;/span&gt; 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;h1&gt;1. 安装常用软件包的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;此 Playbook&amp;nbsp;确保在所有服务器上安装常用的系统工具。&lt;/p&gt;
+&lt;h1&gt;1.&amp;nbsp;安装常用软件包的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;此&amp;nbsp;Playbook&amp;nbsp;确保在所有服务器上安装常用的系统工具。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;安装常用软件包&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;{{ host }}&amp;quot;&lt;/span&gt;
@@ -158,10 +265,10 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;become: yes: 确保任务以 sudo&amp;nbsp;权限执行。&lt;/li&gt;
+&lt;li&gt;become: yes: 确保任务以&amp;nbsp;sudo&amp;nbsp;权限执行。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;2. 用户账户管理的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;此 Playbook&amp;nbsp;创建具有特定权限的用户账户。&lt;/p&gt;
+&lt;h1&gt;2.&amp;nbsp;用户账户管理的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;此&amp;nbsp;Playbook&amp;nbsp;创建具有特定权限的用户账户。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;管理用户账号&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;{{ host }}&amp;quot;&lt;/span&gt;
@@ -181,11 +288,11 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;user 模块: 创建新用户（‘devops’）并将其分配到 ‘sudo’&amp;nbsp;组。&lt;/li&gt;
-&lt;li&gt;authorized_key 模块: 添加 &lt;span class="caps"&gt;SSH&lt;/span&gt;&amp;nbsp;密钥以保障安全访问。&lt;/li&gt;
+&lt;li&gt;user 模块: 创建新用户（‘devops’）并将其分配到&amp;nbsp;‘sudo’&amp;nbsp;组。&lt;/li&gt;
+&lt;li&gt;authorized_key 模块: 添加 &lt;span class="caps"&gt;&lt;span class="caps"&gt;SSH&lt;/span&gt;&lt;/span&gt;&amp;nbsp;密钥以保障安全访问。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;3. 配置 Nginx 的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;使用此 Playbook 安装并配置 Nginx Web&amp;nbsp;服务器。&lt;/p&gt;
+&lt;h1&gt;3. 配置 Nginx&amp;nbsp;的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;使用此 Playbook 安装并配置 Nginx&amp;nbsp;Web&amp;nbsp;服务器。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;安装并配置Nginx&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;{{ host }}&amp;quot;&lt;/span&gt;
@@ -220,8 +327,8 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;service 模块: 确保 Nginx&amp;nbsp;在配置更改后重启。&lt;/li&gt;
-&lt;li&gt;template 模块: 将 Jinja2&amp;nbsp;模板复制到服务器以实现动态配置。&lt;/li&gt;
+&lt;li&gt;service 模块: 确保&amp;nbsp;Nginx&amp;nbsp;在配置更改后重启。&lt;/li&gt;
+&lt;li&gt;template 模块: 将&amp;nbsp;Jinja2&amp;nbsp;模板复制到服务器以实现动态配置。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;proxy_cache_path&lt;span class="w"&gt; &lt;/span&gt;/var/cache/nginx_cache&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;levels&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;:2&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;keys_zone&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;my_cache:100m&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;inactive&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;60m&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;use_temp_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;off&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;max_size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1g&lt;span class="p"&gt;;&lt;/span&gt;
 
@@ -250,8 +357,8 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;h1&gt;4. 防火墙配置的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;此 Playbook 使用 &lt;span class="caps"&gt;UFW&lt;/span&gt;&amp;nbsp;配置基本防火墙。&lt;/p&gt;
+&lt;h1&gt;4.&amp;nbsp;防火墙配置的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;此 Playbook 使用 &lt;span class="caps"&gt;&lt;span class="caps"&gt;UFW&lt;/span&gt;&lt;/span&gt;&amp;nbsp;配置基本防火墙。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;配置UFW防火墙&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;{{ host }}&amp;quot;&lt;/span&gt;
@@ -274,10 +381,10 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;ufw 模块: 配置 Uncomplicated Firewall (&lt;span class="caps"&gt;UFW&lt;/span&gt;)，允许 &lt;span class="caps"&gt;SSH&lt;/span&gt; (22) 和 Web 流量 (80, 443)&amp;nbsp;等必要端口。&lt;/li&gt;
+&lt;li&gt;ufw 模块: 配置 Uncomplicated Firewall (&lt;span class="caps"&gt;&lt;span class="caps"&gt;UFW&lt;/span&gt;&lt;/span&gt;)，允许 &lt;span class="caps"&gt;&lt;span class="caps"&gt;SSH&lt;/span&gt;&lt;/span&gt; (22) 和 Web 流量 (80,&amp;nbsp;443)&amp;nbsp;等必要端口。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;5. 应用部署的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;使用此可重用 Playbook&amp;nbsp;自动化应用部署。&lt;/p&gt;
+&lt;h1&gt;5.&amp;nbsp;应用部署的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;使用此可重用&amp;nbsp;Playbook&amp;nbsp;自动化应用部署。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;部署Python&lt;/span&gt; &lt;span class="n"&gt;Web应用&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;{{ host }}&amp;quot;&lt;/span&gt;
@@ -311,8 +418,8 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;pip 模块: 安装 Flask 和 Gunicorn 等 Python&amp;nbsp;包。&lt;/li&gt;
-&lt;li&gt;shell 模块: 使用 Gunicorn&amp;nbsp;作为后台进程启动应用。&lt;/li&gt;
+&lt;li&gt;pip 模块: 安装 Flask 和 Gunicorn 等&amp;nbsp;Python&amp;nbsp;包。&lt;/li&gt;
+&lt;li&gt;shell 模块: 使用&amp;nbsp;Gunicorn&amp;nbsp;作为后台进程启动应用。&lt;/li&gt;
 &lt;li&gt;app.py&amp;nbsp;是个最简单的flask应用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flask&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
@@ -323,8 +430,8 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
   &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello, Flask!&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;h1&gt;6. 数据库设置的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;快速设置并保护 MySQL&amp;nbsp;数据库。&lt;/p&gt;
+&lt;h1&gt;6.&amp;nbsp;数据库设置的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;快速设置并保护&amp;nbsp;MySQL&amp;nbsp;数据库。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;设置MySQL&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;db_servers&lt;/span&gt;
@@ -345,10 +452,10 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;mysql_user 模块: 创建并保护 MySQL 的 root&amp;nbsp;用户。&lt;/li&gt;
+&lt;li&gt;mysql_user 模块: 创建并保护 MySQL 的&amp;nbsp;root&amp;nbsp;用户。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;7. 系统监控的&amp;nbsp;Playbook&lt;/h1&gt;
-&lt;p&gt;自动化安装 Prometheus 和 Node Exporter&amp;nbsp;等监控工具。&lt;/p&gt;
+&lt;h1&gt;7.&amp;nbsp;系统监控的&amp;nbsp;Playbook&lt;/h1&gt;
+&lt;p&gt;自动化安装 Prometheus 和 Node&amp;nbsp;Exporter&amp;nbsp;等监控工具。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;---&lt;/span&gt;
 &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;设置系统监控&lt;/span&gt;
   &lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;{{ host }}&amp;quot;&lt;/span&gt;
@@ -370,9 +477,9 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-&lt;li&gt;get_url 模块: 下载 Node Exporter&amp;nbsp;二进制文件。&lt;/li&gt;
-&lt;li&gt;unarchive 模块:&amp;nbsp;将二进制文件解压到指定位置。&lt;/li&gt;
-&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 21 Feb 2025 16:18:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-21:/posts/2025/02/21/linux-devops-ansible-playbook/</guid><category>运维</category><category>blog</category><category>linux</category><category>python</category><category>devops</category></item><item><title>一封写给儿子的信</title><link>https://shaodongjun.github.io/posts/2025/02/12/a-letter-to-my-son/</link><description>&lt;p&gt;&lt;img alt="ilovemyson" src="/images/ilovemyson.jpg"&gt;&lt;/p&gt;
+&lt;li&gt;get_url 模块: 下载 Node&amp;nbsp;Exporter&amp;nbsp;二进制文件。&lt;/li&gt;
+&lt;li&gt;unarchive&amp;nbsp;模块:&amp;nbsp;将二进制文件解压到指定位置。&lt;/li&gt;
+&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 21 Feb 2025 16:18:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-21:/posts/2025/02/21/linux-devops-ansible-playbook/</guid><category>运维</category><category>blog</category><category>linux</category><category>python</category><category>devops</category></item><item><title>一封写给儿子的信</title><link>https://shaodongjun.github.io/posts/2025/02/12/a-letter-to-my-son/</link><description>&lt;p&gt;&lt;img alt="ilovemyson" src="/images/ilovemyson.jpg"&gt;&lt;/p&gt;
 &lt;h2&gt;亲爱的孩子：&lt;/h2&gt;
 &lt;p&gt;当你打开这封信的时候，或许已经过去了很久，或许你已经长大成人，甚至有了自己的家庭和责任。无论你此刻身处何地，过着怎样的生活，我都希望你能静下心来，读完这封信。这封信不仅是我作为父亲对你的期望，也是我对你未来人生的祝福与提醒。&lt;/p&gt;
 &lt;p&gt;首先，我想告诉你，&lt;font color=#cc3300&gt;&lt;strong&gt;爸爸一直都很爱你&lt;/strong&gt;。&lt;/font&gt;无论你曾经在学习上表现得如何，无论你是否曾经沉迷于游戏，甚至为了手机而绝食，这些都不会改变我对你的爱。你是我生命中最重要的人之一，&lt;font color=#cc3300&gt;&lt;strong&gt;我希望你健康、快乐、阳光，成为一个内心强大且充满感恩的人&lt;/strong&gt;。&lt;/font&gt;&lt;/p&gt;
@@ -382,17 +489,16 @@ server&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;
 &lt;p&gt;孩子，人生很长，学习只是其中的一部分。&lt;font color=#cc3300&gt;&lt;strong&gt;但学习的态度，往往决定了你未来人生的高度。&lt;/strong&gt;&lt;/font&gt;如果你现在不愿意为学习付出努力，未来可能会面临更多的挑战和困难。我不希望你将来后悔，后悔自己曾经没有好好把握时光，后悔自己曾经没有为梦想付出足够的努力。&lt;/p&gt;
 &lt;p&gt;&lt;font color=#cc3300&gt;&lt;strong&gt;未来的路还很长，爸爸希望你能够珍惜每一天，珍惜每一次成长的机会。&lt;/strong&gt;&lt;/font&gt;若干年后，当你回想起这段时光时，希望你能够心存感恩，感恩曾经的自己，感恩那些陪伴你成长的人和事。然后，&lt;font color=#cc3300&gt;&lt;strong&gt;继续勇敢前行，去追逐属于你的梦想。&lt;/strong&gt; &lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;最后，我想告诉你，无论你将来成为怎样的人，无论你选择怎样的道路，爸爸都会为你感到骄傲。&lt;font color=#cc3300&gt;&lt;strong&gt;只要你身体健康，心理阳光，心怀感恩，勇敢前行，你就是我最棒的孩子&lt;/strong&gt;。&lt;/font&gt;&lt;/p&gt;
-&lt;h2&gt;爱你的爸爸和妈妈&lt;/h2&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Wed, 12 Feb 2025 08:33:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-12:/posts/2025/02/12/a-letter-to-my-son/</guid><category>杂记</category><category>blog</category><category>misc</category><category>study</category></item><item><title>使用 configparser 轻松管理配置文件</title><link>https://shaodongjun.github.io/posts/2025/02/08/python-configparser/</link><description>&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt; 文件格式的配置文件。
-configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。&lt;/p&gt;
+&lt;h2&gt;爱你的爸爸和妈妈&lt;/h2&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Wed, 12 Feb 2025 08:33:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-12:/posts/2025/02/12/a-letter-to-my-son/</guid><category>杂记</category><category>blog</category><category>misc</category><category>study</category></item><item><title>使用 configparser 轻松管理配置文件</title><link>https://shaodongjun.github.io/posts/2025/02/08/python-configparser/</link><description>&lt;h2&gt;configparser&amp;nbsp;是什么?&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;configparser&lt;/strong&gt; 是 Python 标准库中的一个模块，它提供了一种简单的方法来处理类似 Windows &lt;span class="caps"&gt;&lt;span class="caps"&gt;INI&lt;/span&gt;&lt;/span&gt; 文件格式的配置文件。&amp;nbsp;configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作这些配置文件，将程序的设置与代码分离，方便在不修改代码的情况下调整程序的行为。&lt;/p&gt;
 &lt;h2&gt;configparser&amp;nbsp;优势与应用场景&lt;/h2&gt;
 &lt;h3&gt;优势&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;简单易用：configparser 模块的 &lt;span class="caps"&gt;API&lt;/span&gt;&amp;nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。&lt;/p&gt;
+&lt;p&gt;简单易用：configparser 模块的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;&amp;nbsp;简洁明了，易于上手，即使是初学者也能快速掌握。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;跨平台性：由于其基于类似 Windows &lt;span class="caps"&gt;INI&lt;/span&gt;&amp;nbsp;文件的格式，在不同操作系统上都能很好地工作。&lt;/p&gt;
+&lt;p&gt;跨平台性：由于其基于类似 Windows &lt;span class="caps"&gt;&lt;span class="caps"&gt;INI&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件的格式，在不同操作系统上都能很好地工作。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;灵活性：支持读取、写入和修改配置文件，能够满足各种配置管理需求。&lt;/p&gt;
@@ -412,7 +518,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/ul&gt;
 &lt;h2&gt;configparser&amp;nbsp;基本使用&lt;/h2&gt;
 &lt;h3&gt;安装与导入&lt;/h3&gt;
-&lt;p&gt;configparser 模块是 Python&amp;nbsp;的内置模块，无需额外安装。使用时，只需导入即可。&lt;/p&gt;
+&lt;p&gt;configparser 模块是&amp;nbsp;Python&amp;nbsp;的内置模块，无需额外安装。使用时，只需导入即可。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -448,7 +554,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
 &lt;p&gt;在上述代码中，我们首先创建了一个ConfigParser对象，然后使用read方法读取配置文件。接着，通过get方法获取字符串类型的配置项，使用&lt;code&gt;getint&lt;/code&gt;方法获取整数类型的配置项（对于其他类型，还有&lt;code&gt;getfloat&lt;/code&gt;、&lt;code&gt;getboolean&lt;/code&gt;等方法）。&lt;/p&gt;
 &lt;h3&gt;写入配置文件&lt;/h3&gt;
-&lt;p&gt;我们也可以使用 configparser&amp;nbsp;模块来创建或修改配置文件。以下是一个简单的示例：&lt;/p&gt;
+&lt;p&gt;我们也可以使用&amp;nbsp;configparser&amp;nbsp;模块来创建或修改配置文件。以下是一个简单的示例：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;configparser&lt;/span&gt;
 
 &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;configparser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ConfigParser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
@@ -467,17 +573,17 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
 &lt;h2&gt;configparser&amp;nbsp;注意事项&lt;/h2&gt;
 &lt;h3&gt;语法要求严格&lt;/h3&gt;
-&lt;p&gt;configparser 模块对配置文件的语法有一定要求，例如 section&amp;nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。&lt;/p&gt;
+&lt;p&gt;configparser 模块对配置文件的语法有一定要求，例如&amp;nbsp;section&amp;nbsp;名称和配置项名称不能包含特殊字符，等号两侧的空格等也需要注意。否则，可能会导致读取或写入失败。&lt;/p&gt;
 &lt;h3&gt;类型转换问题&lt;/h3&gt;
 &lt;p&gt;在使用getint、getfloat等方法进行类型转换时，如果配置文件中的值不符合相应类型的要求，会抛出异常。因此，在使用时需要进行适当的错误处理。&lt;/p&gt;
-&lt;p&gt;configparser 模块作为 Python 中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&amp;nbsp;模块都值得我们深入学习和掌握。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 08 Feb 2025 15:30:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-08:/posts/2025/02/08/python-configparser/</guid><category>编程</category><category>blog</category><category>python</category><category>config</category></item><item><title>使用 PIL(pillow) 实现图片水印*优化版</title><link>https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/</link><description>&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;PIL&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。&lt;/p&gt;
+&lt;p&gt;configparser 模块作为 Python&amp;nbsp;中处理配置文件的重要工具，为我们提供了一种高效、便捷的方式来管理项目的配置信息。通过合理运用它的各种功能，我们可以使程序更加灵活、可维护，更好地适应不同的环境和需求。无论是小型脚本还是大型项目，configparser&amp;nbsp;模块都值得我们深入学习和掌握。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 08 Feb 2025 15:30:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-08:/posts/2025/02/08/python-configparser/</guid><category>编程</category><category>blog</category><category>python</category><category>config</category></item><item><title>使用 PIL(pillow) 实现图片水印*优化版</title><link>https://shaodongjun.github.io/posts/2025/02/07/python-pillow-watermark/</link><description>&lt;p&gt;&lt;strong&gt;Pillow&lt;/strong&gt; 是一个用于图像处理的 Python 库，是 Python Imaging Library (&lt;span class="caps"&gt;&lt;span class="caps"&gt;PIL&lt;/span&gt;&lt;/span&gt;)&amp;nbsp;的一个分支和更新版本。它提供了丰富的功能，用于打开、操作和保存多种格式的图像。&lt;/p&gt;
 &lt;h2&gt;优点&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;易于使用：Pillow 提供了简单易懂的 &lt;span class="caps"&gt;API&lt;/span&gt;，适合初学者和专业开发者使用。&lt;/p&gt;
+&lt;p&gt;易于使用：Pillow 提供了简单易懂的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;，适合初学者和专业开发者使用。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;支持多种格式：可以处理多种图像格式，如 &lt;span class="caps"&gt;JPEG&lt;/span&gt;、&lt;span class="caps"&gt;PNG&lt;/span&gt;、&lt;span class="caps"&gt;GIF&lt;/span&gt;、&lt;span class="caps"&gt;BMP&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
+&lt;p&gt;支持多种格式：可以处理多种图像格式，如 &lt;span class="caps"&gt;&lt;span class="caps"&gt;JPEG&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;PNG&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;GIF&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;BMP&lt;/span&gt;&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;图像处理功能强大：提供了多种图像处理功能，包括图像增强、过滤、变换、裁剪、旋转等。&lt;/p&gt;
@@ -574,16 +680,16 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;h2&gt;图片转pdf的代码&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;打开图像：使用 Image.open()&amp;nbsp;打开指定路径的图像文件。&lt;/p&gt;
+&lt;p&gt;打开图像：使用&amp;nbsp;Image.open()&amp;nbsp;打开指定路径的图像文件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;模式检查与转换：如果图像不是 &lt;span class="caps"&gt;RGB&lt;/span&gt; 模式，则将其转换为 &lt;span class="caps"&gt;RGB&lt;/span&gt; 模式。&lt;span class="caps"&gt;PDF&lt;/span&gt; 格式通常要求图像为 &lt;span class="caps"&gt;RGB&lt;/span&gt;。&lt;/p&gt;
+&lt;p&gt;模式检查与转换：如果图像不是 &lt;span class="caps"&gt;&lt;span class="caps"&gt;RGB&lt;/span&gt;&lt;/span&gt; 模式，则将其转换为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;RGB&lt;/span&gt;&lt;/span&gt; 模式。&lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt; 格式通常要求图像为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;RGB&lt;/span&gt;&lt;/span&gt;。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;保存为 &lt;span class="caps"&gt;PDF&lt;/span&gt;：使用 image.save() 方法将图像保存为 &lt;span class="caps"&gt;PDF&lt;/span&gt;&amp;nbsp;文件，同时可以指定分辨率。&lt;/p&gt;
+&lt;p&gt;保存为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;：使用 image.save() 方法将图像保存为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件，同时可以指定分辨率。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;支持多图像：如果需要支持将多个图像合并为一个 &lt;span class="caps"&gt;PDF&lt;/span&gt;，可以使用 save() 方法的 append_images&amp;nbsp;参数。&lt;/p&gt;
+&lt;p&gt;支持多图像：如果需要支持将多个图像合并为一个 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;，可以使用 save() 方法的&amp;nbsp;append_images&amp;nbsp;参数。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;PIL&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Image&lt;/span&gt;
@@ -602,8 +708,8 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
     &lt;span class="c1"&gt;# 保存图像为 PDF 文件&lt;/span&gt;
     &lt;span class="n"&gt;image&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pdf_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;PDF&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;resolution&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;100.0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 07 Feb 2025 15:55:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-07:/posts/2025/02/07/python-pillow-watermark/</guid><category>编程</category><category>blog</category><category>python</category><category>pillow</category><category>pil</category></item><item><title>使用 FreeSimpleGUI 定制图形界面</title><link>https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/</link><description>&lt;h2&gt;什么是FreeSimpleGUI？&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;FreeSimpleGUI&lt;/strong&gt;是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁的布局定义系统，支持多种流行的 &lt;span class="caps"&gt;GUI&lt;/span&gt; 框架，包括 tkinter、Qt、WxPython 和 Remi。它通过封装这些框架的常用功能，提供了更简洁的 &lt;span class="caps"&gt;API&lt;/span&gt;，让你专注于应用逻辑而非繁杂的UI细节。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 07 Feb 2025 15:55:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-07:/posts/2025/02/07/python-pillow-watermark/</guid><category>编程</category><category>blog</category><category>python</category><category>pillow</category><category>pil</category></item><item><title>使用 FreeSimpleGUI 定制图形界面</title><link>https://shaodongjun.github.io/posts/2025/02/06/python-freesimplegui/</link><description>&lt;h2&gt;什么是FreeSimpleGUI？&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;FreeSimpleGUI&lt;/strong&gt;是一个开源的图形用户界面库，旨在提供一个简单、易用的GUI解决方案。 它简化了窗口和元素的创建过程，通过一个简洁的布局定义系统，支持多种流行的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;GUI&lt;/span&gt;&lt;/span&gt; 框架，包括 tkinter、Qt、WxPython 和 Remi。它通过封装这些框架的常用功能，提供了更简洁的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;API&lt;/span&gt;&lt;/span&gt;，让你专注于应用逻辑而非繁杂的UI细节。&lt;/p&gt;
 &lt;h2&gt;FreeSimpleGUI的特点&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -675,15 +781,15 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
         &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="n"&gt;sg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;popup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;目录不能为空!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;window&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Thu, 06 Feb 2025 17:18:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-06:/posts/2025/02/06/python-freesimplegui/</guid><category>编程</category><category>blog</category><category>python</category><category>gui</category><category>tkinter</category></item><item><title>使用 python-pptx 库制作PowerPoint</title><link>https://shaodongjun.github.io/posts/2025/02/05/python-pptx-powerpoint/</link><description>&lt;h2&gt;python-pptx&amp;nbsp;库简介&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://python-pptx.readthedocs.io/"&gt;python-pptx&lt;/a&gt; 是一个用于创建和修改 PowerPoint (.pptx) 文件的 Python&amp;nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进行各种格式的自定义。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Thu, 06 Feb 2025 17:18:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-06:/posts/2025/02/06/python-freesimplegui/</guid><category>编程</category><category>blog</category><category>python</category><category>gui</category><category>tkinter</category></item><item><title>使用 python-pptx 库制作PowerPoint</title><link>https://shaodongjun.github.io/posts/2025/02/05/python-pptx-powerpoint/</link><description>&lt;h2&gt;python-pptx&amp;nbsp;库简介&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://python-pptx.readthedocs.io/"&gt;python-pptx&lt;/a&gt; 是一个用于创建和修改 PowerPoint (.pptx) 文件的&amp;nbsp;Python&amp;nbsp;库。它提供了丰富的功能，使用户能够方便地生成演示文稿，并且可以进行各种格式的自定义。&lt;/p&gt;
 &lt;h2&gt;特性&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;创建新演示文稿：可以从零开始创建新的 PowerPoint&amp;nbsp;文件。&lt;/p&gt;
+&lt;p&gt;创建新演示文稿：可以从零开始创建新的&amp;nbsp;PowerPoint&amp;nbsp;文件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;修改现有文件：支持打开和编辑已有的 .pptx&amp;nbsp;文件。&lt;/p&gt;
+&lt;p&gt;修改现有文件：支持打开和编辑已有的&amp;nbsp;.pptx&amp;nbsp;文件。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;添加幻灯片：可以轻松地添加、删除和重新排列幻灯片。&lt;/p&gt;
@@ -699,10 +805,10 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;注意事项：&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;python-pptx &lt;u&gt;本身不支持&lt;/u&gt;&lt;/strong&gt; 复杂的动画效果，如果需要更复杂的动画，可以在生成的 PowerPoint&amp;nbsp;文件中手动设置。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;python-pptx &lt;u&gt;本身不支持&lt;/u&gt;&lt;/strong&gt; 复杂的动画效果，如果需要更复杂的动画，可以在生成的&amp;nbsp;PowerPoint&amp;nbsp;文件中手动设置。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;基本用法&lt;/h2&gt;
-&lt;p&gt;以下是一个简单的示例，展示如何使用 python-pptx&amp;nbsp;创建一个包含文本的幻灯片：&lt;/p&gt;
+&lt;p&gt;以下是一个简单的示例，展示如何使用&amp;nbsp;python-pptx&amp;nbsp;创建一个包含文本的幻灯片：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pptx&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Presentation&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pptx.util&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Inches&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pptx.enum.shapes&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;MSO_SHAPE&lt;/span&gt;
@@ -797,7 +903,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;span class="n"&gt;prs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;example_presentation.pptx&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;PPT 文件已创建成功！&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Wed, 05 Feb 2025 17:38:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-05:/posts/2025/02/05/python-pptx-powerpoint/</guid><category>编程</category><category>blog</category><category>python</category><category>ppt</category><category>pptx</category></item><item><title>使用 Selenium &amp; webdriver 自动化测试</title><link>https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/</link><description>&lt;p&gt;&lt;strong&gt;Selenium&lt;/strong&gt; 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是 Web&amp;nbsp;爬虫、任务自动化（如表单提交、网页截图、数据抓取等），&lt;code&gt;Selenium&lt;/code&gt; 都是一个优秀的选择。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Wed, 05 Feb 2025 17:38:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-05:/posts/2025/02/05/python-pptx-powerpoint/</guid><category>编程</category><category>blog</category><category>python</category><category>ppt</category><category>pptx</category></item><item><title>使用 Selenium &amp; webdriver 自动化测试</title><link>https://shaodongjun.github.io/posts/2025/02/04/python-selenium-web/</link><description>&lt;p&gt;&lt;strong&gt;Selenium&lt;/strong&gt; 是 Python 生态中最强大的工具之一，特别适合处理动态网页和复杂用户交互场景。无论是用于自动化测试、数据抓取、还是&amp;nbsp;Web&amp;nbsp;爬虫、任务自动化（如表单提交、网页截图、数据抓取等），&lt;code&gt;Selenium&lt;/code&gt; 都是一个优秀的选择。&lt;/p&gt;
 &lt;h2&gt;Selenium&amp;nbsp;的一些优秀特性和用途：&lt;/h2&gt;
 &lt;hr&gt;
 &lt;h2&gt;1.&amp;nbsp;跨浏览器支持&lt;/h2&gt;
@@ -819,9 +925,9 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;&lt;strong&gt;Opera&lt;/strong&gt;&amp;nbsp;等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这使得 Selenium&amp;nbsp;可以在不同的浏览器环境中运行相同的脚本，确保兼容性。&lt;/p&gt;
+&lt;p&gt;这使得&amp;nbsp;Selenium&amp;nbsp;可以在不同的浏览器环境中运行相同的脚本，确保兼容性。&lt;/p&gt;
 &lt;h2&gt;2.&amp;nbsp;支持多种编程语言&lt;/h2&gt;
-&lt;p&gt;Selenium 不仅支持&amp;nbsp;Python，还支持：&lt;/p&gt;
+&lt;p&gt;Selenium&amp;nbsp;不仅支持&amp;nbsp;Python，还支持：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Java&lt;/p&gt;
@@ -836,7 +942,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;Ruby&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;span class="caps"&gt;PHP&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
+&lt;p&gt;&lt;span class="caps"&gt;&lt;span class="caps"&gt;PHP&lt;/span&gt;&lt;/span&gt;&amp;nbsp;等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;这使得开发者可以使用自己熟悉的语言来编写自动化脚本。&lt;/p&gt;
@@ -844,7 +950,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;Selenium&amp;nbsp;提供了多种定位网页元素的方式，例如：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;ID&lt;/span&gt;&lt;/strong&gt;: &lt;code&gt;find_element(By.ID, "element_id")&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;&lt;span class="caps"&gt;ID&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;: &lt;code&gt;find_element(By.ID, "element_id")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;By Class Name&lt;/strong&gt;: &lt;code&gt;find_element(By.CLASS_NAME, "class_name")&lt;/code&gt;&lt;/p&gt;
@@ -856,29 +962,29 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;p&gt;&lt;strong&gt;By Tag Name&lt;/strong&gt;: &lt;code&gt;find_element(By.TAG_NAME, "tag_name")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;CSS&lt;/span&gt; Selector&lt;/strong&gt;: &lt;code&gt;find_element(By.CSS_SELECTOR, "css_selector")&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;By &lt;span class="caps"&gt;&lt;span class="caps"&gt;CSS&lt;/span&gt;&lt;/span&gt; Selector&lt;/strong&gt;: &lt;code&gt;find_element(By.CSS_SELECTOR, "css_selector")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;By XPath&lt;/strong&gt;: &lt;code&gt;find_element(By.XPATH, "xpath_expression")&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这些定位方式使得 Selenium&amp;nbsp;可以灵活地与网页中的任何元素交互。&lt;/p&gt;
+&lt;p&gt;这些定位方式使得&amp;nbsp;Selenium&amp;nbsp;可以灵活地与网页中的任何元素交互。&lt;/p&gt;
 &lt;h2&gt;4.&amp;nbsp;丰富的操作功能&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;不仅可以点击按钮、输入文本，还可以：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;提交表单&lt;/li&gt;
 &lt;li&gt;处理下拉菜单&lt;/li&gt;
 &lt;li&gt;上传文件&lt;/li&gt;
-&lt;li&gt;执行 JavaScript&amp;nbsp;代码&lt;/li&gt;
+&lt;li&gt;执行&amp;nbsp;JavaScript&amp;nbsp;代码&lt;/li&gt;
 &lt;li&gt;截图&lt;/li&gt;
 &lt;li&gt;处理弹窗（如警告框、确认框）&lt;/li&gt;
 &lt;li&gt;切换窗口或&amp;nbsp;iframe&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这些功能使得 Selenium&amp;nbsp;可以模拟几乎所有的用户操作。&lt;/p&gt;
+&lt;p&gt;这些功能使得&amp;nbsp;Selenium&amp;nbsp;可以模拟几乎所有的用户操作。&lt;/p&gt;
 &lt;h2&gt;5.&amp;nbsp;支持动态网页&lt;/h2&gt;
-&lt;p&gt;Selenium 可以处理 JavaScript&amp;nbsp;动态加载的内容，这是它与传统爬虫工具（如 &lt;code&gt;requests&lt;/code&gt; 库）相比的最大优势。它能够等待页面完全加载后再进行操作，甚至可以与动态生成的元素交互。&lt;/p&gt;
-&lt;h2&gt;6. 支持无头模式（Headless&amp;nbsp;Mode）&lt;/h2&gt;
-&lt;p&gt;通过启用无头模式（如 &lt;code&gt;options.add_argument('headless')&lt;/code&gt;），Selenium 可以在后台运行浏览器，无需打开 &lt;span class="caps"&gt;GUI&lt;/span&gt;&amp;nbsp;界面。这对于服务器环境或自动化任务非常有用，可以节省资源并提高效率。&lt;/p&gt;
+&lt;p&gt;Selenium 可以处理&amp;nbsp;JavaScript&amp;nbsp;动态加载的内容，这是它与传统爬虫工具（如 &lt;code&gt;requests&lt;/code&gt; 库）相比的最大优势。它能够等待页面完全加载后再进行操作，甚至可以与动态生成的元素交互。&lt;/p&gt;
+&lt;h2&gt;6.&amp;nbsp;支持无头模式（Headless&amp;nbsp;Mode）&lt;/h2&gt;
+&lt;p&gt;通过启用无头模式（如 &lt;code&gt;options.add_argument('headless')&lt;/code&gt;），Selenium 可以在后台运行浏览器，无需打开 &lt;span class="caps"&gt;&lt;span class="caps"&gt;GUI&lt;/span&gt;&lt;/span&gt;&amp;nbsp;界面。这对于服务器环境或自动化任务非常有用，可以节省资源并提高效率。&lt;/p&gt;
 &lt;h2&gt;7.&amp;nbsp;强大的等待机制&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;提供了两种等待机制来处理异步加载的内容：&lt;/p&gt;
 &lt;ul&gt;
@@ -900,7 +1006,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;8.&amp;nbsp;支持分布式测试&lt;/h2&gt;
-&lt;p&gt;通过 Selenium&amp;nbsp;Grid，可以在多台机器上并行运行测试脚本，显著提高测试效率。&lt;/p&gt;
+&lt;p&gt;通过&amp;nbsp;Selenium&amp;nbsp;Grid，可以在多台机器上并行运行测试脚本，显著提高测试效率。&lt;/p&gt;
 &lt;h2&gt;9.&amp;nbsp;社区支持和文档丰富&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;拥有庞大的用户社区和丰富的文档资源，遇到问题时可以轻松找到解决方案。&lt;/p&gt;
 &lt;h2&gt;10.&amp;nbsp;应用场景广泛&lt;/h2&gt;
@@ -938,7 +1044,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;h2&gt;12.&amp;nbsp;开源和免费&lt;/h2&gt;
 &lt;p&gt;Selenium&amp;nbsp;是一个开源项目，完全免费使用，适合个人和企业。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h1&gt;使用Selenium v4&amp;nbsp;编写脚本&lt;/h1&gt;
+&lt;h1&gt;使用Selenium&amp;nbsp;v4&amp;nbsp;编写脚本&lt;/h1&gt;
 &lt;h2&gt;预约球场&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
@@ -985,7 +1091,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 
 &lt;span class="k"&gt;finally&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
   &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Tue, 04 Feb 2025 14:08:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-04:/posts/2025/02/04/python-selenium-web/</guid><category>编程</category><category>blog</category><category>python</category><category>selenium</category><category>web</category></item><item><title>使用 BeautifulSoup &amp; Requests 解析网页</title><link>https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/</link><description>&lt;p&gt;Python有两个很好用第三方模块&lt;code&gt;requests&lt;/code&gt;库和&lt;code&gt;beautifulsoup&lt;/code&gt;库，简单学习下模块用法：&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Tue, 04 Feb 2025 14:08:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-04:/posts/2025/02/04/python-selenium-web/</guid><category>编程</category><category>blog</category><category>python</category><category>selenium</category><category>web</category></item><item><title>使用 BeautifulSoup &amp; Requests 解析网页</title><link>https://shaodongjun.github.io/posts/2025/02/03/python-bs4-requests/</link><description>&lt;p&gt;Python有两个很好用第三方模块&lt;code&gt;requests&lt;/code&gt;库和&lt;code&gt;beautifulsoup&lt;/code&gt;库，简单学习下模块用法：&lt;/p&gt;
 &lt;h2&gt;requests模块&lt;/h2&gt;
 &lt;p&gt;标准库中提供了：&lt;strong&gt;urllib、urllib2、httplib&lt;/strong&gt; 等模块以供Http请求，使用起来较为麻烦。
 &lt;a href="https://requests.readthedocs.io"&gt;requests&lt;/a&gt;是基于Python开发的HTTP第三方库，在Python内置模块的基础上进行了高度的封装，使用了更简单，代码量更少。&lt;/p&gt;
@@ -1003,7 +1109,7 @@ configparser&amp;nbsp;模块允许我们可以轻松地读取、写入和操作�
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;BeautifulSoup模块&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;BeautifulSoup&lt;/code&gt;模块是一个可以从 &lt;strong&gt;HTML或XML&lt;/strong&gt; 文件中提取数据的Python第三方库。&amp;nbsp;它将一个html或xml字符串（或文档句柄）文档被转换成Unicode，利用解析器来解析这段文档。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;BeautifulSoup&lt;/code&gt;模块是一个可以从 &lt;strong&gt;HTML或XML&lt;/strong&gt;&amp;nbsp;文件中提取数据的Python第三方库。&amp;nbsp;它将一个html或xml字符串（或文档句柄）文档被转换成Unicode，利用解析器来解析这段文档。&lt;/p&gt;
 &lt;h3&gt;BeautifulSoup&amp;nbsp;支持几种不同的解析器：&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1060,9 +1166,9 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 6号场, 12:00,13:00
 1号场, 18:00,20:00
 2号场, 18:00,20:00
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Mon, 03 Feb 2025 15:53:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-03:/posts/2025/02/03/python-bs4-requests/</guid><category>编程</category><category>blog</category><category>python</category><category>requests</category><category>beautifulsoup</category><category>bs</category><category>web</category></item><item><title>使用 Pandas 实现基本的数据分析</title><link>https://shaodongjun.github.io/posts/2025/02/02/python-pandas/</link><description>&lt;p&gt;&lt;strong&gt;Pandas&lt;/strong&gt; 一个强大的分析结构化数据的工具集，基础是 &lt;a href="https://www.runoob.com/numpy/numpy-tutorial.html"&gt;Numpy&lt;/a&gt;（提供高性能的矩阵运算）。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Mon, 03 Feb 2025 15:53:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-03:/posts/2025/02/03/python-bs4-requests/</guid><category>编程</category><category>blog</category><category>python</category><category>requests</category><category>beautifulsoup</category><category>bs</category><category>web</category></item><item><title>使用 Pandas 实现基本的数据分析</title><link>https://shaodongjun.github.io/posts/2025/02/02/python-pandas/</link><description>&lt;p&gt;&lt;strong&gt;Pandas&lt;/strong&gt; 一个强大的分析结构化数据的工具集，基础是 &lt;a href="https://www.runoob.com/numpy/numpy-tutorial.html"&gt;Numpy&lt;/a&gt;（提供高性能的矩阵运算）。&lt;/p&gt;
 &lt;h2&gt;数据结构&lt;/h2&gt;
-&lt;p&gt;Pandas 的主要数据结构是 Series （一维数据）与&amp;nbsp;DataFrame（二维数据）。&lt;/p&gt;
+&lt;p&gt;Pandas 的主要数据结构是 Series&amp;nbsp;（一维数据）与&amp;nbsp;DataFrame（二维数据）。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Series 是一种类似于一维数组的对象，它由一组数据（各种 Numpy 数据类型）以及一组与之相关的数据标签（即索引）组成。
@@ -1077,7 +1183,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h2&gt;Pandas&amp;nbsp;应用&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Pandas 可以从各种文件格式比如 &lt;span class="caps"&gt;CSV&lt;/span&gt;、&lt;span class="caps"&gt;JSON&lt;/span&gt;、&lt;span class="caps"&gt;SQL&lt;/span&gt;、Microsoft Excel&amp;nbsp;导入数据。&lt;/p&gt;
+&lt;p&gt;Pandas 可以从各种文件格式比如 &lt;span class="caps"&gt;&lt;span class="caps"&gt;CSV&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;JSON&lt;/span&gt;&lt;/span&gt;、&lt;span class="caps"&gt;&lt;span class="caps"&gt;SQL&lt;/span&gt;&lt;/span&gt;、Microsoft&amp;nbsp;Excel&amp;nbsp;导入数据。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Pandas&amp;nbsp;可以对各种数据进行运算操作，比如归并、再成形、选择，还有数据清洗和数据加工特征。&lt;/p&gt;
@@ -1100,7 +1206,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;p&gt;数据分析：进行统计分析、聚合、分组等。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;数据可视化：通过整合 Matplotlib 和 Seaborn&amp;nbsp;等库，可以进行数据可视化。&lt;/p&gt;
+&lt;p&gt;数据可视化：通过整合 Matplotlib 和&amp;nbsp;Seaborn&amp;nbsp;等库，可以进行数据可视化。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Pandas 是 Python&lt;/strong&gt;&amp;nbsp;数据科学领域中不可或缺的工具之一，它的灵活性和强大的功能使得数据处理和分析变得更加简单和高效。&lt;/p&gt;
@@ -1163,7 +1269,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;员工薪水&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Salary&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;blue&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sun, 02 Feb 2025 10:16:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-02:/posts/2025/02/02/python-pandas/</guid><category>编程</category><category>blog</category><category>python</category><category>pandas</category><category>excel</category><category>xls</category><category>xlsx</category></item><item><title>使用 PIL(pillow) 实现图片绘制 &amp; 裁剪 &amp; 水印</title><link>https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/</link><description>&lt;p&gt;使用&lt;code&gt;PIL&lt;/code&gt;代码实现了从图像中裁剪出一个&lt;code&gt;logo&lt;/code&gt;，并将其作为水印添加到其他图像上。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sun, 02 Feb 2025 10:16:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-02:/posts/2025/02/02/python-pandas/</guid><category>编程</category><category>blog</category><category>python</category><category>pandas</category><category>excel</category><category>xls</category><category>xlsx</category></item><item><title>使用 PIL(pillow) 实现图片绘制 &amp; 裁剪 &amp; 水印</title><link>https://shaodongjun.github.io/posts/2025/02/01/python-pillow-pil/</link><description>&lt;p&gt;使用&lt;code&gt;PIL&lt;/code&gt;代码实现了从图像中裁剪出一个&lt;code&gt;logo&lt;/code&gt;，并将其作为水印添加到其他图像上。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;PIL&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Image&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;PIL&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ImageDraw&lt;/span&gt;
@@ -1223,24 +1329,24 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h2&gt;代码分析&lt;/h2&gt;
 &lt;h3&gt;裁剪&amp;nbsp;Logo：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;crop_logo 函数从输入图像中裁剪出一个 100x100&amp;nbsp;像素的区域，并将其保存为水印。&lt;/li&gt;
+&lt;li&gt;crop_logo 函数从输入图像中裁剪出一个&amp;nbsp;100x100&amp;nbsp;像素的区域，并将其保存为水印。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;添加水印：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;img_watermark 函数将裁剪出的 logo&amp;nbsp;作为水印添加到指定的图像上，放置在右下角。&lt;/li&gt;
+&lt;li&gt;img_watermark 函数将裁剪出的&amp;nbsp;logo&amp;nbsp;作为水印添加到指定的图像上，放置在右下角。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;绘制&amp;nbsp;Logo：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;draw_logo 函数创建一个新的 400x400 像素的图像，在其中绘制了一些图形和文本，并保存为 logo&amp;nbsp;图像。&lt;/li&gt;
+&lt;li&gt;draw_logo 函数创建一个新的 400x400 像素的图像，在其中绘制了一些图形和文本，并保存为&amp;nbsp;logo&amp;nbsp;图像。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;遍历 &lt;span class="caps"&gt;PNG&lt;/span&gt;&amp;nbsp;文件：&lt;/h3&gt;
+&lt;h3&gt;遍历 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PNG&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 Path.rglob() 方法查找指定目录下的所有 &lt;span class="caps"&gt;PNG&lt;/span&gt;&amp;nbsp;文件，并对每个文件应用水印。&lt;/li&gt;
+&lt;li&gt;使用 Path.rglob() 方法查找指定目录下的所有 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PNG&lt;/span&gt;&lt;/span&gt;&amp;nbsp;文件，并对每个文件应用水印。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;改进建议&lt;/h2&gt;
 &lt;h3&gt;路径处理：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 os.path.join()&amp;nbsp;以确保路径在不同操作系统上兼容。&lt;/li&gt;
+&lt;li&gt;使用&amp;nbsp;os.path.join()&amp;nbsp;以确保路径在不同操作系统上兼容。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;异常处理：&lt;/h3&gt;
 &lt;ul&gt;
@@ -1249,7 +1355,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h3&gt;参数化：&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;考虑将某些参数（如裁剪区域、图像大小等）作为函数参数，以提高灵活性。&lt;/li&gt;
-&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 01 Feb 2025 20:32:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pillow-pil/</guid><category>编程</category><category>blog</category><category>python</category><category>pillow</category><category>pil</category></item><item><title>使用 PyPDF 和 Pandoc 实现word/pdf转换</title><link>https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;PyPDF&lt;/code&gt; 和 &lt;code&gt;Pandoc&lt;/code&gt; 实现word/pdf转换&lt;/p&gt;
+&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 01 Feb 2025 20:32:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pillow-pil/</guid><category>编程</category><category>blog</category><category>python</category><category>pillow</category><category>pil</category></item><item><title>使用 PyPDF 和 Pandoc 实现word/pdf转换</title><link>https://shaodongjun.github.io/posts/2025/02/01/python-pypdf-pandoc/</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;PyPDF&lt;/code&gt; 和 &lt;code&gt;Pandoc&lt;/code&gt; 实现word/pdf转换&lt;/p&gt;
 &lt;p&gt;关于&lt;a href="https://medium.com/@daneallist/3-simple-ways-to-merge-word-documents-using-python-862112ff4152"&gt;Pandoc的具体用法&lt;/a&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pypandoc&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;convert_file&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
@@ -1290,23 +1396,23 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;代码分析&lt;/h2&gt;
-&lt;h3&gt;查找 docx&amp;nbsp;文件：&lt;/h3&gt;
+&lt;h3&gt;查找&amp;nbsp;docx&amp;nbsp;文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;find_doc_files 函数使用 Path.rglob 方法递归查找指定目录中的 &lt;span class="caps"&gt;DOCX&lt;/span&gt; 文件，排除以 unused&amp;nbsp;元组中指定的前缀开头的文件。&lt;/li&gt;
+&lt;li&gt;find_doc_files 函数使用 Path.rglob 方法递归查找指定目录中的 &lt;span class="caps"&gt;&lt;span class="caps"&gt;DOCX&lt;/span&gt;&lt;/span&gt; 文件，排除以&amp;nbsp;unused&amp;nbsp;元组中指定的前缀开头的文件。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&amp;nbsp;转换：&lt;/h3&gt;
+&lt;h3&gt;&lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;&amp;nbsp;转换：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;convert_pdf 函数使用 pypandoc 的 convert_file 方法将 docx 文件转换为 &lt;span class="caps"&gt;PDF&lt;/span&gt;，使用 WeasyPrint 作为 &lt;span class="caps"&gt;PDF&lt;/span&gt;&amp;nbsp;引擎。&lt;/li&gt;
+&lt;li&gt;convert_pdf 函数使用 pypandoc 的 convert_file 方法将 docx 文件转换为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;，使用 WeasyPrint 作为 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;&amp;nbsp;引擎。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;添加水印：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;add_watermark 函数读取输入 &lt;span class="caps"&gt;PDF&lt;/span&gt;，使用 PyPDF2&amp;nbsp;将水印添加到每一页，并保存为新文件。&lt;/li&gt;
+&lt;li&gt;add_watermark 函数读取输入 &lt;span class="caps"&gt;&lt;span class="caps"&gt;PDF&lt;/span&gt;&lt;/span&gt;，使用&amp;nbsp;PyPDF2&amp;nbsp;将水印添加到每一页，并保存为新文件。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;注意事项&lt;/h2&gt;
 &lt;h3&gt;依赖库安装：&lt;/h3&gt;
-&lt;p&gt;确保已安装 pypandoc、PyPDF2 和&amp;nbsp;WeasyPrint。可以通过以下命令安装：&lt;/p&gt;
+&lt;p&gt;确保已安装 pypandoc、PyPDF2&amp;nbsp;和&amp;nbsp;WeasyPrint。可以通过以下命令安装：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;pypandoc&lt;span class="w"&gt; &lt;/span&gt;PyPDF2&lt;span class="w"&gt; &lt;/span&gt;WeasyPrint
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 01 Feb 2025 15:04:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pypdf-pandoc/</guid><category>编程</category><category>blog</category><category>python</category><category>word</category><category>pdf</category><category>pypdf</category><category>pandoc</category></item><item><title>使用 python-docx 创建 word 文件</title><link>https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;python-docx&lt;/code&gt; 库创建和修改 Word&amp;nbsp;文件。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 01 Feb 2025 15:04:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pypdf-pandoc/</guid><category>编程</category><category>blog</category><category>python</category><category>word</category><category>pdf</category><category>pypdf</category><category>pandoc</category></item><item><title>使用 python-docx 创建 word 文件</title><link>https://shaodongjun.github.io/posts/2025/02/01/python-pydocx/</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;python-docx&lt;/code&gt; 库创建和修改&amp;nbsp;Word&amp;nbsp;文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;docx&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Document&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;docx.oxml.ns&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;qn&lt;/span&gt;
@@ -1376,7 +1482,7 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;span class="c1"&gt;# 创建新文档并替换占位符&lt;/span&gt;
 &lt;span class="n"&gt;new_doc&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;invite&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;东俊&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;男&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 01 Feb 2025 10:52:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pydocx/</guid><category>编程</category><category>blog</category><category>python</category><category>doc</category><category>docx</category></item><item><title>使用 openpyxl 创建 Excel 文件</title><link>https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Sat, 01 Feb 2025 10:52:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-02-01:/posts/2025/02/01/python-pydocx/</guid><category>编程</category><category>blog</category><category>python</category><category>doc</category><category>docx</category></item><item><title>使用 openpyxl 创建 Excel 文件</title><link>https://shaodongjun.github.io/posts/2025/01/31/python-openpyxl/</link><description>&lt;p&gt;代码示例展示了如何使用 &lt;code&gt;openpyxl&lt;/code&gt; 库从文本文件中读取数据并将其写入Excel文件。&lt;/p&gt;
 &lt;h2&gt;可运行代码&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;openpyxl&lt;/span&gt;
 
@@ -1402,27 +1508,27 @@ https://xihuwenti.juyancn.cn/wechat/product/details?id=753&amp;amp;time=17387712
 &lt;h2&gt;代码解释&lt;/h2&gt;
 &lt;h3&gt;创建工作簿和工作表：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 openpyxl.Workbook()&amp;nbsp;创建一个新的工作簿。&lt;/li&gt;
-&lt;li&gt;create_sheet(&amp;#8220;人员名单&amp;#8221;, 0) 创建一个新的工作表并将其命名为&amp;nbsp;&amp;#8220;人员名单&amp;#8221;。&lt;/li&gt;
+&lt;li&gt;使用&amp;nbsp;openpyxl.Workbook()&amp;nbsp;创建一个新的工作簿。&lt;/li&gt;
+&lt;li&gt;create_sheet(&amp;#8220;人员名单&amp;#8221;, 0)&amp;nbsp;创建一个新的工作表并将其命名为&amp;nbsp;&amp;#8220;人员名单&amp;#8221;。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;读取文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;打开文本文件，确保使用正确的编码（如 &lt;span class="caps"&gt;UTF&lt;/span&gt;-8）。&lt;/li&gt;
+&lt;li&gt;打开文本文件，确保使用正确的编码（如 &lt;span class="caps"&gt;&lt;span class="caps"&gt;UTF&lt;/span&gt;&lt;/span&gt;-8）。&lt;/li&gt;
 &lt;li&gt;enumerate(f.readlines())&amp;nbsp;用于逐行读取文件内容，并在循环中获得行索引。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;处理数据：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 strip().split(&amp;#8220;,&amp;#8221;)&amp;nbsp;去除行首尾空白并根据逗号分隔字符串。&lt;/li&gt;
-&lt;li&gt;检查 people&amp;nbsp;列表的长度，确保至少有两个元素（姓名和性别）。&lt;/li&gt;
+&lt;li&gt;使用&amp;nbsp;strip().split(&amp;#8220;,&amp;#8221;)&amp;nbsp;去除行首尾空白并根据逗号分隔字符串。&lt;/li&gt;
+&lt;li&gt;检查&amp;nbsp;people&amp;nbsp;列表的长度，确保至少有两个元素（姓名和性别）。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;写入工作表：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 wt.cell(row=row, column=1, value=name)&amp;nbsp;将姓名写入第一列，性别写入第二列。&lt;/li&gt;
+&lt;li&gt;使用 wt.cell(row=row, column=1,&amp;nbsp;value=name)&amp;nbsp;将姓名写入第一列，性别写入第二列。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;保存文件：&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;使用 wb.save(&amp;#8220;测试名单.xlsx&amp;#8221;)&amp;nbsp;保存工作簿。&lt;/li&gt;
-&lt;li&gt;注意，openpyxl 支持 .xlsx 格式，而不是&amp;nbsp;.xls。&lt;/li&gt;
-&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 31 Jan 2025 18:00:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-01-31:/posts/2025/01/31/python-openpyxl/</guid><category>编程</category><category>blog</category><category>python</category><category>xls</category><category>xlsx</category><category>openpyxl</category><category>excel</category></item><item><title>My first post</title><link>https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/</link><description>&lt;h5&gt;开篇小记&lt;/h5&gt;
+&lt;li&gt;使用&amp;nbsp;wb.save(&amp;#8220;测试名单.xlsx&amp;#8221;)&amp;nbsp;保存工作簿。&lt;/li&gt;
+&lt;li&gt;注意，openpyxl 支持 .xlsx&amp;nbsp;格式，而不是&amp;nbsp;.xls。&lt;/li&gt;
+&lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 31 Jan 2025 18:00:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-01-31:/posts/2025/01/31/python-openpyxl/</guid><category>编程</category><category>blog</category><category>python</category><category>xls</category><category>xlsx</category><category>openpyxl</category><category>excel</category></item><item><title>My first post</title><link>https://shaodongjun.github.io/posts/2025/01/31/misc-first-post/</link><description>&lt;h5&gt;开篇小记&lt;/h5&gt;
 &lt;p&gt;今天是个好日子！&lt;/p&gt;
-&lt;p&gt;This is the &lt;em&gt;first post&lt;/em&gt; by Pelican Blog. &lt;strong&gt;&lt;span class="caps"&gt;YAY&lt;/span&gt;!&lt;/strong&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 31 Jan 2025 12:00:00 +0800</pubDate><guid isPermaLink="false">tag:shaodongjun.github.io,2025-01-31:/posts/2025/01/31/misc-first-post/</guid><category>杂记</category><category>blog</category><category>misc</category><category>pelican</category></item></channel></rss>
+&lt;p&gt;This is the &lt;em&gt;first post&lt;/em&gt; by Pelican Blog. &lt;strong&gt;&lt;span class="caps"&gt;&lt;span class="caps"&gt;YAY&lt;/span&gt;&lt;/span&gt;!&lt;/strong&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">DJ.shao</dc:creator><pubDate>Fri, 31 Jan 2025 12:00:00 +0800</pubDate><guid>tag:shaodongjun.github.io,2025-01-31:/posts/2025/01/31/misc-first-post/</guid><category>杂记</category><category>blog</category><category>misc</category><category>pelican</category></item></channel></rss>

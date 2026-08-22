@@ -36,11 +36,10 @@
         </abbr>
 
                 <address class="vcard author">
-                        By                                 <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
+                        By <a class="url fn" href="https://shaodongjun.github.io/author/djshao.html">DJ.shao</a>
                 </address>
         <p>In <a href="https://shaodongjun.github.io/category/bian-cheng.html">编程</a>.</p>
-<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/xls.html">xls</a> <a href="https://shaodongjun.github.io/tag/xlsx.html">xlsx</a> <a href="https://shaodongjun.github.io/tag/openpyxl.html">openpyxl</a> <a href="https://shaodongjun.github.io/tag/excel.html">excel</a> </p>        
-</footer><!-- /.post-info -->        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
+<p>tags: <a href="https://shaodongjun.github.io/tag/blog.html">blog</a> <a href="https://shaodongjun.github.io/tag/python.html">python</a> <a href="https://shaodongjun.github.io/tag/xls.html">xls</a> <a href="https://shaodongjun.github.io/tag/xlsx.html">xlsx</a> <a href="https://shaodongjun.github.io/tag/openpyxl.html">openpyxl</a> <a href="https://shaodongjun.github.io/tag/excel.html">excel</a> </p></footer><!-- /.post-info -->        <p>代码示例展示了如何使用 <code>openpyxl</code> 库从文本文件中读取数据并将其写入Excel文件。</p>
 <h2>可运行代码</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openpyxl</span>
 
@@ -66,27 +65,27 @@
 <h2>代码解释</h2>
 <h3>创建工作簿和工作表：</h3>
 <ul>
-<li>使用 openpyxl.Workbook()&nbsp;创建一个新的工作簿。</li>
-<li>create_sheet(&#8220;人员名单&#8221;, 0) 创建一个新的工作表并将其命名为&nbsp;&#8220;人员名单&#8221;。</li>
+<li>使用&nbsp;openpyxl.Workbook()&nbsp;创建一个新的工作簿。</li>
+<li>create_sheet(&#8220;人员名单&#8221;, 0)&nbsp;创建一个新的工作表并将其命名为&nbsp;&#8220;人员名单&#8221;。</li>
 </ul>
 <h3>读取文件：</h3>
 <ul>
-<li>打开文本文件，确保使用正确的编码（如 <span class="caps">UTF</span>-8）。</li>
+<li>打开文本文件，确保使用正确的编码（如 <span class="caps"><span class="caps">UTF</span></span>-8）。</li>
 <li>enumerate(f.readlines())&nbsp;用于逐行读取文件内容，并在循环中获得行索引。</li>
 </ul>
 <h3>处理数据：</h3>
 <ul>
-<li>使用 strip().split(&#8220;,&#8221;)&nbsp;去除行首尾空白并根据逗号分隔字符串。</li>
-<li>检查 people&nbsp;列表的长度，确保至少有两个元素（姓名和性别）。</li>
+<li>使用&nbsp;strip().split(&#8220;,&#8221;)&nbsp;去除行首尾空白并根据逗号分隔字符串。</li>
+<li>检查&nbsp;people&nbsp;列表的长度，确保至少有两个元素（姓名和性别）。</li>
 </ul>
 <h3>写入工作表：</h3>
 <ul>
-<li>使用 wt.cell(row=row, column=1, value=name)&nbsp;将姓名写入第一列，性别写入第二列。</li>
+<li>使用 wt.cell(row=row, column=1,&nbsp;value=name)&nbsp;将姓名写入第一列，性别写入第二列。</li>
 </ul>
 <h3>保存文件：</h3>
 <ul>
-<li>使用 wb.save(&#8220;测试名单.xlsx&#8221;)&nbsp;保存工作簿。</li>
-<li>注意，openpyxl 支持 .xlsx 格式，而不是&nbsp;.xls。</li>
+<li>使用&nbsp;wb.save(&#8220;测试名单.xlsx&#8221;)&nbsp;保存工作簿。</li>
+<li>注意，openpyxl 支持 .xlsx&nbsp;格式，而不是&nbsp;.xls。</li>
 </ul>
       </div><!-- /.entry-content -->
 
@@ -102,9 +101,8 @@
                                 <div class="social">
                                         <h2>social</h2>
                                         <ul>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
-
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                                                                        <li><a href="https://shaodongjun.github.io/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
                                         </ul>
                                 </div><!-- /.social -->
                 </section><!-- /#extras -->
